@@ -1,0 +1,125 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NcnnDotNet</name>
+    </assembly>
+    <members>
+        <member name="T:NcnnDotNet.Ncnn">
+            <summary>
+            Provides the methods of ncnn.
+            </summary>
+            <summary>
+            Provides the methods of ncnn.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.Mat.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:NcnnDotNet.NcnnException">
+            <summary>
+            The exception is general exception for ncnn. This class cannot be inherited.
+            </summary>
+        </member>
+        <member name="T:NcnnDotNet.NcnnObject">
+            <summary>
+            A class which has a pointer of native structure.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.NcnnObject.#ctor(System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NcnnDotNet.NcnnObject"/> class with the specified value indicating whether this instance is disposable.
+            </summary>
+            <param name="isEnabledDispose">true if this instance is disposable; otherwise, false.</param>
+        </member>
+        <member name="P:NcnnDotNet.NcnnObject.IsDisposed">
+            <summary>
+            Gets a value indicating whether this instance has been disposed.
+            </summary>
+            <returns>true if this instance has been disposed; otherwise, false.</returns>
+        </member>
+        <member name="P:NcnnDotNet.NcnnObject.IsEnableDispose">
+            <summary>
+            Gets a value indicating whether this instance is disposable.
+            </summary>
+            <returns>true if this instance is disposable; otherwise, false.</returns>
+        </member>
+        <member name="P:NcnnDotNet.NcnnObject.NativePtr">
+            <summary>
+            Gets a pointer of native structure.
+            </summary>>
+        </member>
+        <member name="M:NcnnDotNet.NcnnObject.ThrowIfDisposed">
+            <summary>
+            If this object is disposed, then <see cref="T:System.ObjectDisposedException"/> is thrown.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.NcnnObject.DisposeManaged">
+            <summary>
+            Releases all managed resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.NcnnObject.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.NcnnObject.Dispose">
+            <summary>
+            Releases all resources used by this <see cref="T:NcnnDotNet.NcnnObject"/>.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.NcnnObject.Dispose(System.Boolean)">
+            <summary>
+            Releases all resources used by this <see cref="T:NcnnDotNet.NcnnObject"/>.
+            </summary>
+            <param name="disposing">Indicate value whether <see cref="M:System.IDisposable.Dispose"/> method was called.</param>
+        </member>
+        <member name="M:NcnnDotNet.Extractor.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.Net.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="T:NcnnDotNet.OpenCV.Cv2">
+            <summary>
+            Provides the methods of OpenCV.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.OpenCV.Mat.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.Option.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="F:NcnnDotNet.NativeMethods.NativeLibrary">
+            <summary>
+            Native library file name.
+            If Linux, it will be converted to  libNcnnDotNetNative.so
+            If MacOSX, it will be converted to  libNcnnDotNetNative.dylib
+            If Windows, it will be available after call LoadLibrary.
+            And this file name must not contain period. If it does,
+            CLR does not add extension (.dll) and CLR fails to load library
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.StdString.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.StdVector`1.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+    </members>
+</doc>

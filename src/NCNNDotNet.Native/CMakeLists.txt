@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 cmake_policy(SET CMP0053 NEW)
 cmake_policy(SET CMP0054 NEW)
 
-set(PROJ_NAME NCNNDotNetNative)
+set(PROJ_NAME NcnnDotNetNative)
 
 project(${PROJ_NAME} VERSION 2019.12.23)
 
@@ -54,7 +54,8 @@ get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
 if (MSVC OR MSYS OR MINGW)
-    include_directories("${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Release/install/include")
+    include_directories("${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Release/install/include"
+                        "$ENV{VULKAN_SDK}/include")
 else()
     find_package( GFlags REQUIRED )
     find_package( OpenCV REQUIRED )
@@ -88,11 +89,6 @@ FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/ncnn/*.h)
 FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cpp)
 
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/ncnn/config.h.in
-    ${CMAKE_CURRENT_SOURCE_DIR}/ncnn/config.h
-    @ONLY)
-
-configure_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
     ${CMAKE_CURRENT_BINARY_DIR}/version.rc
     @ONLY)
@@ -100,7 +96,19 @@ configure_file(
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
         optimized ${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Release/install/lib/ncnn.lib
-        debug ${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Debug/install/lib/ncnn.lib
+        debug     ${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Debug/install/lib/ncnn.lib
+        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
+        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
+        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
+        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
@@ -122,6 +130,14 @@ elseif(UNIX AND NOT APPLE)
     )
 else()
     message(FATAL_ERROR "Failed to link library")
+endif()
+
+# definitions
+if(USE_NCNN_VULKAN)
+  add_definitions(-DNCNN_VULKAN)
+endif()
+if(USE_NCNN_OPENCV)
+  add_definitions(-DNCNN_OPENCV)
 endif()
 
 add_library(${PROJ_NAME} SHARED ${HEADERS}

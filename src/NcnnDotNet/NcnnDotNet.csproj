@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Takuya Takeuchi</Authors>
+    <Description>.NET wrapper for ncnn written in C#</Description>
+    <Company />
+    <Copyright>© Takuya Takeuchi 2019-2020</Copyright>
+    <Configurations>Debug;Release</Configurations>
+    <Version>2019.12.23.0</Version>
+    <RepositoryUrl>https://github.com/takuya-takeuchi/NcnnDotNet</RepositoryUrl>
+    <PackageTags>ncnn .net neural-network deep-learning</PackageTags>
+    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+  
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+
+  <!-- define $(PlatformId) and compile-time constants for NativeMethods.cs  -->
+  <Import Project="RuntimeId.props" />
+
+  <PropertyGroup>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <Optimize>true</Optimize>
+    <DocumentationFile>docs\NcnnDotNet.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="docs\" />
+  </ItemGroup>
+
+
+</Project>
