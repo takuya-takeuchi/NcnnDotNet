@@ -19,6 +19,9 @@ namespace NcnnDotNet
         public static extern bool mat_Mat_empty(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_Mat_row(IntPtr mat, int y);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int mat_Mat_get_w(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
@@ -26,6 +29,15 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int mat_Mat_get_c(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern long mat_Mat_get_elemsize(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern int mat_Mat_get_elempack(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern int mat_Mat_get_dims(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_get_operator_indexer(IntPtr mat, int index, out float returnValue);

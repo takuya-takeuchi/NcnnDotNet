@@ -21,6 +21,25 @@ namespace NcnnDotNet
 
         #region Methods
 
+        public bool Extract(string blobName, Mat feat)
+        {
+            if (string.IsNullOrEmpty(blobName))
+                throw new ArgumentNullException(nameof(blobName));
+
+            if (feat == null)
+                throw new ArgumentNullException(nameof(feat));
+
+            feat.ThrowIfDisposed();
+            this.ThrowIfDisposed();
+
+            var str = Ncnn.Encoding.GetBytes(blobName);
+            var error = NativeMethods.net_Extractor_extract(this.NativePtr, str, str.Length, feat.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                return false;
+
+            return true;
+        }
+
         public bool Input(string blobName, Mat @in)
         {
             if (string.IsNullOrEmpty(blobName))
@@ -39,24 +58,10 @@ namespace NcnnDotNet
 
             return true;
         }
-        
-        public bool Extract(string blobName, Mat feat)
+
+        public void SetNumThreads(int numThreads)
         {
-            if (string.IsNullOrEmpty(blobName))
-                throw new ArgumentNullException(nameof(blobName));
-
-            if (feat == null)
-                throw new ArgumentNullException(nameof(feat));
-
-            feat.ThrowIfDisposed();
-            this.ThrowIfDisposed();
-
-            var str = Ncnn.Encoding.GetBytes(blobName);
-            var error = NativeMethods.net_Extractor_extract(this.NativePtr, str, str.Length, feat.NativePtr);
-            if (error != NativeMethods.ErrorType.OK)
-                return false;
-
-            return true;
+            NativeMethods.net_Extractor_set_num_threads(this.NativePtr, numThreads);
         }
 
         #region Overrides 

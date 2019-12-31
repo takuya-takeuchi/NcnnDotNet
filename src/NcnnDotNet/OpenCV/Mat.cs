@@ -4,7 +4,7 @@
 namespace NcnnDotNet.OpenCV
 {
 
-    public sealed class Mat : NcnnObject
+    public sealed class Mat : NcnnObject, ICloneable
     {
 
         #region Constructors
@@ -66,6 +66,13 @@ namespace NcnnDotNet.OpenCV
             this.ThrowIfDisposed();
             return NativeMethods.opencv_Mat_channels(this.NativePtr);
         }
+        
+        public Mat Clone()
+        {
+            this.ThrowIfDisposed();
+            var ret = NativeMethods.opencv_Mat_clone(this.NativePtr);
+            return new Mat(ret);
+        }
 
         public int Total()
         {
@@ -89,6 +96,15 @@ namespace NcnnDotNet.OpenCV
         }
 
         #endregion
+
+        #endregion
+
+        #region ICloneable Implementations
+
+        object ICloneable.Clone()
+        {
+            return this.Clone();
+        }
 
         #endregion
 

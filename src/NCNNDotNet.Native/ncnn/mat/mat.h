@@ -24,6 +24,11 @@ DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
     return mat->empty();
 }
 
+DLLEXPORT float* mat_Mat_row(ncnn::Mat* mat, const int32_t y)
+{
+    return mat->row(y);
+}
+
 DLLEXPORT int32_t mat_Mat_get_w(ncnn::Mat* mat)
 {
     return mat->w;
@@ -37,6 +42,21 @@ DLLEXPORT int32_t mat_Mat_get_h(ncnn::Mat* mat)
 DLLEXPORT int32_t mat_Mat_get_c(ncnn::Mat* mat)
 {
     return mat->c;
+}
+
+DLLEXPORT size_t mat_Mat_get_elemsize(ncnn::Mat* mat)
+{
+    return mat->elemsize;
+}
+
+DLLEXPORT int32_t mat_Mat_get_elempack(ncnn::Mat* mat)
+{
+    return mat->elempack;
+}
+
+DLLEXPORT int32_t mat_Mat_get_dims(ncnn::Mat* mat)
+{
+    return mat->dims;
 }
 
 DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, int32_t index, float* returnValue)
