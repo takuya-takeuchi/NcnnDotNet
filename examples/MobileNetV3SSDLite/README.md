@@ -1,6 +1,6 @@
 ﻿# MobileNet V3 SSD Lite
   
-This program is ported by C# from examples/mobilenetssd.cpp. 
+This program is ported by C# from examples/mobilenetv3ssdlite.cpp. 
  
 ## How to use? 
  
