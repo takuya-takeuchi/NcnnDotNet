@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 
 // ReSharper disable once CheckNamespace
 namespace NcnnDotNet.OpenCV
@@ -12,6 +13,14 @@ namespace NcnnDotNet.OpenCV
 
         public Rect()
         {
+        }
+
+        public Rect(T x, T y, T width, T height)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
         }
 
         public Rect(Point<T> point, Size<T> size)
@@ -38,6 +47,17 @@ namespace NcnnDotNet.OpenCV
         #endregion
 
         #region Properties
+
+        public T Area
+        {
+            get
+            {
+                // ToDo: Should I implement w * h directly?
+                var bridge = CreateBridge();
+                using (var native = this.ToNative())
+                    return bridge.Area(native.NativePtr);
+            }
+        }
 
         public T Height
         {
@@ -73,6 +93,21 @@ namespace NcnnDotNet.OpenCV
             var ret = bridge.Create(this.X, this.Y, this.Width, this.Height);
             return new Native<T>(ret, bridge);
         }
+
+        #region overrides
+
+        public static Rect<T> operator &(Rect<T> lhs, Rect<T> rhs)
+        {
+            var bridge = CreateBridge();
+            using (var left = lhs.ToNative())
+            using (var right = rhs.ToNative())
+            {
+                var ret = bridge.LogicalAnd(left.NativePtr, right.NativePtr);
+                return new Rect<T>(ret);
+            }
+        }
+
+        #endregion
 
         #region Helpers
 
@@ -116,6 +151,8 @@ namespace NcnnDotNet.OpenCV
             public abstract T GetWidth(IntPtr ptr);
 
             public abstract T GetHeight(IntPtr ptr);
+
+            public abstract IntPtr LogicalAnd(IntPtr left, IntPtr right);
 
             #endregion
 
@@ -161,6 +198,11 @@ namespace NcnnDotNet.OpenCV
                 return NativeMethods.opencv_Rect_int32_t_get_height(ptr);
             }
 
+            public override IntPtr LogicalAnd(IntPtr left, IntPtr right)
+            {
+                return NativeMethods.opencv_Rect_int32_t_operator_logical_and(left, right);
+            }
+
             #endregion
 
         }
@@ -203,6 +245,11 @@ namespace NcnnDotNet.OpenCV
             public override float GetHeight(IntPtr ptr)
             {
                 return NativeMethods.opencv_Rect_float_get_height(ptr);
+            }
+
+            public override IntPtr LogicalAnd(IntPtr left, IntPtr right)
+            {
+                return NativeMethods.opencv_Rect_float_operator_logical_and(left, right);
             }
 
             #endregion
