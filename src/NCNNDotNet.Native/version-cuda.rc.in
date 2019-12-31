@@ -71,10 +71,10 @@ BEGIN
 			VALUE "CompanyName",      "Takuya Takeuchi"
 			VALUE "FileDescription",  "ncnn wrapper library (kernel) with CUDA"
 			VALUE "FileVersion",      VER_FILEVERSION_STR
-			VALUE "InternalName",     "NCNNDotNet.Native"
+			VALUE "InternalName",     "NcnnDotNet.Native"
 			VALUE "LegalCopyright",   "Copyright (c) 2019-2020 Takuya Takeuchi."
-			VALUE "OriginalFilename", "NCNNDotNet.Native.dll"
-			VALUE "ProductName",      "NCNNDotNet"
+			VALUE "OriginalFilename", "NcnnDotNet.Native.dll"
+			VALUE "ProductName",      "NcnnDotNet"
 			VALUE "ProductVersion",   VER_PRODUCTVERSION_STR
 		END
 	END

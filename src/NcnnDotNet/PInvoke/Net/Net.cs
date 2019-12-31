@@ -1,0 +1,31 @@
+﻿using System;
+using System.Runtime.InteropServices;
+
+// ReSharper disable once CheckNamespace
+namespace NcnnDotNet
+{
+
+    internal sealed partial class NativeMethods
+    {
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_new(out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void net_Net_delete(IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_create_extractor(IntPtr net, out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_load_param_filepath(IntPtr net, byte[] protopath, int protopathLength);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_load_model_filepath(IntPtr net, byte[] modelpath, int modelpathLength);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void net_Net_get_opt(IntPtr net, out IntPtr returnValue);
+
+    }
+
+}
