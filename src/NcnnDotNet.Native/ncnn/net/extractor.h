@@ -10,6 +10,16 @@ DLLEXPORT void net_Extractor_delete(ncnn::Extractor* extractor)
     if (extractor != nullptr) delete extractor;
 }
 
+DLLEXPORT int net_Extractor_set_light_mode(ncnn::Extractor* extractor,
+                                            const bool enable)
+{
+    int32_t error = ERR_OK;
+
+    extractor->set_light_mode(enable);
+
+    return error;
+}
+
 DLLEXPORT int net_Extractor_set_num_threads(ncnn::Extractor* extractor,
                                             const int32_t num_threads)
 {
