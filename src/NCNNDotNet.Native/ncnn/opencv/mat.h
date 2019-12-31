@@ -2,7 +2,8 @@
 #define _CPP_OPENCV_MAT_H_
 
 #include "../export.h"
-#include <ncnn/opencv.h>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include "../shared.h"
 
 DLLEXPORT void opencv_Mat_delete(cv::Mat* mat)

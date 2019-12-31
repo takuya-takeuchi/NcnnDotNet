@@ -53,13 +53,20 @@ endif()
 get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
+find_package(OpenCV REQUIRED)
+find_package(ncnn REQUIRED)
+
+message("-- ncnn_INCLUDE_DIRS: ${ncnn_INCLUDE_DIRS}")
+message("-- OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
+
 if (MSVC OR MSYS OR MINGW)
-    include_directories("${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Release/install/include"
+    include_directories("$ENV{ncnn_DIR}/include"
+                        "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
 else()
-    find_package( GFlags REQUIRED )
-    find_package( OpenCV REQUIRED )
-    include_directories("${NCNNDOTNET_ROOT_DIR}/openpose/include")
+    include_directories("$ENV{ncnn_DIR}/include"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "$ENV{VULKAN_SDK}/include")
 endif()
 
 # Set /bigobj for MSVC
@@ -95,8 +102,8 @@ configure_file(
 
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
-        optimized ${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Release/install/lib/ncnn.lib
-        debug     ${NCNNDOTNET_ROOT_DIR}/src/ncnn/build-vs2017_Debug/install/lib/ncnn.lib
+        $ENV{ncnn_DIR}/lib/ncnn.lib
+        opencv_world
         #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
         #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
         #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
@@ -112,21 +119,37 @@ if (MSVC OR MSYS OR MINGW)
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
-        opencv_imgproc
-        opencv_imgcodecs
-        opencv_highgui
-        optimized gflags
-        optimized ${NCNNDOTNET_ROOT_DIR}/openpose/build_osx/src/openpose/libopenpose.dylib
-        debug gflagsd
-        debug ${NCNNDOTNET_ROOT_DIR}/openpose/build_osx/src/openpose/libopenposed.dylib
+        $ENV{ncnn_DIR}/lib/ncnn.lib
+        opencv_world
+        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
+        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
+        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
+        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
-        opencv_imgproc
-        optimized gflags
-        optimized ${NCNNDOTNET_ROOT_DIR}/openpose_linux/build/src/openpose/libopenpose.so
-        debug gflagsd
-        debug ${NCNNDOTNET_ROOT_DIR}/openpose_linux/build/src/openpose/libopenposed.so
+        $ENV{ncnn_DIR}/lib/ncnn.lib
+        opencv_world
+        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
+        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
+        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
+        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
+        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
     )
 else()
     message(FATAL_ERROR "Failed to link library")
@@ -135,9 +158,6 @@ endif()
 # definitions
 if(USE_NCNN_VULKAN)
   add_definitions(-DNCNN_VULKAN)
-endif()
-if(USE_NCNN_OPENCV)
-  add_definitions(-DNCNN_OPENCV)
 endif()
 
 add_library(${PROJ_NAME} SHARED ${HEADERS}
