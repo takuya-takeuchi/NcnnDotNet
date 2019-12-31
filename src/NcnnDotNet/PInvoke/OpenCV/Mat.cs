@@ -10,6 +10,9 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_Mat_delete(IntPtr mat);
+        
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr opencv_Mat_clone(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]

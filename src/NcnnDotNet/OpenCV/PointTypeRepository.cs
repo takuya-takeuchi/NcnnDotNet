@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace NcnnDotNet
+namespace NcnnDotNet.OpenCV
 {
 
-    internal static class StdVectorTypeRepository
+    internal static class PointTypeRepository
     {
 
         #region Fields
@@ -16,14 +16,14 @@ namespace NcnnDotNet
 
         #region Constructors
         
-        static StdVectorTypeRepository()
+        static PointTypeRepository()
         {
             var types = new[]
             {
-                new { Type = typeof(int),                                  ElementType = ElementTypes.Int32 },
-                new { Type = typeof(uint),                                 ElementType = ElementTypes.UInt32 },
-                new { Type = typeof(float),                                ElementType = ElementTypes.Float  },
-                new { Type = typeof(double),                               ElementType = ElementTypes.Double  },
+                new { Type = typeof(int),    ElementType = ElementTypes.Int32 },
+                new { Type = typeof(long),   ElementType = ElementTypes.Int64 },
+                new { Type = typeof(float),  ElementType = ElementTypes.Float  },
+                new { Type = typeof(double), ElementType = ElementTypes.Double  },
             };
 
             foreach (var type in types)
@@ -37,11 +37,11 @@ namespace NcnnDotNet
 
             Int32,
 
-            UInt32,
+            Int64,
 
             Float,
 
-            Double,
+            Double
 
         }
 

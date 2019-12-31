@@ -10,6 +10,16 @@ DLLEXPORT void net_Extractor_delete(ncnn::Extractor* extractor)
     if (extractor != nullptr) delete extractor;
 }
 
+DLLEXPORT int net_Extractor_set_num_threads(ncnn::Extractor* extractor,
+                                            const int32_t num_threads)
+{
+    int32_t error = ERR_OK;
+
+    extractor->set_num_threads(num_threads);
+
+    return error;
+}
+
 DLLEXPORT int net_Extractor_input(ncnn::Extractor* extractor,
                                   const char* blob_name,
                                   const int32_t blob_name_len,

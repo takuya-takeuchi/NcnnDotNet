@@ -11,6 +11,12 @@ DLLEXPORT void opencv_Mat_delete(cv::Mat* mat)
     if (mat != nullptr) delete mat;
 }
 
+DLLEXPORT cv::Mat* opencv_Mat_clone(cv::Mat* mat)
+{
+    const auto& ret = mat->clone();
+    return new cv::Mat(ret);
+}
+
 DLLEXPORT bool opencv_Mat_empty(cv::Mat* mat)
 {
     return mat->empty();

@@ -96,6 +96,26 @@
             Releases all unmanaged resources.
             </summary>
         </member>
+        <member name="M:NcnnDotNet.OpenCV.Point`1.Native`1.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.OpenCV.Rect`1.Native`1.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.OpenCV.Scalar`1.Native`1.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.OpenCV.Size`1.Native`1.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
         <member name="M:NcnnDotNet.Option.DisposeUnmanaged">
             <summary>
             Releases all unmanaged resources.

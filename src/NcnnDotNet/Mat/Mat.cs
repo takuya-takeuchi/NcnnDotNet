@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace NcnnDotNet
@@ -36,6 +37,33 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 return NativeMethods.mat_Mat_get_c(this.NativePtr);
+            }
+        }
+
+        public int Dims
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.mat_Mat_get_dims(this.NativePtr);
+            }
+        }
+
+        public int ElemPack
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.mat_Mat_get_elempack(this.NativePtr);
+            }
+        }
+
+        public long ElemSize
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.mat_Mat_get_elemsize(this.NativePtr);
             }
         }
 
@@ -79,13 +107,7 @@ namespace NcnnDotNet
         #endregion
 
         #region Methods
-
-        public void SubstractMeanNormalize(float[] meanVals, float[] normVals)
-        {
-            this.ThrowIfDisposed();
-            NativeMethods.mat_Mat_substract_mean_normalize(this.NativePtr, meanVals, normVals);
-        }
-
+        
         public static Mat FromPixelsResize(IntPtr pixel, PixelType type, int width, int height, int targetWidth, int targetHeight)
         {
             return FromPixelsResize(pixel,
@@ -114,6 +136,24 @@ namespace NcnnDotNet
             return new Mat(returnValue);
         }
 
+        public float[] Row(int y)
+        {
+            this.ThrowIfDisposed();
+
+            var ret = NativeMethods.mat_Mat_row(this.NativePtr, y);
+            var width = this.Width;
+
+            var array = new float[width];
+            Marshal.Copy(ret, array, 0, width);
+
+            return array;
+        }
+
+        public void SubstractMeanNormalize(float[] meanVals, float[] normVals)
+        {
+            this.ThrowIfDisposed();
+            NativeMethods.mat_Mat_substract_mean_normalize(this.NativePtr, meanVals, normVals);
+        }
 
         #region Overrides 
 
