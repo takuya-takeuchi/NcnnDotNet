@@ -11,7 +11,7 @@ This program is ported by C# from examples/squeezenetssd.cpp.
 ```` 
 dotnet build -c Release 
 ```` 
-2. Copy ***NcnnDotNetNative.dll*** and ***NcnnDotNetNativeDnn.dll*** to output directory; &lt;SqueezeNetSSD_dir&gt;\bin\Release\netcoreapp3.1. 
+2. Copy ***NcnnDotNetNative.dll*** to output directory; &lt;SqueezeNetSSD_dir&gt;\bin\Release\netcoreapp3.1. 
  
 And extract them and copy to extracted files to &lt;SqueezeNetSSD_dir&gt;. 
 
