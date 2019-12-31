@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqueezeNet", "examples\Sque
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoloV3", "examples\YoloV3\YoloV3.csproj", "{3A07F9A8-6401-4D60-ABE5-BC5906156694}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoloV2", "examples\YoloV2\YoloV2.csproj", "{EE342E83-027B-4676-97C7-1830D4F48688}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{3A07F9A8-6401-4D60-ABE5-BC5906156694}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A07F9A8-6401-4D60-ABE5-BC5906156694}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A07F9A8-6401-4D60-ABE5-BC5906156694}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE342E83-027B-4676-97C7-1830D4F48688}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE342E83-027B-4676-97C7-1830D4F48688}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE342E83-027B-4676-97C7-1830D4F48688}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE342E83-027B-4676-97C7-1830D4F48688}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +45,7 @@ Global
 		{6E3D0A4F-B08E-4BD1-8BCD-085F1D594F43} = {8E8E8DD9-0547-4E5E-AC68-F84FACE8C492}
 		{BAE42720-E205-463E-A635-FAB44FFD367F} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{3A07F9A8-6401-4D60-ABE5-BC5906156694} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
+		{EE342E83-027B-4676-97C7-1830D4F48688} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7789377-10BC-434A-87CC-8001AE7F93C6}
