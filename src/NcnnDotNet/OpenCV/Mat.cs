@@ -61,6 +61,18 @@ namespace NcnnDotNet.OpenCV
 
         #region Methods
 
+        public int Channels()
+        {
+            this.ThrowIfDisposed();
+            return NativeMethods.opencv_Mat_channels(this.NativePtr);
+        }
+
+        public int Total()
+        {
+            this.ThrowIfDisposed();
+            return NativeMethods.opencv_Mat_total(this.NativePtr);
+        }
+
         #region Overrides 
 
         /// <summary>
