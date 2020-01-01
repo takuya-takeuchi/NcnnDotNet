@@ -77,7 +77,7 @@ namespace NcnnDotNet
             }
         }
 
-        public int Height
+        public int H
         {
             get
             {
@@ -95,7 +95,7 @@ namespace NcnnDotNet
             }
         }
 
-        public int Width
+        public int W
         {
             get
             {
@@ -201,7 +201,7 @@ namespace NcnnDotNet
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.mat_Mat_row(this.NativePtr, y);
-            var width = this.Width;
+            var width = this.W;
 
             var array = new float[width];
             Marshal.Copy(ret, array, 0, width);
