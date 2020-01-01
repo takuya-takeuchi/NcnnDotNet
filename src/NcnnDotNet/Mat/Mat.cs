@@ -19,6 +19,16 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
+        public Mat(int w, long elemSize = 4u)
+        {
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_new2(w, elemSize, IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
         internal Mat(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
@@ -31,7 +41,7 @@ namespace NcnnDotNet
 
         #region Properties
 
-        public int Channel
+        public int C
         {
             get
             {
@@ -102,12 +112,25 @@ namespace NcnnDotNet
                 NativeMethods.mat_Mat_get_operator_indexer(this.NativePtr, index, out var returnValue);
                 return returnValue;
             }
+            set
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.mat_Mat_set_operator_indexer(this.NativePtr, index, value);
+            }
         }
 
         #endregion
 
         #region Methods
-        
+
+        public Mat Channel(int c)
+        {
+            this.ThrowIfDisposed();
+
+            var ret = NativeMethods.mat_Mat_channel(this.NativePtr, c);
+            return new Mat(ret);
+        }
+
         public static Mat FromPixelsResize(IntPtr pixel, PixelType type, int width, int height, int targetWidth, int targetHeight)
         {
             return FromPixelsResize(pixel,
@@ -134,6 +157,43 @@ namespace NcnnDotNet
                                                      out var returnValue);
 
             return new Mat(returnValue);
+        }
+
+        public Mat Reshape(int w)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_reshape(this.NativePtr, w, IntPtr.Zero, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
+        }
+
+
+        public Mat Reshape(int w, int h)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_reshape2(this.NativePtr, w, h, IntPtr.Zero, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
+        }
+
+        public Mat Reshape(int w, int h, int c)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_reshape3(this.NativePtr, w, h, c, IntPtr.Zero, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
         }
 
         public float[] Row(int y)

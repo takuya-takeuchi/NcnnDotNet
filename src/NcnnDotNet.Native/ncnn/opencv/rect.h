@@ -45,6 +45,15 @@ DLLEXPORT __TYPE__ opencv_Rect_##__TYPENAME__##_area(cv::Rect_<__TYPE__> *rect)\
 {\
     return rect->area();\
 }\
+\
+DLLEXPORT cv::Rect_<__TYPE__>* opencv_Rect_##__TYPENAME__##_operator_logical_and(cv::Rect_<__TYPE__> *left,\
+                                                                                 cv::Rect_<__TYPE__> *right)\
+{\
+    const auto& l = *left;\
+    const auto& r = *right;\
+    const auto& ret = l & r;\
+    return new cv::Rect_<__TYPE__>(ret);\
+}\
 
 #pragma endregion template
 

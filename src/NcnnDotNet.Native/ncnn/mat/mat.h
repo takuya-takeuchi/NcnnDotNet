@@ -14,9 +14,57 @@ DLLEXPORT int mat_Mat_new(ncnn::Mat** returnValue)
     return error;
 }
 
+DLLEXPORT int mat_Mat_new2(const int w, const size_t elemsize, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, elemsize, allocator);
+
+    return error;
+}
+
 DLLEXPORT void mat_Mat_delete(ncnn::Mat* mat)
 {
     if (mat != nullptr) delete mat;
+}
+
+DLLEXPORT int32_t mat_Mat_reshape(ncnn::Mat* mat, int32_t w, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = mat->reshape(w, allocator);
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_reshape2(ncnn::Mat* mat,
+                                   int32_t w,
+                                   int32_t h,
+                                   ncnn::Allocator* allocator,
+                                   ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = mat->reshape(w, h, allocator);
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_reshape3(ncnn::Mat* mat,
+                                   int32_t w,
+                                   int32_t h,
+                                   int32_t c,
+                                   ncnn::Allocator* allocator,
+                                   ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = mat->reshape(w, h, c, allocator);
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
 }
 
 DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
@@ -27,6 +75,12 @@ DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
 DLLEXPORT float* mat_Mat_row(ncnn::Mat* mat, const int32_t y)
 {
     return mat->row(y);
+}
+
+DLLEXPORT ncnn::Mat* mat_Mat_channel(ncnn::Mat* mat, const int32_t c)
+{
+    const auto& ret = mat->channel(c);
+    return new ncnn::Mat(ret);
 }
 
 DLLEXPORT int32_t mat_Mat_get_w(ncnn::Mat* mat)
@@ -59,12 +113,21 @@ DLLEXPORT int32_t mat_Mat_get_dims(ncnn::Mat* mat)
     return mat->dims;
 }
 
-DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, int32_t index, float* returnValue)
+DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, const int32_t index, float* returnValue)
 {
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
     *returnValue = m[index];
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_set_operator_indexer(ncnn::Mat* mat, const int32_t index, const float value)
+{
+    int32_t error = ERR_OK;
+
+    mat->operator[](index) = value;
 
     return error;
 }

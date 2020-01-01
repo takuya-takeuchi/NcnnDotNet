@@ -12,11 +12,26 @@ namespace NcnnDotNet
         public static extern ErrorType mat_Mat_new(out IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_new2(int w, long elemsize, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void mat_Mat_delete(IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_reshape(IntPtr mat, int w, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_reshape2(IntPtr mat, int w, int h, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_reshape3(IntPtr mat, int w, int h, int c, IntPtr allocator, out IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool mat_Mat_empty(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_Mat_channel(IntPtr mat, int c);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr mat_Mat_row(IntPtr mat, int y);
@@ -41,6 +56,9 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_get_operator_indexer(IntPtr mat, int index, out float returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_set_operator_indexer(IntPtr mat, int index, float value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_substract_mean_normalize(IntPtr mat, float[] meanVals, float[] normVals);

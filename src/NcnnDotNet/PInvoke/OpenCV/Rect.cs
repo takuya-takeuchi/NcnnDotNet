@@ -31,6 +31,9 @@ namespace NcnnDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int opencv_Rect_int32_t_area(IntPtr rect);
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr opencv_Rect_int32_t_operator_logical_and(IntPtr left, IntPtr right);
+
         #endregion
 
         #region float
@@ -55,6 +58,9 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int opencv_Rect_float_area(IntPtr rect);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr opencv_Rect_float_operator_logical_and(IntPtr left, IntPtr right);
 
         #endregion
 

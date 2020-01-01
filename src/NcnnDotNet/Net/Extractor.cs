@@ -59,6 +59,11 @@ namespace NcnnDotNet
             return true;
         }
 
+        public void SetLiteMode(bool enable)
+        {
+            NativeMethods.net_Extractor_set_light_mode(this.NativePtr, enable);
+        }
+
         public void SetNumThreads(int numThreads)
         {
             NativeMethods.net_Extractor_set_num_threads(this.NativePtr, numThreads);
