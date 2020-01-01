@@ -18,6 +18,15 @@ namespace NcnnDotNet
         public static extern void mat_Mat_delete(IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_reshape(IntPtr mat, int w, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_reshape2(IntPtr mat, int w, int h, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_reshape3(IntPtr mat, int w, int h, int c, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool mat_Mat_empty(IntPtr mat);
 

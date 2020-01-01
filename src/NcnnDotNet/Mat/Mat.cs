@@ -159,6 +159,43 @@ namespace NcnnDotNet
             return new Mat(returnValue);
         }
 
+        public Mat Reshape(int w)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_reshape(this.NativePtr, w, IntPtr.Zero, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
+        }
+
+
+        public Mat Reshape(int w, int h)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_reshape2(this.NativePtr, w, h, IntPtr.Zero, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
+        }
+
+        public Mat Reshape(int w, int h, int c)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_reshape3(this.NativePtr, w, h, c, IntPtr.Zero, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
+        }
+
         public float[] Row(int y)
         {
             this.ThrowIfDisposed();
