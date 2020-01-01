@@ -28,6 +28,45 @@ DLLEXPORT void mat_Mat_delete(ncnn::Mat* mat)
     if (mat != nullptr) delete mat;
 }
 
+DLLEXPORT int32_t mat_Mat_reshape(ncnn::Mat* mat, int32_t w, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = mat->reshape(w, allocator);
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_reshape2(ncnn::Mat* mat,
+                                   int32_t w,
+                                   int32_t h,
+                                   ncnn::Allocator* allocator,
+                                   ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = mat->reshape(w, h, allocator);
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_reshape3(ncnn::Mat* mat,
+                                   int32_t w,
+                                   int32_t h,
+                                   int32_t c,
+                                   ncnn::Allocator* allocator,
+                                   ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = mat->reshape(w, h, c, allocator);
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
 DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
 {
     return mat->empty();
