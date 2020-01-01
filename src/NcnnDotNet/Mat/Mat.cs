@@ -131,12 +131,74 @@ namespace NcnnDotNet
             return new Mat(ret);
         }
 
+        public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height)
+        {
+            return FromPixels(pixel,
+                              type,
+                              width,
+                              height,
+                              IntPtr.Zero);
+        }
+
+        public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height, int stride)
+        {
+            return FromPixels(pixel,
+                              type,
+                              width,
+                              height,
+                              stride,
+                              IntPtr.Zero);
+        }
+
+        public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height, IntPtr allocator)
+        {
+            if (pixel == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(pixel));
+
+            NativeMethods.mat_Mat_from_pixels(pixel,
+                                              type,
+                                              width,
+                                              height,
+                                              allocator,
+                                              out var returnValue);
+
+            return new Mat(returnValue);
+        }
+
+        public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height, int stride, IntPtr allocator)
+        {
+            if (pixel == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(pixel));
+
+            NativeMethods.mat_Mat_from_pixels2(pixel,
+                                               type,
+                                               width,
+                                               height,
+                                               stride,
+                                               allocator,
+                                               out var returnValue);
+
+            return new Mat(returnValue);
+        }
+
         public static Mat FromPixelsResize(IntPtr pixel, PixelType type, int width, int height, int targetWidth, int targetHeight)
         {
             return FromPixelsResize(pixel,
                                     type,
                                     width,
                                     height,
+                                    targetWidth,
+                                    targetHeight,
+                                    IntPtr.Zero);
+        }
+
+        public static Mat FromPixelsResize(IntPtr pixel, PixelType type, int width, int height, int stride, int targetWidth, int targetHeight)
+        {
+            return FromPixelsResize(pixel,
+                                    type,
+                                    width,
+                                    height,
+                                    stride,
                                     targetWidth,
                                     targetHeight,
                                     IntPtr.Zero);
@@ -159,6 +221,24 @@ namespace NcnnDotNet
             return new Mat(returnValue);
         }
 
+        public static Mat FromPixelsResize(IntPtr pixel, PixelType type, int width, int height, int stride, int targetWidth, int targetHeight, IntPtr allocator)
+        {
+            if (pixel == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(pixel));
+
+            NativeMethods.mat_Mat_from_pixels_resize2(pixel,
+                                                      type,
+                                                      width,
+                                                      height,
+                                                      stride,
+                                                      targetWidth,
+                                                      targetHeight,
+                                                      allocator,
+                                                      out var returnValue);
+
+            return new Mat(returnValue);
+        }
+
         public Mat Reshape(int w)
         {
             this.ThrowIfDisposed();
@@ -170,8 +250,7 @@ namespace NcnnDotNet
 
             return new Mat(ret);
         }
-
-
+        
         public Mat Reshape(int w, int h)
         {
             this.ThrowIfDisposed();
