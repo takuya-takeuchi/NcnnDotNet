@@ -56,6 +56,22 @@ namespace NcnnDotNet.OpenCV
             NativeMethods.opencv_imshow(str, str.Length, mat.NativePtr);
         }
 
+        public static void ImWrite(string fileName, Mat mat)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            var str = Ncnn.Encoding.GetBytes(fileName);
+            var error = NativeMethods.opencv_imwrite(str, str.Length, mat.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
         public static void PutText(Mat mat,
                                    string text,
                                    Point<int> point,

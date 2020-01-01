@@ -88,6 +88,17 @@ DLLEXPORT void opencv_imshow(const char *winname, const int32_t winname_len, cv:
     cv::imshow(win, m);
 }
 
+DLLEXPORT int32_t opencv_imwrite(const char* filename, const int32_t filename_len, cv::Mat* mat)
+{
+    int32_t error = ERR_OK;
+
+    std::string path(filename, filename_len);
+    const auto& m = *mat;
+    const auto ret = cv::imwrite(path, m);
+
+    return error;
+}
+
 DLLEXPORT int32_t opencv_waitKey(const int32_t delay, int32_t* returnValue)
 {
     int32_t error = ERR_OK;
