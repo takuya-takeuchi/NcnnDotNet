@@ -235,4 +235,36 @@ DLLEXPORT int32_t mat_Mat_from_pixels_resize2(const unsigned char* pixels,
     return error;
 }
 
+DLLEXPORT int32_t mat_resize_bicubic(ncnn::Mat* src,
+                                     ncnn::Mat* dst,
+                                     const int32_t w,
+                                     const int32_t h,
+                                     ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::resize_bicubic(s, d, w, h, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_resize_bilinear(ncnn::Mat* src,
+                                      ncnn::Mat* dst,
+                                      const int32_t w,
+                                      const int32_t h,
+                                      ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::resize_bilinear(s, d, w, h, o);
+
+    return error;
+}
+
 #endif

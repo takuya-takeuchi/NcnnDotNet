@@ -1,0 +1,61 @@
+﻿// ReSharper disable once CheckNamespace
+namespace NcnnDotNet
+{
+
+    /// <summary>
+    /// Provides the methods of ncnn.
+    /// </summary>
+    public static partial class Ncnn
+    {
+
+        #region Methods
+
+        public static void ResizeBilinear(Mat src, Mat dst, int width, int height, Option option = null)
+        {
+            var inputOption = option != null;
+            var opt = inputOption ? option : new Option();
+
+            try
+            {
+                var error = NativeMethods.mat_resize_bilinear(src.NativePtr,
+                                                              dst.NativePtr,
+                                                              width,
+                                                              height,
+                                                              opt.NativePtr);
+                if (error != NativeMethods.ErrorType.OK)
+                    throw new NcnnException("Unknown Exception");
+            }
+            finally
+            {
+                if (!inputOption)
+                    opt?.Dispose();
+            }
+        }
+
+        public static void ResizeBicubic(Mat src, Mat dst, int width, int height, Option option = null)
+        {
+            var inputOption = option != null;
+            var opt = inputOption ? option : new Option();
+
+            try
+            {
+                var error = NativeMethods.mat_resize_bicubic(src.NativePtr,
+                                                             dst.NativePtr,
+                                                             width,
+                                                             height,
+                                                             opt.NativePtr);
+                if (error != NativeMethods.ErrorType.OK)
+                    throw new NcnnException("Unknown Exception");
+            }
+            finally
+            {
+                if (!inputOption)
+                    opt?.Dispose();
+            }
+        }
+
+        #endregion
+
+    }
+
+}

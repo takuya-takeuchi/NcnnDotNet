@@ -9,6 +9,9 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType option_Option_new(out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void option_Option_delete(IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
