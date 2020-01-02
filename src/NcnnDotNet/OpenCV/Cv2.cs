@@ -248,7 +248,7 @@ namespace NcnnDotNet.OpenCV
             }
         }
 
-        public static int WaitKey(int delay)
+        public static int WaitKey(int delay = 0)
         {
             var error = NativeMethods.opencv_waitKey(delay, out var returnValue);
             if (error != NativeMethods.ErrorType.OK)
