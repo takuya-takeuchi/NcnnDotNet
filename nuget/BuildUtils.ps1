@@ -711,20 +711,22 @@ function ConfigCPU([Config]$Config)
          .." -ForegroundColor Yellow
       cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF `
+            -D NCNN_VULKAN=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
    }
    else
    {
+      $env:OpenCV_DIR = $installOpenCVDir
+      $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D USE_NCNN_VULKAN=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF `
+            -D NCNN_VULKAN=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
@@ -768,26 +770,28 @@ function ConfigVulkan([Config]$Config)
       $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
-         -D USE_NCNN_VULKAN=OFF `
+         -D USE_NCNN_VULKAN=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF `
+            -D NCNN_VULKAN=ON `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
    }
    else
    {
+      $env:OpenCV_DIR = $installOpenCVDir
+      $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D USE_NCNN_VULKAN=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=ON `
+            -D NCNN_VULKAN=ON `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..

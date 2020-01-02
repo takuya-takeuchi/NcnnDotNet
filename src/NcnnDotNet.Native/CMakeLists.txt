@@ -6,6 +6,9 @@ set(PROJ_NAME NcnnDotNetNative)
 
 project(${PROJ_NAME} VERSION 2019.12.23)
 
+# definitions
+option(NCNN_VULKAN "vulkan compute support" OFF)
+
 # OS info
 message("-------------------------------------------------------")
 message("-- CMAKE_SYSTEM_INFO_FILE: ${CMAKE_SYSTEM_INFO_FILE}")
@@ -140,11 +143,6 @@ elseif(UNIX AND NOT APPLE)
     )
 else()
     message(FATAL_ERROR "Failed to link library")
-endif()
-
-# definitions
-if(USE_NCNN_VULKAN)
-  add_definitions(-DNCNN_VULKAN)
 endif()
 
 add_library(${PROJ_NAME} SHARED ${HEADERS}

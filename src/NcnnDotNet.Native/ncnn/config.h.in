@@ -21,7 +21,7 @@ DLLEXPORT std::string* get_version()
 
 DLLEXPORT bool is_support_vulkan()
 {
-#ifdef NCNN_VULKAN
+#if NCNN_VULKAN
     return true;
 #else
     return false;
