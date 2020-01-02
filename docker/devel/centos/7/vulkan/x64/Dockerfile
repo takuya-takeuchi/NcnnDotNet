@@ -17,7 +17,9 @@ ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum update -y && yum install -y \
     libX11-devel \
-    cmake3
+    cmake3 \
+    gtk2-devel \
+    pkg-config
 RUN yum groupinstall -y "Development Tools"
 
 # set compiler

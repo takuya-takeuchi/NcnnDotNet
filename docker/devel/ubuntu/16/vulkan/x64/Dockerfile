@@ -15,6 +15,8 @@ ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
 RUN apt-get update && apt-get install -y \
     build-essential \
     libx11-dev \
+    libgtk2.0-dev \
+    pkg-config \
     cmake
 
 # set compiler

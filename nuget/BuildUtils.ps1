@@ -551,6 +551,8 @@ class ThirdPartyBuilder
          -D BUILD_TESTS=OFF `
          -D BUILD_DOCS=OFF `
          -D WITH_CUDA=OFF `
+         -D WITH_GTK=ON `
+         -D WITH_GTK_2_X=ON `
          -D BUILD_PROTOBUF=OFF `
          -D WITH_PROTOBUF=OFF `
          -D WITH_IPP=OFF `
@@ -569,6 +571,8 @@ class ThirdPartyBuilder
                   -D BUILD_TESTS=OFF `
                   -D BUILD_DOCS=OFF `
                   -D WITH_CUDA=OFF `
+                  -D WITH_GTK=ON `
+                  -D WITH_GTK_2_X=ON `
                   -D BUILD_PROTOBUF=OFF `
                   -D WITH_PROTOBUF=OFF `
                   -D WITH_IPP=OFF `
