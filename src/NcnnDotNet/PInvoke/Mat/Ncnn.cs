@@ -9,7 +9,6 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
         public static extern ErrorType mat_resize_bicubic(IntPtr src,
                                                           IntPtr dst,
                                                           int w,
@@ -17,7 +16,6 @@ namespace NcnnDotNet
                                                           IntPtr opt);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        [return: MarshalAs(UnmanagedType.U1)]
         public static extern ErrorType mat_resize_bilinear(IntPtr src,
                                                            IntPtr dst,
                                                            int w,
