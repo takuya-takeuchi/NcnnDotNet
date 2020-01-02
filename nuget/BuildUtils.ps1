@@ -429,16 +429,33 @@ class ThirdPartyBuilder
          $ret = $installDir
 
          Write-Host "   cmake configuration" -ForegroundColor Yellow
-         cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
-                                    -D BUILD_SHARED_LIBS=OFF `
-                                    -D CMAKE_INSTALL_PREFIX="$installDir" `
-                                    -D protobuf_BUILD_TESTS=OFF `
-                                    -D protobuf_MSVC_STATIC_RUNTIME=OFF `
-                                    $protobufDir
-         Write-Host "   nmake" -ForegroundColor Yellow
-         nmake
-         Write-Host "   nmake install" -ForegroundColor Yellow
-         nmake install
+
+         if ($global:IsWindows)
+         {
+            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                                       -D BUILD_SHARED_LIBS=OFF `
+                                       -D CMAKE_INSTALL_PREFIX="$installDir" `
+                                       -D protobuf_BUILD_TESTS=OFF `
+                                       -D protobuf_MSVC_STATIC_RUNTIME=OFF `
+                                       $protobufDir
+            Write-Host "   nmake" -ForegroundColor Yellow
+            nmake
+            Write-Host "   nmake install" -ForegroundColor Yellow
+            nmake install
+         }
+         else
+         {
+            cmake -D CMAKE_BUILD_TYPE=Release `
+                  -D BUILD_SHARED_LIBS=OFF `
+                  -D CMAKE_INSTALL_PREFIX="$installDir" `
+                  -D protobuf_BUILD_TESTS=OFF `
+                  -D protobuf_MSVC_STATIC_RUNTIME=OFF `
+                  $protobufDir
+            Write-Host "   make" -ForegroundColor Yellow
+            make -j4
+            Write-Host "   make install" -ForegroundColor Yellow
+            make install
+         }
       }
       finally
       {
@@ -467,29 +484,59 @@ class ThirdPartyBuilder
          $ret = $installDir
 
          Write-Host "   cmake configuration" -ForegroundColor Yellow
-         cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
-                                    -D BUILD_SHARED_LIBS=OFF `
-                                    -D BUILD_WITH_STATIC_CRT=OFF `
-                                    -D CMAKE_INSTALL_PREFIX="$installDir" `
-                                    -D BUILD_SHARED_LIBS=OFF `
-                                    -D BUILD_opencv_world=ON `
-                                    -D BUILD_opencv_java=OFF `
-                                    -D BUILD_opencv_python=OFF `
-                                    -D BUILD_opencv_python2=OFF `
-                                    -D BUILD_opencv_python3=OFF `
-                                    -D BUILD_PERF_TESTS=OFF `
-                                    -D BUILD_TESTS=OFF `
-                                    -D BUILD_DOCS=OFF `
-                                    -D WITH_CUDA=OFF `
-                                    -D BUILD_PROTOBUF=OFF `
-                                    -D WITH_PROTOBUF=OFF `
-                                    -D WITH_IPP=OFF `
-                                    -D WITH_FFMPEG=OFF `
-                                    $opencvDir
-         Write-Host "   nmake" -ForegroundColor Yellow
-         nmake
-         Write-Host "   nmake install" -ForegroundColor Yellow
-         nmake install
+
+         if ($global:IsWindows)
+         {
+            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                                       -D BUILD_SHARED_LIBS=OFF `
+                                       -D BUILD_WITH_STATIC_CRT=OFF `
+                                       -D CMAKE_INSTALL_PREFIX="$installDir" `
+                                       -D BUILD_SHARED_LIBS=OFF `
+                                       -D BUILD_opencv_world=ON `
+                                       -D BUILD_opencv_java=OFF `
+                                       -D BUILD_opencv_python=OFF `
+                                       -D BUILD_opencv_python2=OFF `
+                                       -D BUILD_opencv_python3=OFF `
+                                       -D BUILD_PERF_TESTS=OFF `
+                                       -D BUILD_TESTS=OFF `
+                                       -D BUILD_DOCS=OFF `
+                                       -D WITH_CUDA=OFF `
+                                       -D BUILD_PROTOBUF=OFF `
+                                       -D WITH_PROTOBUF=OFF `
+                                       -D WITH_IPP=OFF `
+                                       -D WITH_FFMPEG=OFF `
+                                       $opencvDir
+            Write-Host "   nmake" -ForegroundColor Yellow
+            nmake
+            Write-Host "   nmake install" -ForegroundColor Yellow
+            nmake install
+         }
+         else
+         {
+            cmake -D CMAKE_BUILD_TYPE=Release `
+                  -D BUILD_SHARED_LIBS=OFF `
+                  -D BUILD_WITH_STATIC_CRT=OFF `
+                  -D CMAKE_INSTALL_PREFIX="$installDir" `
+                  -D BUILD_SHARED_LIBS=OFF `
+                  -D BUILD_opencv_world=ON `
+                  -D BUILD_opencv_java=OFF `
+                  -D BUILD_opencv_python=OFF `
+                  -D BUILD_opencv_python2=OFF `
+                  -D BUILD_opencv_python3=OFF `
+                  -D BUILD_PERF_TESTS=OFF `
+                  -D BUILD_TESTS=OFF `
+                  -D BUILD_DOCS=OFF `
+                  -D WITH_CUDA=OFF `
+                  -D BUILD_PROTOBUF=OFF `
+                  -D WITH_PROTOBUF=OFF `
+                  -D WITH_IPP=OFF `
+                  -D WITH_FFMPEG=OFF `
+                  $opencvDir
+            Write-Host "   make" -ForegroundColor Yellow
+            make -j4
+            Write-Host "   make install" -ForegroundColor Yellow
+            make install
+         }
       }
       finally
       {
@@ -517,26 +564,51 @@ class ThirdPartyBuilder
          $installDir = Join-Path $current2 install
          $ret = $installDir
 
-         $includeDir = Join-Path $protobufInstallDir include
-         $librariesDir = Join-Path $protobufInstallDir lib | `
-                         Join-Path -ChildPath libprotobuf.lib
-         $exeDir = Join-Path $protobufInstallDir bin | `
-                   Join-Path -ChildPath protoc.exe
-
          Write-Host "   cmake configuration" -ForegroundColor Yellow
-         cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
-                                    -D BUILD_SHARED_LIBS=OFF `
-                                    -D CMAKE_INSTALL_PREFIX="$installDir" `
-                                    -D Protobuf_INCLUDE_DIR="$includeDir" `
-                                    -D Protobuf_LIBRARIES="$librariesDir" `
-                                    -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
-                                    -D NCNN_VULKAN:BOOL=$vulkanOnOff `
-                                    -D NCNN_OPENCV:BOOL=OFF `
-                                    $ncnnDir
-         Write-Host "   nmake" -ForegroundColor Yellow
-         nmake
-         Write-Host "   nmake install" -ForegroundColor Yellow
-         nmake install
+         if ($global:IsWindows)
+         {
+            $includeDir = Join-Path $protobufInstallDir include
+            $librariesDir = Join-Path $protobufInstallDir lib | `
+                            Join-Path -ChildPath libprotobuf.lib
+            $exeDir = Join-Path $protobufInstallDir bin | `
+                      Join-Path -ChildPath protoc.exe
+
+            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                                       -D BUILD_SHARED_LIBS=OFF `
+                                       -D CMAKE_INSTALL_PREFIX="$installDir" `
+                                       -D Protobuf_INCLUDE_DIR="$includeDir" `
+                                       -D Protobuf_LIBRARIES="$librariesDir" `
+                                       -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
+                                       -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                                       -D NCNN_OPENCV:BOOL=OFF `
+                                       $ncnnDir
+            Write-Host "   nmake" -ForegroundColor Yellow
+            nmake
+            Write-Host "   nmake install" -ForegroundColor Yellow
+            nmake install
+         }
+         else
+         {
+            $includeDir = Join-Path $protobufInstallDir include
+            $librariesDir = Join-Path $protobufInstallDir lib | `
+                            Join-Path /-ChildPath libprotobuf.a
+            $exeDir = Join-Path $protobufInstallDir bin | `
+                      Join-Path -ChildPath protoc
+
+            cmake -D CMAKE_BUILD_TYPE=Release `
+                  -D BUILD_SHARED_LIBS=OFF `
+                  -D CMAKE_INSTALL_PREFIX="$installDir" `
+                  -D Protobuf_INCLUDE_DIR="$includeDir" `
+                  -D Protobuf_LIBRARIES="$librariesDir" `
+                  -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
+                  -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                  -D NCNN_OPENCV:BOOL=OFF `
+                  $ncnnDir
+            Write-Host "   make" -ForegroundColor Yellow
+            make -j4
+            Write-Host "   make install" -ForegroundColor Yellow
+            make install
+         }
       }
       finally
       {
@@ -553,32 +625,35 @@ function ConfigCPU([Config]$Config)
    if ($IsWindows)
    {
       CallVisualStudioDeveloperConsole
+   }
 
-      $Builder = [ThirdPartyBuilder]::new($Config)
+   $Builder = [ThirdPartyBuilder]::new($Config)
       
-      # Build Protobuf
-      $installProtobufDir = $Builder.BuildProtobuf()
-      
-      # Build opencv
-      $installOpenCVDir = $Builder.BuildOpenCV()
-      
-      # Build ncnn
-      $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
+   # Build Protobuf
+   $installProtobufDir = $Builder.BuildProtobuf()
+   
+   # Build opencv
+   $installOpenCVDir = $Builder.BuildOpenCV()
+   
+   # Build ncnn
+   $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
 
-      # Build ncnn
+   # Build ncnn
+   if ($IsWindows)
+   {
       $env:OpenCV_DIR = $Config.GetOpenCVRootDir()
       $env:ncnn_DIR = $installNcnnDir
       cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN:BOOL=OFF `
+            -D USE_NCNN_VULKAN=OFF `
             ..
    }
    else
    {
-      $arch_type = $Config.GetArchitecture()
-      cmake -D ARCH_TYPE="$arch_type" `
-            -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN:BOOL=OFF `
+      cmake -D BUILD_SHARED_LIBS=ON `
+            -D USE_NCNN_VULKAN=OFF `
+            -D OpenCV_DIR=$installOpenCVDir `
+            -D ncnn_DIR=$installNcnnDir `
             ..
    }
 }
@@ -599,19 +674,22 @@ function ConfigVulkan([Config]$Config)
    if ($IsWindows)
    {
       CallVisualStudioDeveloperConsole
+   }
 
-      $Builder = [ThirdPartyBuilder]::new($Config)
+   $Builder = [ThirdPartyBuilder]::new($Config)
       
-      # Build Protobuf
-      $installProtobufDir = $Builder.BuildProtobuf()
-      
-      # Build opencv
-      $installOpenCVDir = $Builder.BuildOpenCV()
-      
-      # Build ncnn
-      $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
+   # Build Protobuf
+   $installProtobufDir = $Builder.BuildProtobuf()
+   
+   # Build opencv
+   $installOpenCVDir = $Builder.BuildOpenCV()
+   
+   # Build ncnn
+   $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
 
-      # Build ncnn
+   # Build ncnn
+   if ($IsWindows)
+   {
       $env:OpenCV_DIR = $Config.GetOpenCVRootDir()
       $env:ncnn_DIR = $installNcnnDir
       cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
@@ -621,10 +699,10 @@ function ConfigVulkan([Config]$Config)
    }
    else
    {
-      $arch_type = $Config.GetArchitecture()
-      cmake -D ARCH_TYPE="$arch_type" `
-            -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=ON `
+      cmake -D BUILD_SHARED_LIBS=ON `
+            -D USE_NCNN_VULKAN=OFF `
+            -D OpenCV_DIR=$installOpenCVDir `
+            -D ncnn_DIR=$installNcnnDir `
             ..
    }
 }

@@ -119,24 +119,13 @@ if (MSVC OR MSYS OR MINGW)
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/ncnn.lib
+        $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_world
-        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
-        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
+        $ENV{VULKAN_SDK}/lib/libvulkan.dylib
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/ncnn.lib
+        $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_world
         #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
         #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
