@@ -53,11 +53,9 @@ endif()
 get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
+set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)
 find_package(ncnn REQUIRED)
-
-message("-- ncnn_INCLUDE_DIRS: ${ncnn_INCLUDE_DIRS}")
-message("-- OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
 
 if (MSVC OR MSYS OR MINGW)
     include_directories("$ENV{ncnn_DIR}/include"
