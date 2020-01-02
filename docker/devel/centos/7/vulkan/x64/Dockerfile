@@ -11,7 +11,7 @@ WORKDIR /usr/share/vulkan
 RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN rm vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
-ENV VULKAN_SDK ${PWD}/${VULKAN_SDK_VERSION}
+ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}
 
 # install package to build
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
