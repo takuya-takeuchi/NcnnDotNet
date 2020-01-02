@@ -64,6 +64,23 @@ namespace NcnnDotNet
         public static extern ErrorType mat_Mat_substract_mean_normalize(IntPtr mat, float[] meanVals, float[] normVals);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_from_pixels(IntPtr pixels,
+                                                           PixelType type,
+                                                           int w,
+                                                           int h,
+                                                           IntPtr allocator,
+                                                           out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_from_pixels2(IntPtr pixels,
+                                                            PixelType type,
+                                                            int w,
+                                                            int h,
+                                                            int stride,
+                                                            IntPtr allocator,
+                                                            out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_from_pixels_resize(IntPtr pixels,
                                                                   PixelType type,
                                                                   int w,
@@ -72,6 +89,17 @@ namespace NcnnDotNet
                                                                   int targetHeight,
                                                                   IntPtr allocator,
                                                                   out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_from_pixels_resize2(IntPtr pixels,
+                                                                   PixelType type,
+                                                                   int w,
+                                                                   int h,
+                                                                   int stride,
+                                                                   int targetWidth,
+                                                                   int targetHeight,
+                                                                   IntPtr allocator,
+                                                                   out IntPtr returnValue);
 
     }
 

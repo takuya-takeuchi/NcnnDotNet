@@ -22,6 +22,9 @@ namespace NcnnDotNet
         public static extern ErrorType opencv_imread(byte[] filename, int filenameLength, int flags, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_imwrite(byte[] filename, int filenameLength, IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_imshow(byte[] winName, int winNameLength, IntPtr mat);
 
         #region putText
@@ -93,6 +96,24 @@ namespace NcnnDotNet
                                                               int thickness,
                                                               CvLineTypes lineType,
                                                               int shift);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_rectangle2_int32_t(IntPtr mat,
+                                                                 IntPtr pt1,
+                                                                 IntPtr pt2,
+                                                                 IntPtr scalar,
+                                                                 int thickness,
+                                                                 CvLineTypes lineType,
+                                                                 int shift);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_rectangle2_float(IntPtr mat,
+                                                               IntPtr pt1,
+                                                               IntPtr pt2,
+                                                               IntPtr scalar,
+                                                               int thickness,
+                                                               CvLineTypes lineType,
+                                                               int shift);
 
         #endregion
 
