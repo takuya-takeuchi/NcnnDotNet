@@ -43,3 +43,5 @@ RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 \
                  --slave /usr/local/bin/cpack cpack /usr/bin/cpack3 \
                  --slave /usr/local/bin/ccmake ccmake /usr/bin/ccmake3 \
                  --family cmake
+
+WORKDIR /

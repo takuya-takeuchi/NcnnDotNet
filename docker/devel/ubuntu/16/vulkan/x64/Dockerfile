@@ -30,3 +30,5 @@ RUN dpkg -i packages-microsoft-prod.deb && rm packages-microsoft-prod.deb
 RUN apt-get update && apt-get install -y \
     powershell \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /
