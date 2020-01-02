@@ -4,6 +4,7 @@ cmake_policy(SET CMP0054 NEW)
 
 set(PROJ_NAME NcnnDotNetNative)
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(${PROJ_NAME} VERSION 2019.12.23)
 
@@ -62,6 +63,16 @@ find_package(OpenCV REQUIRED)
 
 if (NCNN_VULKAN)
     find_package(ncnn REQUIRED)
+endif()
+
+# link OpenMP (https://github.com/Tencent/ncnn/issues/659)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    find_package(OpenMP REQUIRED)
+    if(OPENMP_FOUND)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    endif()
 endif()
 
 if (MSVC OR MSYS OR MINGW)
