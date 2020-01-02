@@ -27,6 +27,25 @@ DLLEXPORT int32_t opencv_rectangle_##__TYPENAME__(cv::Mat* mat,\
 \
     return error;\
 }\
+\
+DLLEXPORT int32_t opencv_rectangle2_##__TYPENAME__(cv::Mat* mat,\
+                                                   cv::Point_<__TYPE__>* pt1,\
+                                                   cv::Point_<__TYPE__>* pt2,\
+                                                   cv::Scalar* scalar,\
+                                                   const int32_t thickness,\
+                                                   const int lineType,\
+                                                   const int shift)\
+{\
+    int32_t error = ERR_OK;\
+\
+    auto& m = *mat;\
+    auto& p1 = *pt1;\
+    auto& p2 = *pt2;\
+    auto& s = *scalar;\
+    cv::rectangle(m, p1, p2, s, thickness, lineType, shift);\
+\
+    return error;\
+}\
 
 #define MAKE_PUTTEXT(__TYPE__, __TYPENAME__)\
 DLLEXPORT int32_t opencv_putText_##__TYPENAME__(cv::Mat* mat,\
