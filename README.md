@@ -4,7 +4,7 @@ ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
 
 ## Related Projects
 
-- [NcnnDotNet](https://github.com/takuya-takeuchi/NcnnDotNet)
+- [UltraFaceDotNet](https://github.com/takuya-takeuchi/UltraFaceDotNet)
   - Face detection .NET library uses NcnnDotNet
  
 ## Dependencies Libraries and Products
