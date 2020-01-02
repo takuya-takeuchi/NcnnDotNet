@@ -68,8 +68,8 @@ namespace SqueezeNet
                 using var @out = new Mat();
                 ex.Extract("prob", @out);
 
-                clsScores.Capacity = @out.Width;
-                for (var j = 0; j < @out.Width; j++)
+                clsScores.Capacity = @out.W;
+                for (var j = 0; j < @out.W; j++)
                     clsScores.Add(@out[j]);
             }
 

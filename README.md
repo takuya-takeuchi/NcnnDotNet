@@ -1,6 +1,11 @@
 # ![Alt text](nuget/nn48.png "NcnnDotNet") NcnnDotNet [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
 ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
+
+## Related Projects
+
+- [NcnnDotNet](https://github.com/takuya-takeuchi/NcnnDotNet)
+  - Face detection .NET library uses NcnnDotNet
  
 ## Dependencies Libraries and Products
 

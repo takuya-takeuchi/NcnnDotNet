@@ -143,6 +143,48 @@ DLLEXPORT int32_t mat_Mat_substract_mean_normalize(ncnn::Mat* mat,
     return error;
 }
 
+DLLEXPORT int32_t mat_Mat_from_pixels(const unsigned char* pixels,
+                                      const int32_t type,
+                                      const int32_t w,
+                                      const int32_t h,
+                                      ncnn::Allocator* allocator,
+                                      ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = ncnn::Mat::from_pixels(pixels,
+                                             type,
+                                             w,
+                                             h,
+                                             allocator);
+
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_from_pixels2(const unsigned char* pixels,
+                                       const int32_t type,
+                                       const int32_t w,
+                                       const int32_t h,
+                                       const int32_t stride,
+                                       ncnn::Allocator* allocator,
+                                       ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = ncnn::Mat::from_pixels(pixels,
+                                             type,
+                                             w,
+                                             h,
+                                             stride,
+                                             allocator);
+
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
 DLLEXPORT int32_t mat_Mat_from_pixels_resize(const unsigned char* pixels,
                                              const int32_t type,
                                              const int32_t w,
@@ -163,6 +205,64 @@ DLLEXPORT int32_t mat_Mat_from_pixels_resize(const unsigned char* pixels,
                                                     allocator);
 
     *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_from_pixels_resize2(const unsigned char* pixels,
+                                              const int32_t type,
+                                              const int32_t w,
+                                              const int32_t h,
+                                              const int32_t stride,
+                                              const int32_t target_width,
+                                              const int32_t target_height,
+                                              ncnn::Allocator* allocator,
+                                              ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& ret = ncnn::Mat::from_pixels_resize(pixels,
+                                                    type,
+                                                    w,
+                                                    h,
+                                                    stride,
+                                                    target_width,
+                                                    target_height,
+                                                    allocator);
+
+    *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_resize_bicubic(ncnn::Mat* src,
+                                     ncnn::Mat* dst,
+                                     const int32_t w,
+                                     const int32_t h,
+                                     ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::resize_bicubic(s, d, w, h, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_resize_bilinear(ncnn::Mat* src,
+                                      ncnn::Mat* dst,
+                                      const int32_t w,
+                                      const int32_t h,
+                                      ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::resize_bilinear(s, d, w, h, o);
 
     return error;
 }

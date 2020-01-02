@@ -56,6 +56,22 @@ namespace NcnnDotNet.OpenCV
             NativeMethods.opencv_imshow(str, str.Length, mat.NativePtr);
         }
 
+        public static void ImWrite(string fileName, Mat mat)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            var str = Ncnn.Encoding.GetBytes(fileName);
+            var error = NativeMethods.opencv_imwrite(str, str.Length, mat.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
         public static void PutText(Mat mat,
                                    string text,
                                    Point<int> point,
@@ -185,6 +201,60 @@ namespace NcnnDotNet.OpenCV
         }
 
         public static void Rectangle(Mat mat,
+                                     Point<int> pt1,
+                                     Point<int> pt2,
+                                     Scalar<double> scalar,
+                                     int thickness = 1,
+                                     CvLineTypes lineType = CvLineTypes.Line8,
+                                     int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativePt1 = pt1.ToNative())
+            using (var nativePt2 = pt2.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_rectangle2_int32_t(mat.NativePtr,
+                                                        nativePt1.NativePtr,
+                                                        nativePt2.NativePtr,
+                                                        nativeScalar.NativePtr,
+                                                        thickness,
+                                                        lineType,
+                                                        shift);
+            }
+        }
+
+        public static void Rectangle(Mat mat,
+                                     Point<float> pt1,
+                                     Point<float> pt2,
+                                     Scalar<double> scalar,
+                                     int thickness = 1,
+                                     CvLineTypes lineType = CvLineTypes.Line8,
+                                     int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativePt1 = pt1.ToNative())
+            using (var nativePt2 = pt2.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_rectangle2_float(mat.NativePtr,
+                                                      nativePt1.NativePtr,
+                                                      nativePt2.NativePtr,
+                                                      nativeScalar.NativePtr,
+                                                      thickness,
+                                                      lineType,
+                                                      shift);
+            }
+        }
+
+        public static void Rectangle(Mat mat,
                                      Rect<int> rect,
                                      Scalar<double> scalar,
                                      int thickness = 1,
@@ -232,7 +302,7 @@ namespace NcnnDotNet.OpenCV
             }
         }
 
-        public static int WaitKey(int delay)
+        public static int WaitKey(int delay = 0)
         {
             var error = NativeMethods.opencv_waitKey(delay, out var returnValue);
             if (error != NativeMethods.ErrorType.OK)

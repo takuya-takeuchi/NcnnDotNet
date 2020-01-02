@@ -81,10 +81,10 @@ namespace ShuffleNetV2
                     softmax.ForwardInplace(@out, shuffleNetV2.Opt);
                 }
 
-                using var @out2 = @out.Reshape(@out.Width * @out.Height * @out.C);
+                using var @out2 = @out.Reshape(@out.W * @out.H * @out.C);
 
-                clsScores.Capacity = @out2.Width;
-                for (var j = 0; j < @out2.Width; j++)
+                clsScores.Capacity = @out2.W;
+                for (var j = 0; j < @out2.W; j++)
                     clsScores.Add(@out2[j]);
             }
 

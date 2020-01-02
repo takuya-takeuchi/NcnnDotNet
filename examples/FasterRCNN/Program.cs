@@ -127,7 +127,7 @@ namespace FasterRCNN
                     ex2.Extract("bbox_pred", bboxPred);
                     ex2.Extract("cls_prob", clsProb);
 
-                    var numClass = clsProb.Width;
+                    var numClass = clsProb.W;
 
                     // There is no equivalent to std::vector::resize  in C#
                     Resize(classCandidates, numClass);

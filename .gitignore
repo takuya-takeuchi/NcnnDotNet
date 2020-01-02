@@ -306,4 +306,4 @@ __pycache__/
 *.xsd.cs
 
 # Custom
-src/NCNNDotNet.Native/build*
+src/NcnnDotNet.Native/build*

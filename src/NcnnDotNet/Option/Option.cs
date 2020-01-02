@@ -9,6 +9,15 @@ namespace NcnnDotNet
 
         #region Constructors
 
+        public Option()
+        {
+            var error = NativeMethods.option_Option_new(out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
         internal Option(IntPtr ptr, bool isEnabledDispose = true) :
             base(isEnabledDispose)
         {

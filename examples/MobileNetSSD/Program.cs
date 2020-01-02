@@ -80,7 +80,7 @@ namespace MobileNetSSD
 
                 //     printf("%d %d %d\n", out.w, out.h, out.c);
                 objects.Clear();
-                for (var i = 0; i < @out.Height; i++)
+                for (var i = 0; i < @out.H; i++)
                 {
                     var values = @out.Row(i);
 

@@ -27,6 +27,25 @@ DLLEXPORT int32_t opencv_rectangle_##__TYPENAME__(cv::Mat* mat,\
 \
     return error;\
 }\
+\
+DLLEXPORT int32_t opencv_rectangle2_##__TYPENAME__(cv::Mat* mat,\
+                                                   cv::Point_<__TYPE__>* pt1,\
+                                                   cv::Point_<__TYPE__>* pt2,\
+                                                   cv::Scalar* scalar,\
+                                                   const int32_t thickness,\
+                                                   const int lineType,\
+                                                   const int shift)\
+{\
+    int32_t error = ERR_OK;\
+\
+    auto& m = *mat;\
+    auto& p1 = *pt1;\
+    auto& p2 = *pt2;\
+    auto& s = *scalar;\
+    cv::rectangle(m, p1, p2, s, thickness, lineType, shift);\
+\
+    return error;\
+}\
 
 #define MAKE_PUTTEXT(__TYPE__, __TYPENAME__)\
 DLLEXPORT int32_t opencv_putText_##__TYPENAME__(cv::Mat* mat,\
@@ -86,6 +105,17 @@ DLLEXPORT void opencv_imshow(const char *winname, const int32_t winname_len, cv:
     std::string win(winname, winname_len);
     const auto& m = *mat;
     cv::imshow(win, m);
+}
+
+DLLEXPORT int32_t opencv_imwrite(const char* filename, const int32_t filename_len, cv::Mat* mat)
+{
+    int32_t error = ERR_OK;
+
+    std::string path(filename, filename_len);
+    const auto& m = *mat;
+    const auto ret = cv::imwrite(path, m);
+
+    return error;
 }
 
 DLLEXPORT int32_t opencv_waitKey(const int32_t delay, int32_t* returnValue)
