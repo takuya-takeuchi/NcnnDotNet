@@ -16,6 +16,17 @@ $NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
 
 $BuildSourceHash = [Config]::GetBinaryLibraryOSXHash()
 
+$VulkanSDKDir = $env:VULKAN_SDK
+if ([string]::IsNullOrEmpty($VulkanSDKDir))
+{
+   Write-Host "Environmental Value 'VULKAN_SDK' is not defined." -ForegroundColor Yellow
+}
+
+if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
+{
+   Write-Host "Environmental Value 'VULKAN_SDK' does not exist." -ForegroundColor Yellow
+}
+
 # https://docs.microsoft.com/ja-jp/dotnet/core/rid-catalog#macos-rids
 # osx-x86 does not support
 $BuildTargets = @()
