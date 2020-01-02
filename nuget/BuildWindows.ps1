@@ -29,9 +29,7 @@ if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
 
 $BuildTargets = @()
 $BuildTargets += New-Object PSObject -Property @{Target = "cpu";    Architecture = 64; RID = "$OperatingSystem-x64";  }
-$BuildTargets += New-Object PSObject -Property @{Target = "cpu";    Architecture = 32; RID = "$OperatingSystem-x86";  }
 $BuildTargets += New-Object PSObject -Property @{Target = "vulkan"; Architecture = 64; RID = "$OperatingSystem-x64";  }
-$BuildTargets += New-Object PSObject -Property @{Target = "vulkan"; Architecture = 32; RID = "$OperatingSystem-x64";  }
 
 foreach ($BuildTarget in $BuildTargets)
 {
