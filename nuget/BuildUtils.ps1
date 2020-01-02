@@ -172,7 +172,7 @@ class Config
    [string] GetNcnnRootDir()
    {
       return   Join-Path $this.GetRootDir() src |
-               Join-Path -ChildPath Ncnn
+               Join-Path -ChildPath ncnn
    }
 
    [string] GetOpenCVRootDir()
