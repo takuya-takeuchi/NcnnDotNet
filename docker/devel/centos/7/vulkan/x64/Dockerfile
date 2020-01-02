@@ -11,13 +11,13 @@ WORKDIR /usr/share/vulkan
 RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN rm vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
-ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}
+ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
 
 # install package to build
 RUN yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 RUN yum update -y && yum install -y \
     libX11-devel \
-    cmake3 \
+    cmake3
 RUN yum groupinstall -y "Development Tools"
 
 # set compiler
