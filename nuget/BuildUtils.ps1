@@ -609,7 +609,7 @@ class ThirdPartyBuilder
          if ($global:IsWindows)
          {
             $includeDir = Join-Path $protobufInstallDir include
-            $librariesDir = Join-Path $protobufInstallDir lib | `
+            $librarieFile = Join-Path $protobufInstallDir lib | `
                             Join-Path -ChildPath libprotobuf.lib
             $exeDir = Join-Path $protobufInstallDir bin | `
                       Join-Path -ChildPath protoc.exe
@@ -618,7 +618,7 @@ class ThirdPartyBuilder
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
          -D Protobuf_INCLUDE_DIR="$includeDir" `
-         -D Protobuf_LIBRARIES="$librariesDir" `
+         -D Protobuf_LIBRARIES="$librarieFile" `
          -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
@@ -627,7 +627,7 @@ class ThirdPartyBuilder
                                        -D BUILD_SHARED_LIBS=OFF `
                                        -D CMAKE_INSTALL_PREFIX="$installDir" `
                                        -D Protobuf_INCLUDE_DIR="$includeDir" `
-                                       -D Protobuf_LIBRARIES="$librariesDir" `
+                                       -D Protobuf_LIBRARIES="$librarieFile" `
                                        -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
                                        -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                                        -D NCNN_OPENCV:BOOL=OFF `
@@ -640,8 +640,14 @@ class ThirdPartyBuilder
          else
          {
             $includeDir = Join-Path $protobufInstallDir include
-            $librariesDir = Join-Path $protobufInstallDir lib | `
+            $librarieFile = Join-Path $protobufInstallDir lib | `
                             Join-Path -ChildPath libprotobuf.a
+            # centos
+            if (!(Test-Path $librarieFile))
+            {
+               $librarieFile = Join-Path $protobufInstallDir lib64 | `
+                               Join-Path -ChildPath libprotobuf.a
+            }
             $exeDir = Join-Path $protobufInstallDir bin | `
                       Join-Path -ChildPath protoc
 
@@ -649,7 +655,7 @@ class ThirdPartyBuilder
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
          -D Protobuf_INCLUDE_DIR="$includeDir" `
-         -D Protobuf_LIBRARIES="$librariesDir" `
+         -D Protobuf_LIBRARIES="$librarieFile" `
          -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
@@ -658,7 +664,7 @@ class ThirdPartyBuilder
                   -D BUILD_SHARED_LIBS=OFF `
                   -D CMAKE_INSTALL_PREFIX="$installDir" `
                   -D Protobuf_INCLUDE_DIR="$includeDir" `
-                  -D Protobuf_LIBRARIES="$librariesDir" `
+                  -D Protobuf_LIBRARIES="$librarieFile" `
                   -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
                   -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                   -D NCNN_OPENCV:BOOL=OFF `
