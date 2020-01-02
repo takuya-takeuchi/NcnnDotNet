@@ -641,7 +641,7 @@ class ThirdPartyBuilder
          {
             $includeDir = Join-Path $protobufInstallDir include
             $librariesDir = Join-Path $protobufInstallDir lib | `
-                            Join-Path /-ChildPath libprotobuf.a
+                            Join-Path -ChildPath libprotobuf.a
             $exeDir = Join-Path $protobufInstallDir bin | `
                       Join-Path -ChildPath protoc
 
@@ -705,13 +705,13 @@ function ConfigCPU([Config]$Config)
       $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
-         -D USE_NCNN_VULKAN=OFF `
+         -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
-            -D NCNN_VULKAN=OFF `
+            -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
@@ -721,12 +721,12 @@ function ConfigCPU([Config]$Config)
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
-         -D USE_NCNN_VULKAN=OFF `
+         -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
-            -D NCNN_VULKAN=OFF `
+            -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
@@ -770,13 +770,13 @@ function ConfigVulkan([Config]$Config)
       $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
-         -D USE_NCNN_VULKAN=ON `
+         -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
-            -D NCNN_VULKAN=ON `
+            -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
@@ -786,12 +786,12 @@ function ConfigVulkan([Config]$Config)
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
-         -D USE_NCNN_VULKAN=ON `
+         -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
-            -D NCNN_VULKAN=ON `
+            -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR=$installNcnnDir `
             ..
