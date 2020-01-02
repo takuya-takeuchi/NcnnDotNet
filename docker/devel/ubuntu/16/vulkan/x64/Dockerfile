@@ -32,3 +32,5 @@ RUN apt-get update && apt-get install -y \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
+# old cmake does not have FindVulkan.cmake
+RUN cp /usr/share/vulkan/1.1.92.1/samples/cmake/FindVulkan.cmake /usr/share/cmake-3.5/Modules
