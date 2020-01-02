@@ -3,6 +3,7 @@ cmake_policy(SET CMP0053 NEW)
 cmake_policy(SET CMP0054 NEW)
 
 set(PROJ_NAME NcnnDotNetNative)
+set(CMAKE_CXX_STANDARD 11)
 
 project(${PROJ_NAME} VERSION 2019.12.23)
 
