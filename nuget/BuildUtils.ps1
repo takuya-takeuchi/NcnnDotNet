@@ -32,22 +32,22 @@ class Config
    
    static $BuildLibraryWindowsHash = 
    @{
-      "NcnnDotNet.Native"     = "NcnnDotNet.dll";
+      "NcnnDotNet.Native"     = "NcnnDotNetNative.dll";
    }
    
    static $BuildLibraryLinuxHash = 
    @{
-      "NcnnDotNet.Native"     = "libNcnnDotNet.so";
+      "NcnnDotNet.Native"     = "libNcnnDotNetNative.so";
    }
    
    static $BuildLibraryOSXHash = 
    @{
-      "NcnnDotNet.Native"     = "libNcnnDotNet.dylib";
+      "NcnnDotNet.Native"     = "libNcnnDotNetNative.dylib";
    }
    
    static $BuildLibraryIOSHash = 
    @{
-      "NcnnDotNet.Native"     = "libNcnnDotNet.a";
+      "NcnnDotNet.Native"     = "libNcnnDotNetNative.a";
    }
 
    [string]   $_Root
