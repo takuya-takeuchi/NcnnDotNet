@@ -39,15 +39,7 @@ foreach($BuildTarget in $BuildTargets)
    $target = $BuildTarget.Target
    $architecture = $BuildTarget.Architecture
    $rid = $BuildTarget.RID
-
-   if ($target -eq "cpu")
-   {
-      $option = ""
-   }
-   elseif ($target -eq "vulkan")
-   {
-      $option = $VulkanSDKDir
-   }
+   $option = ""
 
    $Config = [Config]::new($NcnnDotNetRoot, "Release", $target, $architecture, $platform, $option)
    $libraryDir = Join-Path "artifacts" $Config.GetArtifactDirectoryName()

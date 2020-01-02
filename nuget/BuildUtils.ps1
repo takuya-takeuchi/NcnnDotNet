@@ -110,7 +110,7 @@ class Config
       {
          "vulkan"
          {
-            $this._VulkanSDKDirectory = $Option
+            $this._VulkanSDKDirectory = $env:VULKAN_SDK
          }
       }
 
