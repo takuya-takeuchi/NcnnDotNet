@@ -2,6 +2,9 @@ ARG IMAGE_NAME
 FROM ${IMAGE_NAME}:latest
 LABEL maintainer "Takuya Takeuchi <takuya.takeuchi.dev@gmail.com>"
 
+RUN yum update -y && yum install -y \
+    gtk2-devel
+
 # Reference
 # https://dotnet.microsoft.com/download/linux-package-manager/centos7/sdk-2.1.402
 
