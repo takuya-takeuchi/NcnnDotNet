@@ -604,6 +604,8 @@ class ThirdPartyBuilder
          -D BUILD_opencv_video=OFF `
          -D BUILD_opencv_videoio=OFF `
          -D BUILD_opencv_videostab=OFF `
+         -D BUILD_PNG=ON `
+         -D BUILD_JPEG=ON `
          -D WITH_CUDA=OFF `
          -D WITH_GTK=ON `
          -D WITH_GTK_2_X=ON `
@@ -642,6 +644,8 @@ class ThirdPartyBuilder
                   -D BUILD_opencv_video=OFF `
                   -D BUILD_opencv_videoio=OFF `
                   -D BUILD_opencv_videostab=OFF `
+                  -D BUILD_PNG=ON `
+                  -D BUILD_JPEG=ON `
                   -D WITH_CUDA=OFF `
                   -D WITH_GTK=ON `
                   -D WITH_GTK_2_X=ON `
