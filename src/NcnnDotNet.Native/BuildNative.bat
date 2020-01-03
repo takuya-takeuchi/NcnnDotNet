@@ -1,0 +1,1 @@
+pwsh Build.ps1 Release vulkan 64 desktop %VULKAN_SDK%
