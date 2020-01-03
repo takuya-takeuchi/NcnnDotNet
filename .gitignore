@@ -307,3 +307,5 @@ __pycache__/
 
 # Custom
 src/NcnnDotNet.Native/build*/
+
+work
