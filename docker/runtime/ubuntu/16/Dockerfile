@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     wget \
     apt-transport-https
+    
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgtk2.0-dev \
+    libgomp1
 
 # Register Microsoft key and feed
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
