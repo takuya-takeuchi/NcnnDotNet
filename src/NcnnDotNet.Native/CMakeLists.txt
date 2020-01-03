@@ -6,7 +6,7 @@ set(PROJ_NAME NcnnDotNetNative)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(${PROJ_NAME} VERSION 2019.12.23)
+project(${PROJ_NAME} VERSION 0.0.0.20191223)
 
 # definitions
 option(NCNN_VULKAN "vulkan compute support" OFF)
@@ -26,10 +26,10 @@ message("-- Binaries: ${CMAKE_CURRENT_BINARY_DIR}")
 message("-------------------------------------------------------")
 
 # Version info
-set(VERSION_MAJOR 2019)
-set(VERSION_MINOR 12)
-set(VERSION_PATCH 23)
-set(VERSION_DATE 0)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
+set(VERSION_DATE 20191223)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
