@@ -1,9 +1,14 @@
 #ifndef _CPP_SHARED_H_
 #define _CPP_SHARED_H_
 
+#include <ncnn/platform.h>
 #include <cstdint>
 #include <string>
 #include <vector>
+
+#pragma region error-codegeneral
+
+#pragma region general
 
 #define ERR_OK                                                            0x00000000
 
@@ -16,5 +21,7 @@
 #define ERR_GENERAL_NOT_SUPPORT                     -(ERR_GENERAL_ERROR | 0x00000005)
 
 #pragma endregion general
+
+#pragma endregion error-codegeneral
 
 #endif

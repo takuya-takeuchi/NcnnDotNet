@@ -19,13 +19,4 @@ DLLEXPORT std::string* get_version()
     return new std::string(ss.str());
 }
 
-DLLEXPORT bool is_support_vulkan()
-{
-#if NCNN_VULKAN
-    return true;
-#else
-    return false;
-#endif
-}
-
 #endif
