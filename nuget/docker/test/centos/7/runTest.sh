@@ -18,4 +18,5 @@ NDNROOT=/opt/data/NcnnDotNet
 NUGETDIR=${NDNROOT}/nuget
 
 cd ${NUGETDIR}
+export TARGETRID=centos
 exec /usr/local/bin/gosu $NON_ROOT_USER pwsh ./TestPackage.ps1 $PACKAGE $VERSION $PLATFORMTARGET $RID

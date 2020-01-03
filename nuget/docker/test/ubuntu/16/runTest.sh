@@ -18,5 +18,5 @@ NDNROOT=/opt/data/NcnnDotNet
 NUGETDIR=${NDNROOT}/nuget
 
 cd ${NUGETDIR}
-
+export TARGETRID=ubuntu
 exec /usr/sbin/gosu $NON_ROOT_USER pwsh ./TestPackage.ps1 $PACKAGE $VERSION $PLATFORMTARGET $RID

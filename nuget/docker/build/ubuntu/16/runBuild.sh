@@ -22,4 +22,5 @@ groupmod -g $GROUP_ID $NON_ROOT_USER
 export HOME=/home/$NON_ROOT_USER
 
 cd ${NDNROOT}/src/${Source}
+export TARGETRID=ubuntu
 exec /usr/sbin/gosu $NON_ROOT_USER pwsh Build.ps1 ${CONFIG} ${TARGET} ${ARCH} ${PLATFORM} ${OPTION}
