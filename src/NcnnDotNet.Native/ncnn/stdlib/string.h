@@ -1,0 +1,33 @@
+#ifndef _CPP_STDLIB_STRING_H_
+#define _CPP_STDLIB_STRING_H_
+
+#include "../export.h"
+#include "../shared.h"
+#include <stdlib.h>
+
+DLLEXPORT std::string* string_new()
+{
+    return new std::string;
+}
+
+DLLEXPORT std::string* string_new2(const char* c_str, int len)
+{
+    return new std::string(c_str, len);
+}
+
+DLLEXPORT void string_append(std::string* str, const char* c_str, int len)
+{
+    str->append(c_str, len);
+}
+
+DLLEXPORT const char* string_c_str(std::string* str)
+{
+    return str->c_str();
+}
+
+DLLEXPORT void string_delete(std::string* str)
+{
+    delete str;
+}
+
+#endif

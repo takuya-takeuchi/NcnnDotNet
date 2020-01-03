@@ -3,8 +3,13 @@ cmake_policy(SET CMP0053 NEW)
 cmake_policy(SET CMP0054 NEW)
 
 set(PROJ_NAME NcnnDotNetNative)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(${PROJ_NAME} VERSION 2019.12.23)
+project(${PROJ_NAME} VERSION 0.0.0.20191223)
+
+# definitions
+option(NCNN_VULKAN "vulkan compute support" OFF)
 
 # OS info
 message("-------------------------------------------------------")
@@ -21,10 +26,10 @@ message("-- Binaries: ${CMAKE_CURRENT_BINARY_DIR}")
 message("-------------------------------------------------------")
 
 # Version info
-set(VERSION_MAJOR 2019)
-set(VERSION_MINOR 12)
-set(VERSION_PATCH 23)
-set(VERSION_DATE 0)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 0)
+set(VERSION_PATCH 0)
+set(VERSION_DATE 20191223)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -53,11 +58,22 @@ endif()
 get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
+set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)
-find_package(ncnn REQUIRED)
 
-message("-- ncnn_INCLUDE_DIRS: ${ncnn_INCLUDE_DIRS}")
-message("-- OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
+if (NCNN_VULKAN)
+    find_package(ncnn REQUIRED)
+endif()
+
+# link OpenMP (https://github.com/Tencent/ncnn/issues/659)
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    find_package(OpenMP REQUIRED)
+    if(OPENMP_FOUND)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    endif()
+endif()
 
 if (MSVC OR MSYS OR MINGW)
     include_directories("$ENV{ncnn_DIR}/include"
@@ -95,69 +111,63 @@ configure_file(
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/ncnn/*.h)
 FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cpp)
 
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
-    ${CMAKE_CURRENT_BINARY_DIR}/version.rc
-    @ONLY)
+if (NCNN_VULKAN)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/version-vulkan.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+        @ONLY)
+else()
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/version.rc.in
+        ${CMAKE_CURRENT_BINARY_DIR}/version.rc
+        @ONLY)
+endif()
 
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/ncnn.lib
         opencv_world
-        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
-        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/ncnn.lib
+        $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_world
-        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
-        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
+        $ENV{VULKAN_SDK}/lib/libvulkan.dylib
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/ncnn.lib
+        $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_world
-        #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
-        #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
-        $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
-        $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
     )
 else()
     message(FATAL_ERROR "Failed to link library")
 endif()
 
-# definitions
-if(USE_NCNN_VULKAN)
-  add_definitions(-DNCNN_VULKAN)
+if (NCNN_VULKAN)
+    if (MSVC OR MSYS OR MINGW)
+        list(APPEND STATIC_LIBRARIES
+            #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
+            #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
+            $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
+            $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
+            $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
+        )
+    elseif(APPLE)
+        list(APPEND STATIC_LIBRARIES
+            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+        )
+    elseif(UNIX AND NOT APPLE)
+        list(APPEND STATIC_LIBRARIES
+            $ENV{VULKAN_SDK}/lib/libvulkan.so
+        )
+    endif()
 endif()
 
 add_library(${PROJ_NAME} SHARED ${HEADERS}
