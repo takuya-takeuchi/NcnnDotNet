@@ -11,7 +11,7 @@ Param([Parameter(
 
 Set-StrictMode -Version Latest
 
-$RidOperatingSystem="linux"
+$RidOperatingSystem="ubuntu"
 $OperatingSystem="ubuntu"
 $OperatingSystemVersion="16"
 
