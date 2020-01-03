@@ -7,7 +7,7 @@ $NugetPath = Join-Path $NcnnDotNetRoot "nuget" | `
              Join-Path -ChildPath "BuildUtils.ps1"
 import-module $NugetPath -function *
 
-$OperatingSystem="linux"
+$OperatingSystem="ubuntu"
 $Distribution="ubuntu"
 $DistributionVersion="16"
 
