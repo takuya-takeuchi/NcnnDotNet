@@ -50,6 +50,15 @@ namespace NcnnDotNet
             }
         }
 
+        public IntPtr Data
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.mat_Mat_get_data(this.NativePtr);
+            }
+        }
+
         public int Dims
         {
             get

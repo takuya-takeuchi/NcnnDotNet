@@ -113,6 +113,11 @@ DLLEXPORT int32_t mat_Mat_get_dims(ncnn::Mat* mat)
     return mat->dims;
 }
 
+DLLEXPORT void* mat_Mat_get_data(ncnn::Mat* mat)
+{
+    return mat->data;
+}
+
 DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, const int32_t index, float* returnValue)
 {
     int32_t error = ERR_OK;
