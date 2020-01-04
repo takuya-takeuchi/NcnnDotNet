@@ -15,6 +15,8 @@ ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
 
 - [UltraFaceDotNet](https://github.com/takuya-takeuchi/UltraFaceDotNet)
   - Face detection .NET library uses NcnnDotNet
+- [CenterFaceDotNet](https://github.com/takuya-takeuchi/CenterFaceDotNet)
+  - Face detection .NET library uses NcnnDotNet
  
 ## Dependencies Libraries and Products
 
