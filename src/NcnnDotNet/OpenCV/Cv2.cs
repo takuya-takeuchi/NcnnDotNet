@@ -13,7 +13,7 @@ namespace NcnnDotNet.OpenCV
 
         #region Methods
 
-        public static void Center(Mat mat,
+        public static void Circle(Mat mat,
                                   Point<int> center,
                                   int radius,
                                   Scalar<double> scalar,
@@ -39,7 +39,7 @@ namespace NcnnDotNet.OpenCV
             }
         }
 
-        public static void Center(Mat mat,
+        public static void Circle(Mat mat,
                                   Point<float> center,
                                   int radius,
                                   Scalar<double> scalar,
