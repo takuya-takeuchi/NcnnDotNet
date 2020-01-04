@@ -10,7 +10,7 @@
 
 #pragma region template
 
-#define MAKE_RECTANGLE(__TYPE__, __TYPENAME__)\
+#define MAKE_DRAWING(__TYPE__, __TYPENAME__)\
 DLLEXPORT int32_t opencv_rectangle_##__TYPENAME__(cv::Mat* mat,\
                                                   cv::Rect_<__TYPE__>* rect,\
                                                   cv::Scalar* scalar,\
@@ -43,6 +43,24 @@ DLLEXPORT int32_t opencv_rectangle2_##__TYPENAME__(cv::Mat* mat,\
     auto& p2 = *pt2;\
     auto& s = *scalar;\
     cv::rectangle(m, p1, p2, s, thickness, lineType, shift);\
+\
+    return error;\
+}\
+\
+DLLEXPORT int32_t opencv_circle_##__TYPENAME__(cv::Mat* mat,\
+                                               cv::Point_<__TYPE__>* center,\
+                                               const int32_t radius,\
+                                               cv::Scalar* scalar,\
+                                               const int32_t thickness,\
+                                               const int lineType,\
+                                               const int shift)\
+{\
+    int32_t error = ERR_OK;\
+\
+    auto& m = *mat;\
+    auto& c = *center;\
+    auto& s = *scalar;\
+    cv::circle(m, c, radius, s, thickness, lineType, shift);\
 \
     return error;\
 }\
@@ -127,8 +145,8 @@ DLLEXPORT int32_t opencv_waitKey(const int32_t delay, int32_t* returnValue)
     return error;
 }
 
-MAKE_RECTANGLE(int32_t, int32_t)
-MAKE_RECTANGLE(float, float)
+MAKE_DRAWING(int32_t, int32_t)
+MAKE_DRAWING(float, float)
 
 MAKE_PUTTEXT(int32_t, int32_t)
 MAKE_PUTTEXT(int64_t, int64_t)

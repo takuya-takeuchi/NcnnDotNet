@@ -27,6 +27,28 @@ namespace NcnnDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_imshow(byte[] winName, int winNameLength, IntPtr mat);
 
+        #region center
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_circle_int32_t(IntPtr mat,
+                                                             IntPtr center,
+                                                             int radius,
+                                                             IntPtr scalar,
+                                                             int thickness,
+                                                             CvLineTypes lineType,
+                                                             int shift);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_circle_float(IntPtr mat,
+                                                           IntPtr center,
+                                                           int radius,
+                                                           IntPtr scalar,
+                                                           int thickness,
+                                                           CvLineTypes lineType,
+                                                           int shift);
+
+        #endregion
+
         #region putText
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

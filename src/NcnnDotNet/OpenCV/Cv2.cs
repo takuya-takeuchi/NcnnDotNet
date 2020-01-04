@@ -13,6 +13,58 @@ namespace NcnnDotNet.OpenCV
 
         #region Methods
 
+        public static void Center(Mat mat,
+                                  Point<int> center,
+                                  int radius,
+                                  Scalar<double> scalar,
+                                  int thickness = 1,
+                                  CvLineTypes lineType = CvLineTypes.Line8,
+                                  int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativeCenter = center.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_circle_int32_t(mat.NativePtr,
+                                                    nativeCenter.NativePtr,
+                                                    radius,
+                                                    nativeScalar.NativePtr,
+                                                    thickness,
+                                                    lineType,
+                                                    shift);
+            }
+        }
+
+        public static void Center(Mat mat,
+                                  Point<float> center,
+                                  int radius,
+                                  Scalar<double> scalar,
+                                  int thickness = 1,
+                                  CvLineTypes lineType = CvLineTypes.Line8,
+                                  int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativeCenter = center.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_circle_float(mat.NativePtr,
+                                                  nativeCenter.NativePtr,
+                                                  radius,
+                                                  nativeScalar.NativePtr,
+                                                  thickness,
+                                                  lineType,
+                                                  shift);
+            }
+        }
+
         public static Size<int> GetTextSize(string text, CvHersheyFonts fontFace, double fontScale, int thickness, ref int baseLine)
         {
             var str = Ncnn.Encoding.GetBytes(text ?? "");
