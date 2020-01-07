@@ -10,7 +10,7 @@
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/takuya-takeuchi/NcnnDotNet</projectUrl>
     <iconUrl>https://github.com/takuya-takeuchi/NcnnDotNet/blob/master/nuget/nn128.png?raw=true</iconUrl>
-    <description>Dlib wrapper library written in C++ and C# for Windows, MacOS and Linux
+    <description>ncnn wrapper library written in C++ and C# for Windows, MacOS and Linux
 
 Requirements: Visual C++ 2017 Redistributable Package and Vulkan SDK
 </description>
