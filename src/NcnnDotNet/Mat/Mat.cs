@@ -140,6 +140,30 @@ namespace NcnnDotNet
             return new Mat(ret);
         }
 
+        public Mat ChannelRange(int c, int channels)
+        {
+            this.ThrowIfDisposed();
+
+            var ret = NativeMethods.mat_Mat_channel_range(this.NativePtr, c, channels);
+            return new Mat(ret);
+        }
+
+        public void Create(int w, long elemSize = 4u)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var ret = NativeMethods.mat_Mat_create(this.NativePtr, w, elemSize, IntPtr.Zero);
+        }
+
+        public void Create(int w, int h, long elemSize = 4u)
+        {
+            this.ThrowIfDisposed();
+
+            // ToDo: Provide allocator class
+            var ret = NativeMethods.mat_Mat_create2(this.NativePtr, w, h, elemSize, IntPtr.Zero);
+        }
+
         public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height)
         {
             return FromPixels(pixel,
@@ -284,17 +308,14 @@ namespace NcnnDotNet
             return new Mat(ret);
         }
 
-        public float[] Row(int y)
+        public MemoryBuffer Row(int y)
         {
             this.ThrowIfDisposed();
 
             var ret = NativeMethods.mat_Mat_row(this.NativePtr, y);
             var width = this.W;
 
-            var array = new float[width];
-            Marshal.Copy(ret, array, 0, width);
-
-            return array;
+            return new MemoryBuffer(this, ret, width);
         }
 
         public void SubstractMeanNormalize(float[] meanVals, float[] normVals)
@@ -321,6 +342,60 @@ namespace NcnnDotNet
         #endregion
 
         #endregion
+
+        public sealed class MemoryBuffer
+        {
+
+            #region Fields
+
+            private readonly Mat _Parent;
+
+            private readonly IntPtr _Ptr;
+
+            private readonly int _Length;
+
+            #endregion
+
+            #region Constructors
+
+            internal MemoryBuffer(Mat parent, IntPtr ptr, int length)
+            {
+                this._Parent = parent;
+                this._Ptr = ptr;
+                this._Length = length;
+            }
+
+            #endregion
+
+            #region Properties
+
+            public float this[int index]
+            {
+                get
+                {
+                    this._Parent.ThrowIfDisposed();
+                    unsafe
+                    {
+                        var ptr = (float*)this._Ptr;
+                        var dst = ptr + index;
+                        return *dst;
+                    }
+                }
+                set
+                {
+                    this._Parent.ThrowIfDisposed();
+                    unsafe
+                    {
+                        var ptr = (float*) this._Ptr;
+                        var dst = ptr + index;
+                        dst[0] = value;
+                    }
+                }
+            }
+
+            #endregion
+
+        }
 
     }
 

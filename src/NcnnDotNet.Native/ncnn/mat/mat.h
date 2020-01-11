@@ -67,6 +67,31 @@ DLLEXPORT int32_t mat_Mat_reshape3(ncnn::Mat* mat,
     return error;
 }
 
+DLLEXPORT int32_t mat_Mat_create(ncnn::Mat* mat,
+                                 const int32_t w,
+                                 const size_t celemsize,
+                                 ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    mat->create(w, celemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_create2(ncnn::Mat* mat,
+                                  const int32_t w,
+                                  const int32_t h,
+                                  const size_t celemsize,
+                                  ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    mat->create(w, h, celemsize, allocator);
+
+    return error;
+}
+
 DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
 {
     return mat->empty();
@@ -80,6 +105,12 @@ DLLEXPORT float* mat_Mat_row(ncnn::Mat* mat, const int32_t y)
 DLLEXPORT ncnn::Mat* mat_Mat_channel(ncnn::Mat* mat, const int32_t c)
 {
     const auto& ret = mat->channel(c);
+    return new ncnn::Mat(ret);
+}
+
+DLLEXPORT ncnn::Mat* mat_Mat_channel_range(ncnn::Mat* mat, const int32_t c, const int32_t channels)
+{
+    const auto& ret = mat->channel_range(c, channels);
     return new ncnn::Mat(ret);
 }
 
