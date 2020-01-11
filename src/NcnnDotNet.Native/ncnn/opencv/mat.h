@@ -47,4 +47,9 @@ DLLEXPORT int32_t opencv_Mat_channels(cv::Mat* mat)
     return mat->channels();
 }
 
+DLLEXPORT unsigned char* opencv_Mat_ptr(cv::Mat* mat, const int32_t y)
+{
+    return mat->ptr(y);
+}
+
 #endif

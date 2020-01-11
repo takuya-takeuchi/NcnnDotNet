@@ -73,6 +73,12 @@ namespace NcnnDotNet.OpenCV
             var ret = NativeMethods.opencv_Mat_clone(this.NativePtr);
             return new Mat(ret);
         }
+        
+        public IntPtr Ptr(int y)
+        {
+            this.ThrowIfDisposed();
+            return NativeMethods.opencv_Mat_ptr(this.NativePtr, y);
+        }
 
         public int Total()
         {

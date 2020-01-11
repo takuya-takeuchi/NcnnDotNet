@@ -33,6 +33,9 @@ namespace NcnnDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int opencv_Mat_channels(IntPtr mat);
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr opencv_Mat_ptr(IntPtr mat, int y);
+
     }
 
 }
