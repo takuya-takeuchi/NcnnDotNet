@@ -27,11 +27,20 @@ namespace NcnnDotNet
         public static extern ErrorType mat_Mat_reshape3(IntPtr mat, int w, int h, int c, IntPtr allocator, out IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_create(IntPtr mat, int w, long elemsize, IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_create2(IntPtr mat, int w, int h, long elemsize, IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool mat_Mat_empty(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr mat_Mat_channel(IntPtr mat, int c);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_Mat_channel_range(IntPtr mat, int c, int channels);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr mat_Mat_row(IntPtr mat, int y);

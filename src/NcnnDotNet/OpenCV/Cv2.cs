@@ -177,6 +177,70 @@ namespace NcnnDotNet.OpenCV
                                                 shift);
             }
         }
+        
+        public static void PutText(Mat mat,
+                                   string text,
+                                   Point<int> point,
+                                   CvHersheyFonts fontFace,
+                                   double fontScale,
+                                   Scalar<double> scalar,
+                                   int thickness = 1,
+                                   CvLineTypes lineType = CvLineTypes.Line8,
+                                   bool bottomLeftOrigin = false)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            var str = Ncnn.Encoding.GetBytes(text ?? "");
+            using (var nativePoint = point.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_putText_int32_t(mat.NativePtr,
+                                                     str,
+                                                     str.Length,
+                                                     nativePoint.NativePtr,
+                                                     fontFace,
+                                                     fontScale,
+                                                     nativeScalar.NativePtr,
+                                                     thickness,
+                                                     lineType,
+                                                     bottomLeftOrigin);
+            }
+        }
+
+        public static void PutText(Mat mat,
+                                   string text,
+                                   Point<long> point,
+                                   CvHersheyFonts fontFace,
+                                   double fontScale,
+                                   Scalar<double> scalar,
+                                   int thickness = 1,
+                                   CvLineTypes lineType = CvLineTypes.Line8,
+                                   bool bottomLeftOrigin = false)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            var str = Ncnn.Encoding.GetBytes(text ?? "");
+            using (var nativePoint = point.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_putText_int64_t(mat.NativePtr,
+                                                     str,
+                                                     str.Length,
+                                                     nativePoint.NativePtr,
+                                                     fontFace,
+                                                     fontScale,
+                                                     nativeScalar.NativePtr,
+                                                     thickness,
+                                                     lineType,
+                                                     bottomLeftOrigin);
+            }
+        }
 
         public static void PutText(Mat mat,
                                    string text,

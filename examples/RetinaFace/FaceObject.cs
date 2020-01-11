@@ -1,16 +1,18 @@
-﻿using NcnnDotNet.OpenCV;
+﻿using System.Linq;
+using NcnnDotNet.OpenCV;
 
-namespace MobileNetV3SSDLite
+namespace RetinaFace
 {
 
-    internal sealed class Object
+    internal sealed class FaceObject
     {
 
         #region Constructors
 
-        public Object()
+        public FaceObject()
         {
             this.Rect = new Rect<float>();
+            this.Landmark = Enumerable.Range(0, 5).Select(_ => new Point<float>()).ToArray();
         }
 
         #endregion
@@ -23,10 +25,9 @@ namespace MobileNetV3SSDLite
             set;
         }
 
-        public int Label
+        public Point<float>[] Landmark
         {
             get;
-            set;
         }
 
         public float Prob

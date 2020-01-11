@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeleeNetSSDSeg", "examples\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimplePose", "examples\SimplePose\SimplePose.csproj", "{25075AD1-5D78-45AA-8502-0C78FDF73A20}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RetinaFace", "examples\RetinaFace\RetinaFace.csproj", "{C70DFDAA-B1BB-4728-96A2-5326B1198412}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,10 @@ Global
 		{25075AD1-5D78-45AA-8502-0C78FDF73A20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25075AD1-5D78-45AA-8502-0C78FDF73A20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25075AD1-5D78-45AA-8502-0C78FDF73A20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C70DFDAA-B1BB-4728-96A2-5326B1198412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70DFDAA-B1BB-4728-96A2-5326B1198412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70DFDAA-B1BB-4728-96A2-5326B1198412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70DFDAA-B1BB-4728-96A2-5326B1198412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{ED188B38-0F9F-41C7-8BAC-B53AE8638F64} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{147B2EDD-930D-4372-9E74-A5FB99E5E411} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{25075AD1-5D78-45AA-8502-0C78FDF73A20} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
+		{C70DFDAA-B1BB-4728-96A2-5326B1198412} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7789377-10BC-434A-87CC-8001AE7F93C6}

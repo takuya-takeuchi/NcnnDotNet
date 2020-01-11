@@ -4,7 +4,7 @@ using NcnnDotNet;
 using NcnnDotNet.OpenCV;
 using Mat = NcnnDotNet.Mat;
 
-namespace MobileNetV2SSDLite
+namespace MobileNetV3SSDLite
 {
 
     internal class Program
@@ -16,7 +16,7 @@ namespace MobileNetV2SSDLite
         {
             if (args.Length != 1)
             {
-                Console.WriteLine($"Usage: {nameof(MobileNetV2SSDLite)} [imagepath]");
+                Console.WriteLine($"Usage: {nameof(MobileNetV3SSDLite)} [imagepath]");
                 return -1;
             }
 
