@@ -124,70 +124,60 @@ namespace NcnnDotNet.OpenCV
                 throw new NcnnException("Unknown Exception");
         }
 
-        public static void PutText(Mat mat,
-                                   string text,
-                                   Point<int> point,
-                                   CvHersheyFonts fontFace,
-                                   double fontScale,
-                                   Scalar<double> scalar,
-                                   int thickness = 1,
-                                   CvLineTypes lineType = CvLineTypes.Line8,
-                                   bool bottomLeftOrigin = false)
+        public static void Line(Mat mat,
+                                Point<int> p1,
+                                Point<int> p2,
+                                Scalar<double> scalar,
+                                int thickness = 1,
+                                CvLineTypes lineType = CvLineTypes.Line8,
+                                int shift = 0)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
 
             mat.ThrowIfDisposed();
 
-            var str = Ncnn.Encoding.GetBytes(text ?? "");
-            using (var nativePoint = point.ToNative())
+            using (var nativePoint1 = p1.ToNative())
+            using (var nativePoint2 = p2.ToNative())
             using (var nativeScalar = scalar.ToNative())
             {
-                NativeMethods.opencv_putText_int32_t(mat.NativePtr,
-                                                     str,
-                                                     str.Length,
-                                                     nativePoint.NativePtr,
-                                                     fontFace,
-                                                     fontScale,
-                                                     nativeScalar.NativePtr,
-                                                     thickness,
-                                                     lineType,
-                                                     bottomLeftOrigin);
+                NativeMethods.opencv_line_int32_t(mat.NativePtr,
+                                                  nativePoint1.NativePtr,
+                                                  nativePoint2.NativePtr,
+                                                  nativeScalar.NativePtr,
+                                                  thickness,
+                                                  lineType,
+                                                  shift);
             }
         }
 
-        public static void PutText(Mat mat,
-                                   string text,
-                                   Point<long> point,
-                                   CvHersheyFonts fontFace,
-                                   double fontScale,
-                                   Scalar<double> scalar,
-                                   int thickness = 1,
-                                   CvLineTypes lineType = CvLineTypes.Line8,
-                                   bool bottomLeftOrigin = false)
+        public static void Line(Mat mat,
+                                Point<float> p1,
+                                Point<float> p2,
+                                Scalar<double> scalar,
+                                int thickness = 1,
+                                CvLineTypes lineType = CvLineTypes.Line8,
+                                int shift = 0)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
 
             mat.ThrowIfDisposed();
 
-            var str = Ncnn.Encoding.GetBytes(text ?? "");
-            using (var nativePoint = point.ToNative())
+            using (var nativePoint1 = p1.ToNative())
+            using (var nativePoint2 = p2.ToNative())
             using (var nativeScalar = scalar.ToNative())
             {
-                NativeMethods.opencv_putText_int64_t(mat.NativePtr,
-                                                     str,
-                                                     str.Length,
-                                                     nativePoint.NativePtr,
-                                                     fontFace,
-                                                     fontScale,
-                                                     nativeScalar.NativePtr,
-                                                     thickness,
-                                                     lineType,
-                                                     bottomLeftOrigin);
+                NativeMethods.opencv_line_float(mat.NativePtr,
+                                                nativePoint1.NativePtr,
+                                                nativePoint2.NativePtr,
+                                                nativeScalar.NativePtr,
+                                                thickness,
+                                                lineType,
+                                                shift);
             }
         }
-        
+
         public static void PutText(Mat mat,
                                    string text,
                                    Point<float> point,

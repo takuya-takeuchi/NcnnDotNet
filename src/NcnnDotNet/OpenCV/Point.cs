@@ -10,6 +10,11 @@ namespace NcnnDotNet.OpenCV
 
         #region Constructors
 
+        public Point() :
+            this(default, default)
+        {
+        }
+
         public Point(T x, T y)
         {
             this.X = x;
@@ -50,7 +55,7 @@ namespace NcnnDotNet.OpenCV
         internal NcnnObject ToNative()
         {
             var bridge = CreateBridge();
-            var ret = bridge.Create( this.X, this.Y);
+            var ret = bridge.Create(this.X, this.Y);
             return new Native<T>(ret, bridge);
         }
 
@@ -185,7 +190,7 @@ namespace NcnnDotNet.OpenCV
             #endregion
 
         }
-        
+
         private sealed class DoubleBridge : Bridge<double>
         {
 
@@ -214,7 +219,7 @@ namespace NcnnDotNet.OpenCV
             #endregion
 
         }
-        
+
         private sealed class Native<T> : NcnnObject
         {
 
