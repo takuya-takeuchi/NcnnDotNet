@@ -11,6 +11,25 @@
 #pragma region template
 
 #define MAKE_DRAWING(__TYPE__, __TYPENAME__)\
+DLLEXPORT int32_t opencv_line_##__TYPENAME__(cv::Mat* mat,\
+                                             cv::Point_<__TYPE__>* p1,\
+                                             cv::Point_<__TYPE__>* p2,\
+                                             cv::Scalar* scalar,\
+                                             const int32_t thickness,\
+                                             const int lineType,\
+                                             const int shift)\
+{\
+    int32_t error = ERR_OK;\
+\
+    auto& m = *mat;\
+    auto& p1_ = *p1;\
+    auto& p2_ = *p2;\
+    auto& s = *scalar;\
+    cv::line(m, p1_, p2_, s, thickness, lineType, shift);\
+\
+    return error;\
+}\
+\
 DLLEXPORT int32_t opencv_rectangle_##__TYPENAME__(cv::Mat* mat,\
                                                   cv::Rect_<__TYPE__>* rect,\
                                                   cv::Scalar* scalar,\

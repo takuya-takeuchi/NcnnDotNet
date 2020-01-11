@@ -35,7 +35,7 @@ namespace PeleeNetSSDSeg
 
                 var objects = new List<Object>();
                 using var segOut = new NcnnDotNet.Mat();
-                DetectMobileNet(m, objects, segOut);
+                DetectPeleeNet(m, objects, segOut);
 
                 if (Ncnn.IsSupportVulkan)
                     Ncnn.DestroyGpuInstance();
@@ -48,7 +48,7 @@ namespace PeleeNetSSDSeg
 
         #region Helpers
 
-        private static int DetectMobileNet(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects, NcnnDotNet.Mat resized)
+        private static int DetectPeleeNet(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects, NcnnDotNet.Mat resized)
         {
             using (var peleenet = new Net())
             {
