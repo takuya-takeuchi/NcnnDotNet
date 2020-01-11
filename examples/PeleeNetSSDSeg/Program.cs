@@ -122,8 +122,8 @@ namespace PeleeNetSSDSeg
             };
 
             using var image = bgr.Clone();
-            var color = new[] { 128,255,128,244,35,232 };
-            var colorCount  = color.Length;
+            var color = new[] { 128, 255, 128, 244, 35, 232 };
+            var colorCount = color.Length;
 
             for (var i = 0; i < objects.Count; i++)
             {
@@ -148,7 +148,7 @@ namespace PeleeNetSSDSeg
                 Cv2.Rectangle(image, new Rect<int>(new Point<int>(x, y),
                                                    new Size<int>(labelSize.Width, labelSize.Height + baseLine)),
                               new Scalar<double>(255, 255, 255), -1);
-                
+
                 Cv2.PutText(image, text, new Point<int>(x, y + labelSize.Height),
                             CvHersheyFonts.HersheySimplex, 0.5, new Scalar<double>(0, 0, 0));
             }
@@ -163,19 +163,19 @@ namespace PeleeNetSSDSeg
                 var ptr2 = (float*)map.Data;
                 for (var i = 0; i < height; i++)
                 {
-                    var ptr1 = (byte*)image.Ptr(i);        
-                    var imgIndex1 = 0;        
+                    var ptr1 = (byte*)image.Ptr(i);
+                    var imgIndex1 = 0;
                     for (var j = 0; j < width; j++)
                     {
-                        var maxima = threshold; 
+                        var maxImage = threshold;
                         var index = -1;
                         for (var c = 0; c < size; c++)
                         {
                             //const float* ptr3 = map.channel(c);  
                             var ptr3 = ptr2 + c * width * height;
-                            if (ptr3[imgIndex2] > maxima)
+                            if (ptr3[imgIndex2] > maxImage)
                             {
-                                maxima = ptr3[imgIndex2];
+                                maxImage = ptr3[imgIndex2];
                                 index = c;
                             }
                         }
@@ -185,10 +185,10 @@ namespace PeleeNetSSDSeg
                             var colorIndex = index * 3;
                             if (colorIndex < colorCount)
                             {
-                                var b = color[colorIndex    ];
+                                var b = color[colorIndex];
                                 var g = color[colorIndex + 1];
                                 var r = color[colorIndex + 2];
-                                ptr1[imgIndex1    ] = (byte)(b / 2 + ptr1[imgIndex1]     / 2);
+                                ptr1[imgIndex1    ] = (byte)(b / 2 + ptr1[imgIndex1    ] / 2);
                                 ptr1[imgIndex1 + 1] = (byte)(g / 2 + ptr1[imgIndex1 + 1] / 2);
                                 ptr1[imgIndex1 + 2] = (byte)(r / 2 + ptr1[imgIndex1 + 2] / 2);
                             }

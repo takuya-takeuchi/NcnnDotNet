@@ -31,12 +31,10 @@ The following result is example.
  
 ```` 
 cd <PeleeNetSSDSeg_dir> 
-dotnet run --configuration Release -- dog.jpg
+dotnet run --configuration Release -- car.jpg
 
 vkEnumerateInstanceExtensionProperties failed -6
-12 = 0.99775 at 137.99 209.13 186.70 332.18
-7 = 0.99636 at 465.98 72.85 222.67 98.30
-2 = 0.99473 at 106.52 141.06 467.29 273.91
+3 = 0.99860 at 85.66 117.31 183.82 119.78
 ````
 
 ![MobileNetSSD](images/image.png "MobileNetSSD")

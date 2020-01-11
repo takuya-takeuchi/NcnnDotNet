@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RFCN", "examples\RFCN\RFCN.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShuffleNetV2", "examples\ShuffleNetV2\ShuffleNetV2.csproj", "{ED188B38-0F9F-41C7-8BAC-B53AE8638F64}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeleeNetSSDSeg", "examples\PeleeNetSSDSeg\PeleeNetSSDSeg.csproj", "{147B2EDD-930D-4372-9E74-A5FB99E5E411}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{ED188B38-0F9F-41C7-8BAC-B53AE8638F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED188B38-0F9F-41C7-8BAC-B53AE8638F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED188B38-0F9F-41C7-8BAC-B53AE8638F64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{147B2EDD-930D-4372-9E74-A5FB99E5E411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{147B2EDD-930D-4372-9E74-A5FB99E5E411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{147B2EDD-930D-4372-9E74-A5FB99E5E411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{147B2EDD-930D-4372-9E74-A5FB99E5E411}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{56B863D8-3352-4BE6-93E8-8036971EFACF} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{F9A00AEC-6230-4FF4-BE0A-CA0433743730} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{ED188B38-0F9F-41C7-8BAC-B53AE8638F64} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
+		{147B2EDD-930D-4372-9E74-A5FB99E5E411} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7789377-10BC-434A-87CC-8001AE7F93C6}
