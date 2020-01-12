@@ -37,7 +37,7 @@ DLLEXPORT int32_t opencv_Mat_get_rows(cv::Mat* mat)
     return mat->rows;
 }
 
-DLLEXPORT int32_t opencv_Mat_total(cv::Mat* mat)
+DLLEXPORT size_t opencv_Mat_total(cv::Mat* mat)
 {
     return mat->total();
 }
