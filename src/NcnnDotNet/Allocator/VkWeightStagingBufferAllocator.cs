@@ -20,8 +20,8 @@ namespace NcnnDotNet
             this.NativePtr = returnValue;
         }
 
-        internal VkWeightStagingBufferAllocator(IntPtr ptr):
-            base(ptr)
+        internal VkWeightStagingBufferAllocator(IntPtr ptr, bool isEnabledDispose = true) :
+            base(ptr, isEnabledDispose)
         {
         }
 

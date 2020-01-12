@@ -20,8 +20,8 @@ namespace NcnnDotNet
             this.NativePtr = returnValue;
         }
 
-        internal VkBlobBufferAllocator(IntPtr ptr):
-            base(ptr)
+        internal VkBlobBufferAllocator(IntPtr ptr, bool isEnabledDispose = true) :
+            base(ptr, isEnabledDispose)
         {
         }
 

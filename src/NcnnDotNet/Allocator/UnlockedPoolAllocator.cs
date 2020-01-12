@@ -15,8 +15,8 @@ namespace NcnnDotNet
             this.NativePtr = returnValue;
         }
 
-        internal UnlockedPoolAllocator(IntPtr ptr):
-            base(ptr)
+        internal UnlockedPoolAllocator(IntPtr ptr, bool isEnabledDispose = true) :
+            base(ptr, isEnabledDispose)
         {
         }
 
