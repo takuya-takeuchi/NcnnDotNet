@@ -6,7 +6,7 @@ set(PROJ_NAME NcnnDotNetNative)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(${PROJ_NAME} VERSION 0.0.0.20191223)
+project(${PROJ_NAME} VERSION 0.0.0.20200106)
 
 # definitions
 option(NCNN_VULKAN "vulkan compute support" OFF)
@@ -29,7 +29,7 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20191223)
+set(VERSION_DATE 20200106)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
