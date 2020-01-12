@@ -15,6 +15,15 @@ namespace NcnnDotNet
         public static extern void net_Net_delete(IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_set_vulkan_device(IntPtr net, int deviceIndex);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_set_vulkan_device2(IntPtr net, IntPtr vulkanDevice);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_get_vulkan_device(IntPtr net, out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType net_Net_create_extractor(IntPtr net, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
