@@ -32,9 +32,34 @@ DLLEXPORT void allocator_##__TYPENAME__##_set_size_compare_ratio(ncnn::__TYPE__*
     allocator->set_size_compare_ratio(scr);\
 }
 
+#define MAKE_VKALLOCATOR(__TYPE__, __TYPENAME__)\
+DLLEXPORT int32_t allocator_##__TYPENAME__##_new(const ncnn::VulkanDevice* vkdev, ncnn::__TYPE__** returnValue)\
+{\
+    int32_t error = ERR_OK;\
+\
+    *returnValue = new ncnn::__TYPE__(vkdev);\
+\
+    return error;\
+}\
+\
+DLLEXPORT void allocator_##__TYPENAME__##_delete(ncnn::__TYPE__* allocator)\
+{\
+    if (allocator != nullptr) delete allocator;\
+}\
+\
+DLLEXPORT void allocator_##__TYPENAME__##_clear(ncnn::__TYPE__* allocator)\
+{\
+    allocator->clear();\
+}
+
 #pragma endregion template
 
 MAKE_ALLOCATOR(UnlockedPoolAllocator, UnlockedPoolAllocator)
 MAKE_ALLOCATOR(PoolAllocator, PoolAllocator)
+
+MAKE_VKALLOCATOR(VkBlobBufferAllocator, VkBlobBufferAllocator)
+MAKE_VKALLOCATOR(VkWeightBufferAllocator, VkWeightBufferAllocator)
+MAKE_VKALLOCATOR(VkStagingBufferAllocator, VkStagingBufferAllocator)
+MAKE_VKALLOCATOR(VkWeightStagingBufferAllocator, VkWeightStagingBufferAllocator)
 
 #endif
