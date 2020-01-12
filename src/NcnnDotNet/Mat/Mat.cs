@@ -29,6 +29,26 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
+        public Mat(int w, int h, long elemSize = 4u)
+        {
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_new3(w, h, elemSize, IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, int h, int c, long elemSize = 4u)
+        {
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_new4(w, h, c, elemSize, IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
         internal Mat(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
@@ -162,6 +182,24 @@ namespace NcnnDotNet
 
             // ToDo: Provide allocator class
             var ret = NativeMethods.mat_Mat_create2(this.NativePtr, w, h, elemSize, IntPtr.Zero);
+        }
+
+        public void Fill(float value)
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_fill_float(this.NativePtr, value);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        public void Fill(int value)
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_fill_int(this.NativePtr, value);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
         }
 
         public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height)
