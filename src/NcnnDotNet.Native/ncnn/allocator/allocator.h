@@ -57,9 +57,13 @@ DLLEXPORT void allocator_##__TYPENAME__##_clear(ncnn::__TYPE__* allocator)\
 MAKE_ALLOCATOR(UnlockedPoolAllocator, UnlockedPoolAllocator)
 MAKE_ALLOCATOR(PoolAllocator, PoolAllocator)
 
+#if NCNN_VULKAN
+
 MAKE_VKALLOCATOR(VkBlobBufferAllocator, VkBlobBufferAllocator)
 MAKE_VKALLOCATOR(VkWeightBufferAllocator, VkWeightBufferAllocator)
 MAKE_VKALLOCATOR(VkStagingBufferAllocator, VkStagingBufferAllocator)
 MAKE_VKALLOCATOR(VkWeightStagingBufferAllocator, VkWeightStagingBufferAllocator)
+
+#endif
 
 #endif
