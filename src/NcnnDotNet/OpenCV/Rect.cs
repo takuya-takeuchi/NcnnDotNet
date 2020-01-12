@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq.Expressions;
 
 // ReSharper disable once CheckNamespace
 namespace NcnnDotNet.OpenCV

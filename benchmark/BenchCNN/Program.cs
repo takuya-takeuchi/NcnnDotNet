@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using NcnnDotNet;
-using Mat = NcnnDotNet.Mat;
 
 namespace BenchCNN
 {
