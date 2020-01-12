@@ -29,6 +29,26 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
+        public Mat(int w, int h, long elemSize = 4u)
+        {
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_new3(w, h, elemSize, IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, int h, int c, long elemSize = 4u)
+        {
+            // ToDo: Provide allocator class
+            var error = NativeMethods.mat_Mat_new4(w, h, c, elemSize, IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
         internal Mat(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)
