@@ -46,6 +46,30 @@ DLLEXPORT void mat_Mat_delete(ncnn::Mat* mat)
     if (mat != nullptr) delete mat;
 }
 
+#pragma region fill
+
+DLLEXPORT int32_t mat_Mat_fill_float(ncnn::Mat* mat, const float v)
+{
+    int32_t error = ERR_OK;
+
+    mat->fill(v);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_fill_int(ncnn::Mat* mat, const int32_t v)
+{
+    int32_t error = ERR_OK;
+
+    mat->fill(v);
+
+    return error;
+}
+
+#pragma endregion fill
+
+#pragma region reshape
+
 DLLEXPORT int32_t mat_Mat_reshape(ncnn::Mat* mat, int32_t w, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
 {
     int32_t error = ERR_OK;
@@ -85,6 +109,10 @@ DLLEXPORT int32_t mat_Mat_reshape3(ncnn::Mat* mat,
     return error;
 }
 
+#pragma endregion reshape
+
+#pragma region create
+
 DLLEXPORT int32_t mat_Mat_create(ncnn::Mat* mat,
                                  const int32_t w,
                                  const size_t celemsize,
@@ -109,6 +137,8 @@ DLLEXPORT int32_t mat_Mat_create2(ncnn::Mat* mat,
 
     return error;
 }
+
+#pragma endregion reshape
 
 DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
 {

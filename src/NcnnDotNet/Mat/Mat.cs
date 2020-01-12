@@ -184,6 +184,24 @@ namespace NcnnDotNet
             var ret = NativeMethods.mat_Mat_create2(this.NativePtr, w, h, elemSize, IntPtr.Zero);
         }
 
+        public void Fill(float value)
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_fill_float(this.NativePtr, value);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        public void Fill(int value)
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_fill_int(this.NativePtr, value);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
         public static Mat FromPixels(IntPtr pixel, PixelType type, int width, int height)
         {
             return FromPixels(pixel,
