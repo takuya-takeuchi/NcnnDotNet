@@ -14,6 +14,12 @@ namespace NcnnDotNet
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern void gpu_destroy_gpu_instance();
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern int gpu_get_default_gpu_index();
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern int gpu_get_gpu_count();
+
     }
 
 }
