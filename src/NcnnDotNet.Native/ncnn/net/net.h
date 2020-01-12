@@ -61,6 +61,8 @@ DLLEXPORT int net_Net_create_extractor(ncnn::Net* net, ncnn::Extractor** returnV
     return error;
 }
 
+#pragma region load_param
+
 DLLEXPORT int net_Net_load_param_filepath(ncnn::Net* net, const char* protopath, const int32_t protopath_len)
 {
     int32_t error = ERR_OK;
@@ -84,6 +86,20 @@ DLLEXPORT int net_Net_load_model_filepath(ncnn::Net* net, const char* modelpath,
 
     return error;
 }
+
+DLLEXPORT int net_Net_load_model_datareader(ncnn::Net* net, ncnn::DataReader* reader)
+{
+    int32_t error = ERR_OK;
+
+    const auto& dr = *reader;
+    const auto ret = net->load_model(dr);
+    if (ret != 0)
+        return ERR_GENERAL_ERROR;
+
+    return error;
+}
+
+#pragma endregion load_param
 
 DLLEXPORT void net_Net_get_opt(ncnn::Net* net, ncnn::Option** returnValue)
 {

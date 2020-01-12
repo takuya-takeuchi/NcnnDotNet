@@ -92,6 +92,21 @@ namespace NcnnDotNet
             return true;
         }
 
+        public bool LoadModel(DataReader dataReader)
+        {
+            if (dataReader == null) 
+                throw new ArgumentNullException(nameof(dataReader));
+
+            this.ThrowIfDisposed();
+            dataReader.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_load_model_datareader(this.NativePtr, dataReader.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                return false;
+
+            return true;
+        }
+
         public bool LoadParam(string protoPath)
         {
             if (string.IsNullOrEmpty(protoPath))

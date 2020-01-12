@@ -1,0 +1,1 @@
+copy ..\..\src\ncnn\benchmark\*.param .

@@ -33,6 +33,9 @@ namespace NcnnDotNet
         public static extern ErrorType net_Net_load_model_filepath(IntPtr net, byte[] modelPath, int modelPathLength);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_load_model_datareader(IntPtr net, IntPtr reader);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void net_Net_get_opt(IntPtr net, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
