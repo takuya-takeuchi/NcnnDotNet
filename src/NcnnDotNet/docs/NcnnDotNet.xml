@@ -4,12 +4,69 @@
         <name>NcnnDotNet</name>
     </assembly>
     <members>
+        <member name="M:NcnnDotNet.PoolAllocator.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.UnlockedPoolAllocator.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkBlobBufferAllocator.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkStagingBufferAllocator.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkWeightBufferAllocator.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkWeightStagingBufferAllocator.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
         <member name="T:NcnnDotNet.Ncnn">
             <summary>
             Provides the methods of ncnn.
             </summary>
             <summary>
             Provides the methods of ncnn.
+            </summary>
+            <summary>
+            Provides the methods of ncnn.
+            </summary>
+            <summary>
+            Provides the methods of ncnn.
+            </summary>
+            <summary>
+            Provides the methods of ncnn.
+            </summary>
+            <summary>
+            Provides the methods of ncnn.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.DataReader.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VulkanDevice.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.Layer.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
             </summary>
         </member>
         <member name="M:NcnnDotNet.Mat.DisposeUnmanaged">
@@ -117,6 +174,11 @@
             </summary>
         </member>
         <member name="M:NcnnDotNet.Option.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.ParamDict.DisposeUnmanaged">
             <summary>
             Releases all unmanaged resources.
             </summary>
