@@ -20,8 +20,8 @@ namespace NcnnDotNet
             this.NativePtr = returnValue;
         }
 
-        internal VkStagingBufferAllocator(IntPtr ptr):
-            base(ptr)
+        internal VkStagingBufferAllocator(IntPtr ptr, bool isEnabledDispose = true) :
+            base(ptr, isEnabledDispose)
         {
         }
 
