@@ -15,7 +15,7 @@ namespace NcnnDotNet
             return NativeMethods.cpu_get_cpu_count();
         }
 
-        public static PowerSave GetPowerSave()
+        public static PowerSave SetCpuPowerSave()
         {
             var powerSave = NativeMethods.cpu_get_cpu_powersave();
             return (PowerSave)powerSave;
