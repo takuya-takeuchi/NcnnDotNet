@@ -109,18 +109,14 @@ namespace BenchCNN
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("squeezenet_int8", new Mat(227, 227, 3), opt);
-                opt.UsePackingLayout = true;
             }
 
             Benchmark("mobilenet", new Mat(224, 224, 3), opt);
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("mobilenet_int8", new Mat(224, 224, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("mobilenet_v2", new Mat(224, 224, 3), opt);
@@ -144,18 +140,14 @@ namespace BenchCNN
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("googlenet_int8", new Mat(224, 224, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("resnet18", new Mat(224, 224, 3), opt);
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("resnet18_int8", new Mat(224, 224, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("alexnet", new Mat(227, 227, 3), opt);
@@ -164,36 +156,28 @@ namespace BenchCNN
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("vgg16_int8", new Mat(224, 224, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("resnet50", new Mat(224, 224, 3), opt);
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("resnet50_int8", new Mat(224, 224, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("squeezenet_ssd", new Mat(300, 300, 3), opt);
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("squeezenet_ssd_int8", new Mat(300, 300, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("mobilenet_ssd", new Mat(300, 300, 3), opt);
 
             if (!Ncnn.IsSupportVulkan || !useVulkanCompute)
             {
-                opt.UsePackingLayout = false;
                 Benchmark("mobilenet_ssd_int8", new Mat(300, 300, 3), opt);
-                opt.UsePackingLayout = false;
             }
 
             Benchmark("mobilenet_yolo", new Mat(416, 416, 3), opt);
