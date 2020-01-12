@@ -17,10 +17,10 @@ namespace NcnnDotNet
         private delegate void OnDestructorDelegate();
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void OnScanDelegate(IntPtr format, IntPtr p);
+        private delegate int OnScanDelegate(IntPtr format, IntPtr p);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate void OnReadDelegate(IntPtr buf, long size);
+        private delegate long OnReadDelegate(IntPtr buf, long size);
 
         #endregion
 
@@ -65,12 +65,14 @@ namespace NcnnDotNet
 
         }
 
-        protected virtual void OnScan(IntPtr format, IntPtr p)
+        protected virtual int OnScan(IntPtr format, IntPtr p)
         {
+            return 0;
         }
 
-        protected virtual void OnRead(IntPtr buf, long size)
+        protected virtual long OnRead(IntPtr buf, long size)
         {
+            return 0;
         }
 
         #region Overrids
@@ -102,14 +104,14 @@ namespace NcnnDotNet
             this.OnDestructor();
         }
 
-        private void Scan(IntPtr format, IntPtr p)
+        private int Scan(IntPtr format, IntPtr p)
         {
-            this.OnScan(format, p);
+            return this.OnScan(format, p);
         }
 
-        private void Read(IntPtr buf, long size)
+        private long Read(IntPtr buf, long size)
         {
-            this.OnRead(buf, size);
+            return this.OnRead(buf, size);
         }
 
         #endregion
