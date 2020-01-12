@@ -19,6 +19,38 @@ DLLEXPORT void net_Net_delete(ncnn::Net* net)
     if (net != nullptr) delete net;
 }
 
+#if NCNN_VULKAN
+
+DLLEXPORT int net_Net_set_vulkan_device(ncnn::Net* net, const int32_t device_index)
+{
+    int32_t error = ERR_OK;
+
+    net->set_vulkan_device(device_index);
+
+    return error;
+}
+
+DLLEXPORT int net_Net_set_vulkan_device2(ncnn::Net* net, const ncnn::VulkanDevice* vkdev)
+{
+    int32_t error = ERR_OK;
+
+    net->set_vulkan_device(vkdev);
+
+    return error;
+}
+
+DLLEXPORT int net_Net_get_vulkan_device(ncnn::Net* net, const ncnn::VulkanDevice** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    auto ret = net->vulkan_device();
+    *returnValue = ret;
+
+    return error;
+}
+
+#endif
+
 DLLEXPORT int net_Net_create_extractor(ncnn::Net* net, ncnn::Extractor** returnValue)
 {
     int32_t error = ERR_OK;

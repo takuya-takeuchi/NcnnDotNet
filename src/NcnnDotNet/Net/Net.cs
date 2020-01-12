@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace NcnnDotNet
@@ -56,6 +57,17 @@ namespace NcnnDotNet
             return new Extractor(ret);
         }
 
+        public VulkanDevice GetVulkanDevice()
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_get_vulkan_device(this.NativePtr, out var device);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new VulkanDevice(device);
+        }
+
         public bool LoadModel(string modelPath)
         {
             if (string.IsNullOrEmpty(modelPath))
@@ -92,6 +104,28 @@ namespace NcnnDotNet
             return true;
         }
 
+        public void SetVulkanDevice(int deviceIndex)
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_set_vulkan_device(this.NativePtr, deviceIndex);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        public void SetVulkanDevice(VulkanDevice device)
+        {
+            if (device == null) 
+                throw new ArgumentNullException(nameof(device));
+
+            this.ThrowIfDisposed();
+            device.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_set_vulkan_device2(this.NativePtr, device.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+        
         #region Overrides 
 
         /// <summary>
