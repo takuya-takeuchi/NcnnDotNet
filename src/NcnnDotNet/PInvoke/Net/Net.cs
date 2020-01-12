@@ -27,13 +27,16 @@ namespace NcnnDotNet
         public static extern ErrorType net_Net_create_extractor(IntPtr net, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType net_Net_load_param_filepath(IntPtr net, byte[] protopath, int protopathLength);
+        public static extern ErrorType net_Net_load_param_filepath(IntPtr net, byte[] protoPath, int protoPathLength);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType net_Net_load_model_filepath(IntPtr net, byte[] modelpath, int modelpathLength);
+        public static extern ErrorType net_Net_load_model_filepath(IntPtr net, byte[] modelPath, int modelPathLength);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void net_Net_get_opt(IntPtr net, out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_set_opt(IntPtr net, IntPtr option);
 
     }
 

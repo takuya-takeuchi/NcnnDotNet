@@ -40,6 +40,12 @@ namespace NcnnDotNet
                 NativeMethods.net_Net_get_opt(this.NativePtr, out var opt);
                 return new Option(opt, false);
             }
+            set
+            {
+                this.ThrowIfDisposed();
+                value?.ThrowIfDisposed();
+                NativeMethods.net_Net_set_opt(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+            }
         }
 
         #endregion
