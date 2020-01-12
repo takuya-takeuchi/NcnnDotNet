@@ -29,7 +29,7 @@ int32_t DataReader::scan(const char* format, void* p) const
 size_t DataReader::read(void* buf, size_t size) const
 {
     if (this->m_read_function)
-        this->m_read_function(buf, size);
+        return this->m_read_function(buf, size);
     else
         return ncnn::DataReader::read(buf, size);
 }
