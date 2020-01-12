@@ -29,7 +29,7 @@ namespace NcnnDotNet
 
         #region Methods
 
-        public void Clear()
+        public override void Clear()
         {
             this.ThrowIfDisposed();
 

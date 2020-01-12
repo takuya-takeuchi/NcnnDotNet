@@ -24,6 +24,12 @@ namespace NcnnDotNet
 
         #endregion
 
+        #region Methods
+
+        public abstract void Clear();
+
+        #endregion
+
     }
 
 }
