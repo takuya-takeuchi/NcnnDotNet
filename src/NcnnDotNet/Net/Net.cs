@@ -39,6 +39,12 @@ namespace NcnnDotNet
                 NativeMethods.net_Net_get_opt(this.NativePtr, out var opt);
                 return new Option(opt, false);
             }
+            set
+            {
+                this.ThrowIfDisposed();
+                value?.ThrowIfDisposed();
+                NativeMethods.net_Net_set_opt(this.NativePtr, value?.NativePtr ?? IntPtr.Zero);
+            }
         }
 
         #endregion
@@ -56,6 +62,17 @@ namespace NcnnDotNet
             return new Extractor(ret);
         }
 
+        public VulkanDevice GetVulkanDevice()
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_get_vulkan_device(this.NativePtr, out var device);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new VulkanDevice(device);
+        }
+
         public bool LoadModel(string modelPath)
         {
             if (string.IsNullOrEmpty(modelPath))
@@ -68,6 +85,21 @@ namespace NcnnDotNet
 
             var str = Ncnn.Encoding.GetBytes(modelPath);
             var error = NativeMethods.net_Net_load_model_filepath(this.NativePtr, str, str.Length);
+            if (error != NativeMethods.ErrorType.OK)
+                return false;
+
+            return true;
+        }
+
+        public bool LoadModel(DataReader dataReader)
+        {
+            if (dataReader == null) 
+                throw new ArgumentNullException(nameof(dataReader));
+
+            this.ThrowIfDisposed();
+            dataReader.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_load_model_datareader(this.NativePtr, dataReader.NativePtr);
             if (error != NativeMethods.ErrorType.OK)
                 return false;
 
@@ -92,6 +124,28 @@ namespace NcnnDotNet
             return true;
         }
 
+        public void SetVulkanDevice(int deviceIndex)
+        {
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_set_vulkan_device(this.NativePtr, deviceIndex);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        public void SetVulkanDevice(VulkanDevice device)
+        {
+            if (device == null) 
+                throw new ArgumentNullException(nameof(device));
+
+            this.ThrowIfDisposed();
+            device.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_set_vulkan_device2(this.NativePtr, device.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+        
         #region Overrides 
 
         /// <summary>

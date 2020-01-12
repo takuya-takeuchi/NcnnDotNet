@@ -34,7 +34,10 @@ The following result is example.
 cd <RFCN_dir> 
 dotnet run --configuration Release -- eagle.jpg
 
-vkEnumerateInstanceExtensionProperties failed -6
+[0 GeForce GTX 1080]  queueC=2[8]  queueG=0[16]  queueT=1[1]  buglssc=0
+[0 GeForce GTX 1080]  fp16p=1  fp16s=1  fp16a=0  int8s=1  int8a=1
+[1 Intel(R) UHD Graphics 630]  queueC=0[1]  queueG=0[1]  queueT=0[1]  buglssc=0
+[1 Intel(R) UHD Graphics 630]  fp16p=1  fp16s=1  fp16a=1  int8s=1  int8a=1
 3 = 1.00000 at 253.45 327.21 294.89 65.97
 3 = 1.00000 at 0.00 0.00 773.00 273.40
 3 = 1.00000 at 0.00 0.00 773.00 273.40

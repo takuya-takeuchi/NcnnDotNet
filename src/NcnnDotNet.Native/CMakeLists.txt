@@ -6,7 +6,7 @@ set(PROJ_NAME NcnnDotNetNative)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(${PROJ_NAME} VERSION 0.0.0.20191223)
+project(${PROJ_NAME} VERSION 0.0.0.20200106)
 
 # definitions
 option(NCNN_VULKAN "vulkan compute support" OFF)
@@ -29,7 +29,7 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20191223)
+set(VERSION_DATE 20200106)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -146,17 +146,6 @@ endif()
 if (NCNN_VULKAN)
     if (MSVC OR MSYS OR MINGW)
         list(APPEND STATIC_LIBRARIES
-            #$ENV{VULKAN_SDK}/Lib/shaderc_combined.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_api_dump.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_core_validation.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_device_simulation.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_monitor.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_object_tracker.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_parameter_validation.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_screenshot.lib
-            #$ENV{VULKAN_SDK}/Lib/VkLayer_threading.lib
-            $ENV{VULKAN_SDK}/Lib/VkLayer_unique_objects.lib
-            $ENV{VULKAN_SDK}/Lib/VkLayer_utils.lib
             $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
         )
     elseif(APPLE)

@@ -12,10 +12,22 @@ namespace NcnnDotNet
         public static extern ErrorType mat_Mat_new(out IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType mat_Mat_new2(int w, long elemsize, IntPtr allocator, out IntPtr net);
+        public static extern ErrorType mat_Mat_new2(int w, long elemSize, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_new3(int w, int h, long elemSize, IntPtr allocator, out IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_new4(int w, int h, int c, long elemSize, IntPtr allocator, out IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void mat_Mat_delete(IntPtr net);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_fill_float(IntPtr mat, float v);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_fill_int(IntPtr mat, int v);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_reshape(IntPtr mat, int w, IntPtr allocator, out IntPtr net);
@@ -27,11 +39,20 @@ namespace NcnnDotNet
         public static extern ErrorType mat_Mat_reshape3(IntPtr mat, int w, int h, int c, IntPtr allocator, out IntPtr net);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_create(IntPtr mat, int w, long elemSize, IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_create2(IntPtr mat, int w, int h, long elemSize, IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool mat_Mat_empty(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr mat_Mat_channel(IntPtr mat, int c);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_Mat_channel_range(IntPtr mat, int c, int channels);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr mat_Mat_row(IntPtr mat, int y);
@@ -53,6 +74,9 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int mat_Mat_get_dims(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_Mat_get_data(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_get_operator_indexer(IntPtr mat, int index, out float returnValue);

@@ -1,6 +1,6 @@
 ﻿using NcnnDotNet.OpenCV;
 
-namespace MobileNetV2SSDLite
+namespace MobileNetV3SSDLite
 {
 
     internal sealed class Object

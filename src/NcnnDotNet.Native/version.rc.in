@@ -69,7 +69,7 @@ BEGIN
 		BLOCK "080904b0"
 		BEGIN
 			VALUE "CompanyName",      "Takuya Takeuchi"
-			VALUE "FileDescription",  "ncnn wrapper library (kernel)"
+			VALUE "FileDescription",  "ncnn wrapper library"
 			VALUE "FileVersion",      VER_FILEVERSION_STR
 			VALUE "InternalName",     "NcnnDotNet.Native"
 			VALUE "LegalCopyright",   "Copyright (c) 2019-2020 Takuya Takeuchi."

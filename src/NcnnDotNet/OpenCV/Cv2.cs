@@ -13,6 +13,58 @@ namespace NcnnDotNet.OpenCV
 
         #region Methods
 
+        public static void Circle(Mat mat,
+                                  Point<int> center,
+                                  int radius,
+                                  Scalar<double> scalar,
+                                  int thickness = 1,
+                                  CvLineTypes lineType = CvLineTypes.Line8,
+                                  int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativeCenter = center.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_circle_int32_t(mat.NativePtr,
+                                                    nativeCenter.NativePtr,
+                                                    radius,
+                                                    nativeScalar.NativePtr,
+                                                    thickness,
+                                                    lineType,
+                                                    shift);
+            }
+        }
+
+        public static void Circle(Mat mat,
+                                  Point<float> center,
+                                  int radius,
+                                  Scalar<double> scalar,
+                                  int thickness = 1,
+                                  CvLineTypes lineType = CvLineTypes.Line8,
+                                  int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativeCenter = center.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_circle_float(mat.NativePtr,
+                                                  nativeCenter.NativePtr,
+                                                  radius,
+                                                  nativeScalar.NativePtr,
+                                                  thickness,
+                                                  lineType,
+                                                  shift);
+            }
+        }
+
         public static Size<int> GetTextSize(string text, CvHersheyFonts fontFace, double fontScale, int thickness, ref int baseLine)
         {
             var str = Ncnn.Encoding.GetBytes(text ?? "");
@@ -72,6 +124,60 @@ namespace NcnnDotNet.OpenCV
                 throw new NcnnException("Unknown Exception");
         }
 
+        public static void Line(Mat mat,
+                                Point<int> p1,
+                                Point<int> p2,
+                                Scalar<double> scalar,
+                                int thickness = 1,
+                                CvLineTypes lineType = CvLineTypes.Line8,
+                                int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativePoint1 = p1.ToNative())
+            using (var nativePoint2 = p2.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_line_int32_t(mat.NativePtr,
+                                                  nativePoint1.NativePtr,
+                                                  nativePoint2.NativePtr,
+                                                  nativeScalar.NativePtr,
+                                                  thickness,
+                                                  lineType,
+                                                  shift);
+            }
+        }
+
+        public static void Line(Mat mat,
+                                Point<float> p1,
+                                Point<float> p2,
+                                Scalar<double> scalar,
+                                int thickness = 1,
+                                CvLineTypes lineType = CvLineTypes.Line8,
+                                int shift = 0)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            mat.ThrowIfDisposed();
+
+            using (var nativePoint1 = p1.ToNative())
+            using (var nativePoint2 = p2.ToNative())
+            using (var nativeScalar = scalar.ToNative())
+            {
+                NativeMethods.opencv_line_float(mat.NativePtr,
+                                                nativePoint1.NativePtr,
+                                                nativePoint2.NativePtr,
+                                                nativeScalar.NativePtr,
+                                                thickness,
+                                                lineType,
+                                                shift);
+            }
+        }
+        
         public static void PutText(Mat mat,
                                    string text,
                                    Point<int> point,
@@ -135,7 +241,7 @@ namespace NcnnDotNet.OpenCV
                                                      bottomLeftOrigin);
             }
         }
-        
+
         public static void PutText(Mat mat,
                                    string text,
                                    Point<float> point,

@@ -35,7 +35,10 @@ The following result is example.
 cd <FasterRCNN_dir> 
 dotnet run --configuration Release -- dog.jpg
 
-vkEnumerateInstanceExtensionProperties failed -6
+[0 GeForce GTX 1080]  queueC=2[8]  queueG=0[16]  queueT=1[1]  buglssc=0
+[0 GeForce GTX 1080]  fp16p=1  fp16s=1  fp16a=0  int8s=1  int8a=1
+[1 Intel(R) UHD Graphics 630]  queueC=0[1]  queueG=0[1]  queueT=0[1]  buglssc=0
+[1 Intel(R) UHD Graphics 630]  fp16p=1  fp16s=1  fp16a=1  int8s=1  int8a=1
 7 = 0.94920 at 447.28 72.53 251.93 96.47
 7 = 0.94920 at 447.28 72.53 251.93 96.47
 7 = 0.94920 at 447.28 72.53 251.93 96.47

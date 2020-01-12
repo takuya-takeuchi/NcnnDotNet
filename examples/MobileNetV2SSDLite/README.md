@@ -33,7 +33,10 @@ The following result is example.
 cd <MobileNetV2SSDLite_dir> 
 dotnet run --configuration Release -- dog.jpg
 
-vkEnumerateInstanceExtensionProperties failed -6
+[0 GeForce GTX 1080]  queueC=2[8]  queueG=0[16]  queueT=1[1]  buglssc=0
+[0 GeForce GTX 1080]  fp16p=1  fp16s=1  fp16a=0  int8s=1  int8a=1
+[1 Intel(R) UHD Graphics 630]  queueC=0[1]  queueG=0[1]  queueT=0[1]  buglssc=0
+[1 Intel(R) UHD Graphics 630]  fp16p=1  fp16s=1  fp16a=1  int8s=1  int8a=1
 2 = 0.96775 at 130.60 118.44 436.14 315.11
 7 = 0.83982 at 465.92 83.44 235.06 94.72
 12 = 0.83866 at 128.00 212.55 185.20 328.66
