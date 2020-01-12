@@ -90,4 +90,14 @@ DLLEXPORT void net_Net_get_opt(ncnn::Net* net, ncnn::Option** returnValue)
     *returnValue = &(net->opt);
 }
 
+DLLEXPORT int32_t net_Net_set_opt(ncnn::Net* net, ncnn::Option* option)
+{
+    int32_t error = ERR_OK;
+
+    const auto& o = *option;
+    net->opt = o;
+
+    return error;
+}
+
 #endif

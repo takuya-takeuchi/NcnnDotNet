@@ -35,6 +35,9 @@ namespace NcnnDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void net_Net_get_opt(IntPtr net, out IntPtr returnValue);
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_set_opt(IntPtr net, IntPtr option);
+
     }
 
 }
