@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 
 // ReSharper disable once CheckNamespace
 namespace NcnnDotNet
@@ -19,6 +20,9 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern int gpu_get_gpu_count();
+        
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr gpu_get_gpu_device(int deviceIndex);
 
     }
 

@@ -27,6 +27,11 @@ DLLEXPORT int32_t gpu_get_gpu_count()
     return ncnn::get_gpu_count();
 }
 
+DLLEXPORT ncnn::VulkanDevice* gpu_get_gpu_device(const int device_index)
+{
+    return ncnn::get_gpu_device(device_index);
+}
+
 #endif
 
 #endif

@@ -30,6 +30,18 @@ namespace NcnnDotNet
             return NativeMethods.gpu_get_gpu_count();
         }
 
+        public static VulkanDevice GetGpuDevice()
+        {
+            var deviceIndex = NativeMethods.gpu_get_default_gpu_index();
+            return GetGpuDevice(deviceIndex);
+        }
+
+        public static VulkanDevice GetGpuDevice(int deviceIndex)
+        {
+            var ret = NativeMethods.gpu_get_gpu_device(deviceIndex);
+            return new VulkanDevice(ret);
+        }
+
         #endregion
 
     }
