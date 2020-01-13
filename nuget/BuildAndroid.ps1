@@ -35,8 +35,8 @@ $BuildSourceHash = [Config]::GetBinaryLibraryLinuxHash()
 $BuildTargets = @()
 $BuildTargets += New-Object PSObject -Property @{ Platform = "android"; Target = "arm"; Architecture = 64; RID = "arm64-v8a"   }
 $BuildTargets += New-Object PSObject -Property @{ Platform = "android"; Target = "arm"; Architecture = 32; RID = "armeabi-v7a" }
-# $BuildTargets += New-Object PSObject -Property @{ Platform = "android"; Target = "arm"; Architecture = 32; RID = "x86"         }
-# $BuildTargets += New-Object PSObject -Property @{ Platform = "android"; Target = "arm"; Architecture = 64; RID = "x86_64"      }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "android"; Target = "arm"; Architecture = 32; RID = "x86"         }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "android"; Target = "arm"; Architecture = 64; RID = "x86_64"      }
 
 $dockername = "ncnndotnet/build/$Distribution/$DistributionVersion/android/$AndroidVersion"
 $imagename  = "ncnndotnet/devel/$Distribution/$DistributionVersion/android/$AndroidVersion"
