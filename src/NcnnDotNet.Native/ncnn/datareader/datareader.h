@@ -12,7 +12,7 @@ public:
                void (*destructor_function)() = nullptr,
                int32_t (*scan_function)(const char*, void*) = nullptr,
                size_t (*read_function)(void*, size_t) = nullptr);
-    ~DataReader();
+    virtual ~DataReader();
 
 public:
     virtual int32_t scan(const char* format, void* p) const;
