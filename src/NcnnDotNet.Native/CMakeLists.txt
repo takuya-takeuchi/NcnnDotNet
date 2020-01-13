@@ -37,6 +37,12 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
+# typeinfo for DataReader_: error: undefined reference to 'typeinfo for ncnn::DataReader'
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+	set(CMAKE_C_FLAGS "-fPIC")
+	set(CMAKE_CXX_FLAGS "-fPIC -fno-rtti")
+endif()
+
 # set architecture
 if (NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
     if ("${ARCH_TYPE}" STREQUAL "32")
@@ -61,10 +67,6 @@ get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)
 
-if (NCNN_VULKAN)
-    find_package(ncnn REQUIRED)
-endif()
-
 # link OpenMP (https://github.com/Tencent/ncnn/issues/659)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     find_package(OpenMP REQUIRED)
@@ -72,6 +74,21 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    else()
+        message(FATAL_ERROR "Failed to find OpenMP")
+    endif()
+endif()
+
+# https://github.com/Tencent/ncnn/wiki/FAQ-ncnn-throw-error#undefined-reference-to-__kmpc_xyz_xyz
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+    FIND_PACKAGE( OpenMP REQUIRED)
+
+    if(OPENMP_FOUND)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    else()
+        message(FATAL_ERROR "Failed to find OpenMP")
     endif()
 endif()
 
@@ -123,6 +140,7 @@ else()
         @ONLY)
 endif()
 
+# STATIC_LIBRARIES
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/ncnn.lib
@@ -132,7 +150,12 @@ elseif(APPLE)
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_world
-        $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+    )
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+    set(STATIC_LIBRARIES
+        $ENV{ncnn_DIR}/lib/libncnn.a
+        opencv_world
+        android
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
@@ -151,6 +174,10 @@ if (NCNN_VULKAN)
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+        )   
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+        list(APPEND STATIC_LIBRARIES
+            vulkan
         )
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
