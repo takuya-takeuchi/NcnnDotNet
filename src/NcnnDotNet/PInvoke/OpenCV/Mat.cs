@@ -9,6 +9,14 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_Mat_new(int rows,
+                                                      int cols,
+                                                      int type,
+                                                      IntPtr data,
+                                                      ulong step,
+                                                      out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_Mat_delete(IntPtr mat);
         
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

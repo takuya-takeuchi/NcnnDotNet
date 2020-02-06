@@ -6,6 +6,20 @@
 #include <opencv2/imgcodecs.hpp>
 #include "../shared.h"
 
+DLLEXPORT int32_t opencv_Mat_new(const int32_t rows,
+                                 const int32_t cols,
+                                 const int32_t type,
+                                 void* data,
+                                 size_t step,
+                                 cv::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new cv::Mat(rows, cols, type, data, step);
+
+    return error;
+}
+
 DLLEXPORT void opencv_Mat_delete(cv::Mat* mat)
 {
     if (mat != nullptr) delete mat;
