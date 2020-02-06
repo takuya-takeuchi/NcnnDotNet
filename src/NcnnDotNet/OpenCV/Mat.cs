@@ -9,6 +9,22 @@ namespace NcnnDotNet.OpenCV
 
         #region Constructors
 
+        public Mat(int rows,
+                   int cols,
+                   int type,
+                   IntPtr data,
+                   ulong step = 0)
+        {
+            if (data == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(data));
+
+            var error = NativeMethods.opencv_Mat_new(rows, cols, type, data, step, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
         internal Mat(IntPtr ptr)
         {
             if (ptr == IntPtr.Zero)

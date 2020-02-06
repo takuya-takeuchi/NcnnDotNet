@@ -23,7 +23,11 @@ DLLEXPORT int mat_Mat_new2(const int32_t w, const size_t elemsize, ncnn::Allocat
     return error;
 }
 
-DLLEXPORT int mat_Mat_new3(const int32_t w, const int32_t h, const size_t elemsize, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+DLLEXPORT int mat_Mat_new3(const int32_t w,
+                           const int32_t h,
+                           const size_t elemsize,
+                           ncnn::Allocator* allocator,
+                           ncnn::Mat** returnValue)
 {
     int32_t error = ERR_OK;
 
@@ -32,11 +36,58 @@ DLLEXPORT int mat_Mat_new3(const int32_t w, const int32_t h, const size_t elemsi
     return error;
 }
 
-DLLEXPORT int mat_Mat_new4(const int32_t w, const int32_t h, const int32_t c, const size_t elemsize, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+DLLEXPORT int mat_Mat_new4(const int32_t w,
+                           const int32_t h,
+                           const int32_t c,
+                           const size_t elemsize,
+                           ncnn::Allocator* allocator,
+                           ncnn::Mat** returnValue)
 {
     int32_t error = ERR_OK;
 
     *returnValue = new ncnn::Mat(w, h, c, elemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_new5(const int32_t w,
+                               void* data,
+                               const size_t elemsize,
+                               ncnn::Allocator* allocator,
+                               ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, data, elemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_new6(const int32_t w,
+                               const int32_t h,
+                               void* data,
+                               const size_t elemsize,
+                               ncnn::Allocator* allocator,
+                               ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, h, data, elemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_new7(const int32_t w,
+                               const int32_t h,
+                               const int32_t c,
+                               void* data,
+                               const size_t elemsize,
+                               ncnn::Allocator* allocator,
+                               ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, h, c, data, elemsize, allocator);
 
     return error;
 }
