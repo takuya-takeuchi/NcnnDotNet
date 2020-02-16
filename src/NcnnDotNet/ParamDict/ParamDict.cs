@@ -30,6 +30,18 @@ namespace NcnnDotNet
 
         #region Methods
 
+        public void Set(int id, int value)
+        {
+            this.ThrowIfDisposed();
+            NativeMethods.paramdict_ParamDict_set(this.NativePtr, id, value);
+        }
+
+        public void Set(int id, float value)
+        {
+            this.ThrowIfDisposed();
+            NativeMethods.paramdict_ParamDict_set2(this.NativePtr, id, value);
+        }
+
         #region Overrides 
 
         /// <summary>

@@ -28,6 +28,20 @@ namespace NcnnDotNet
 
         #endregion
 
+        #region Properties
+
+        public GpuInfo Info
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.gpu_VulkanDevice_get_info(this.NativePtr, out var value);
+                return new GpuInfo(value, false);
+            }
+        }
+
+        #endregion
+
         #region Methods
 
         #region Overrides 

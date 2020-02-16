@@ -102,6 +102,9 @@ namespace NcnnDotNet
         public static extern bool mat_Mat_empty(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ulong mat_Mat_total(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr mat_Mat_channel(IntPtr mat, int c);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
@@ -136,6 +139,12 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_set_operator_indexer(IntPtr mat, int index, float value);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_get_operator_indexer2(IntPtr mat, ulong index, out float returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_set_operator_indexer2(IntPtr mat, ulong index, float value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_substract_mean_normalize(IntPtr mat, float[] meanVals, float[] normVals);

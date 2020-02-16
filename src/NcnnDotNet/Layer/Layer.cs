@@ -4,10 +4,13 @@
 namespace NcnnDotNet
 {
 
-    public sealed class Layer : NcnnObject
+    public class Layer : NcnnObject
     {
 
         #region Constructors
+
+        protected Layer()
+        { }
 
         internal Layer(IntPtr ptr)
         {
@@ -15,6 +18,40 @@ namespace NcnnDotNet
                 throw new ArgumentException("Can not pass IntPtr.Zero", nameof(ptr));
 
             this.NativePtr = ptr;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public bool OneBlobOnly
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.layer_Layer_get_one_blob_only(this.NativePtr, out var value);
+                return value;
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.layer_Layer_set_one_blob_only(this.NativePtr, value);
+            }
+        }
+
+        public bool SupportPacking
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.layer_Layer_get_support_packing(this.NativePtr, out var value);
+                return value;
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.layer_Layer_set_support_packing(this.NativePtr, value);
+            }
         }
 
         #endregion

@@ -24,7 +24,29 @@ namespace NcnnDotNet
 
             return new Layer(ret);
         }
-        
+
+        public static Layer CreateLayer(int index)
+        {
+            var error = NativeMethods.layer_create_layer2(index, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Layer(ret);
+        }
+
+        public static int LayerToIndex(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentNullException(nameof(fileName));
+
+            var str = Ncnn.Encoding.GetBytes(fileName);
+            var error = NativeMethods.layer_layer_to_index(str, str.Length, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return ret;
+        }
+
         #endregion
 
     }

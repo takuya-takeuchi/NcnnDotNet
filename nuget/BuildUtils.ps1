@@ -949,12 +949,16 @@ function ConfigCPU([Config]$Config)
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
 
-   # Build ncnn
+   # To inclue src/layer
+   $ncnnDir = $Config.GetNcnnRootDir()
+
+   # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
    if ($IsWindows)
    {
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
+      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
@@ -972,6 +976,7 @@ function ConfigCPU([Config]$Config)
    {
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
+      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
@@ -1014,12 +1019,16 @@ function ConfigVulkan([Config]$Config)
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
 
-   # Build ncnn
+   # To inclue src/layer
+   $ncnnDir = $Config.GetNcnnRootDir()
+
+   # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
    if ($IsWindows)
    {
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
+      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
@@ -1037,6 +1046,7 @@ function ConfigVulkan([Config]$Config)
    {
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
+      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `

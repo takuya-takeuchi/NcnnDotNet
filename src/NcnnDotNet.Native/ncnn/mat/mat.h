@@ -196,6 +196,11 @@ DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
     return mat->empty();
 }
 
+DLLEXPORT size_t mat_Mat_total(ncnn::Mat* mat)
+{
+    return mat->total();
+}
+
 DLLEXPORT float* mat_Mat_row(ncnn::Mat* mat, const int32_t y)
 {
     return mat->row(y);
@@ -259,6 +264,25 @@ DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, const int32_t ind
 }
 
 DLLEXPORT int32_t mat_Mat_set_operator_indexer(ncnn::Mat* mat, const int32_t index, const float value)
+{
+    int32_t error = ERR_OK;
+
+    mat->operator[](index) = value;
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_get_operator_indexer2(ncnn::Mat* mat, const size_t index, float* returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& m = *mat;
+    *returnValue = m[index];
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_set_operator_indexer2(ncnn::Mat* mat, const size_t index, const float value)
 {
     int32_t error = ERR_OK;
 

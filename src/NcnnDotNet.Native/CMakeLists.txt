@@ -94,10 +94,12 @@ endif()
 
 if (MSVC OR MSYS OR MINGW)
     include_directories("$ENV{ncnn_DIR}/include"
+                        "$ENV{ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
 else()
     include_directories("$ENV{ncnn_DIR}/include"
+                        "$ENV{ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
 endif()

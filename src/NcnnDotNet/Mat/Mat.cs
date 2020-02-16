@@ -210,6 +210,15 @@ namespace NcnnDotNet
             }
         }
 
+        public ulong Total
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.mat_Mat_total(this.NativePtr);
+            }
+        }
+
         public int W
         {
             get
@@ -231,6 +240,21 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.mat_Mat_set_operator_indexer(this.NativePtr, index, value);
+            }
+        }
+
+        public float this[ulong index]
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.mat_Mat_get_operator_indexer2(this.NativePtr, index, out var returnValue);
+                return returnValue;
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.mat_Mat_set_operator_indexer2(this.NativePtr, index, value);
             }
         }
 

@@ -14,6 +14,9 @@ namespace NcnnDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void gpu_VulkanDevice_delete(IntPtr device);
 
-    }
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void gpu_VulkanDevice_get_info(IntPtr device, out IntPtr returnValue);
+
+}
 
 }
