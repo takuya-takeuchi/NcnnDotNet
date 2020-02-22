@@ -298,6 +298,42 @@ namespace NcnnDotNet
 
         #endregion
 
+        #region CreateLike
+        
+        public void CreateLike(Mat mat, Allocator allocator = null)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            this.ThrowIfDisposed();
+            mat.ThrowIfDisposed();
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_create_like_mat(this.NativePtr,
+                                                              mat.NativePtr,
+                                                              allocator?.NativePtr ?? IntPtr.Zero);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        public void CreateLike(VkMat mat, Allocator allocator = null)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            this.ThrowIfDisposed();
+            mat.ThrowIfDisposed();
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_create_like_vkmat(this.NativePtr,
+                                                                mat.NativePtr,
+                                                                allocator?.NativePtr ?? IntPtr.Zero);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        #endregion
+
         #region Fill
 
         public void Fill(float value)

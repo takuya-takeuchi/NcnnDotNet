@@ -18,7 +18,8 @@ namespace NcnnDotNet
             this.NativePtr = device;
         }
 
-        internal VulkanDevice(IntPtr ptr)
+        internal VulkanDevice(IntPtr ptr, bool isEnabledDispose = true) :
+            base(isEnabledDispose)
         {
             if (ptr == IntPtr.Zero)
                 throw new ArgumentException("Can not pass IntPtr.Zero", nameof(ptr));

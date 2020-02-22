@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Takuya Takeuchi</Authors>
+    <Description>Example of CenterFaceDotNet</Description>
+    <Company />
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ShellProgressBar" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\NCNNDotNet\NcnnDotNet.csproj" />
+    <ProjectReference Include="..\TestUtil\TestUtil.csproj" />
+  </ItemGroup>
+
+</Project>

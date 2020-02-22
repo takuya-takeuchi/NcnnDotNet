@@ -26,7 +26,8 @@ namespace NcnnDotNet.Layers
         /// </summary>
         protected override void DisposeUnmanaged()
         {
-            base.DisposeUnmanaged();
+            // Suspend to call Layer.DisposeUnmanaged
+            //base.DisposeUnmanaged();
 
             if (this.NativePtr == IntPtr.Zero)
                 return;

@@ -189,7 +189,39 @@ DLLEXPORT int32_t mat_Mat_create2(ncnn::Mat* mat,
     return error;
 }
 
-#pragma endregion reshape
+#pragma endregion create
+
+#pragma region create_like
+
+DLLEXPORT int32_t mat_Mat_create_like_mat(ncnn::Mat* mat,
+                                          ncnn::Mat* m,
+                                          ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    const auto& in_m = *m;
+    mat->create_like(in_m, allocator);
+
+    return error;
+}
+
+#if NCNN_VULKAN
+
+DLLEXPORT int32_t mat_Mat_create_like_vkmat(ncnn::Mat* mat,
+                                            ncnn::VkMat* m,
+                                            ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    const auto& in_m = *m;
+    mat->create_like(in_m, allocator);
+
+    return error;
+}
+
+#endif
+
+#pragma endregion create_like
 
 DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
 {
@@ -422,6 +454,49 @@ DLLEXPORT int32_t mat_resize_bilinear(ncnn::Mat* src,
     auto& d = *dst;
     const auto& o = *opt;
     ncnn::resize_bilinear(s, d, w, h, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_convert_packing(ncnn::Mat* src,
+                                      ncnn::Mat* dst,
+                                      const int32_t elempack,
+                                      ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::convert_packing(s, d, elempack, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_cast_float16_to_float32(ncnn::Mat* src,
+                                              ncnn::Mat* dst,
+                                              ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::cast_float16_to_float32(s, d, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_cast_float32_to_float16(ncnn::Mat* src,
+                                              ncnn::Mat* dst,
+                                              ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::cast_float32_to_float16(s, d, o);
 
     return error;
 }

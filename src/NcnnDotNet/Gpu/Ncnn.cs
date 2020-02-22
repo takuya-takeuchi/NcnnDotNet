@@ -39,7 +39,7 @@ namespace NcnnDotNet
         public static VulkanDevice GetGpuDevice(int deviceIndex)
         {
             var ret = NativeMethods.gpu_get_gpu_device(deviceIndex);
-            return new VulkanDevice(ret);
+            return new VulkanDevice(ret, false);
         }
 
         #endregion

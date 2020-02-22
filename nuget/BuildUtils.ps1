@@ -340,7 +340,14 @@ class Config
          }
       }
 
-      return "build_${osname}_${platform}_${target}_${architecture}"
+      if ($this._Configuration -eq "Debug")
+      {
+         return "build_${osname}_${platform}_${target}_${architecture}_d"
+      }
+      else
+      {
+         return "build_${osname}_${platform}_${target}_${architecture}"
+      }
    }
 
    [string] GetVisualStudio()
@@ -427,52 +434,50 @@ class ThirdPartyBuilder
       {
          Write-Host "Start Build Protobuf" -ForegroundColor Green
 
+         $Configuration = $this._Config.GetConfigurationName()
+
          $protobufDir = $this._Config.GetProtobufRootDir()
          $protobufDir = Join-Path $protobufDir "cmake"
          $protobufTarget = Join-Path $current protobuf
          New-Item $protobufTarget -Force -ItemType Directory
          Set-Location $protobufTarget
          $current2 = Get-Location
-         $installDir = Join-Path $current2 install
+         $installDir = Join-Path $current2 "install"
          $ret = $installDir
 
          if ($global:IsWindows)
          {
-            Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+            Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
          -D protobuf_BUILD_TESTS=OFF `
          -D protobuf_MSVC_STATIC_RUNTIME=OFF `
          $protobufDir" -ForegroundColor Yellow
-            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+            cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                                        -D BUILD_SHARED_LIBS=OFF `
                                        -D CMAKE_INSTALL_PREFIX="$installDir" `
                                        -D protobuf_BUILD_TESTS=OFF `
                                        -D protobuf_MSVC_STATIC_RUNTIME=OFF `
                                        $protobufDir
-            Write-Host "   nmake" -ForegroundColor Yellow
-            nmake
-            Write-Host "   nmake install" -ForegroundColor Yellow
-            nmake install
+            Write-Host "   cmake build and install" -ForegroundColor Yellow
+            cmake --build . --config $Configuration --target install
          }
          else
          {
-            Write-Host "   cmake -D CMAKE_BUILD_TYPE=Release `
+            Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
          -D protobuf_BUILD_TESTS=OFF `
          -D protobuf_MSVC_STATIC_RUNTIME=OFF `
          $protobufDir" -ForegroundColor Yellow
-            cmake -D CMAKE_BUILD_TYPE=Release `
+            cmake -D CMAKE_BUILD_TYPE=$Configuration `
                   -D BUILD_SHARED_LIBS=OFF `
                   -D CMAKE_INSTALL_PREFIX="$installDir" `
                   -D protobuf_BUILD_TESTS=OFF `
                   -D protobuf_MSVC_STATIC_RUNTIME=OFF `
                   $protobufDir
-            Write-Host "   make" -ForegroundColor Yellow
-            make -j4
-            Write-Host "   make install" -ForegroundColor Yellow
-            make install
+            Write-Host "   cmake build and install" -ForegroundColor Yellow
+            cmake --build . --config $Configuration --target install
          }
       }
       finally
@@ -492,6 +497,7 @@ class ThirdPartyBuilder
       try
       {  
          $Platform = $this._Config.GetPlatform()
+         $Configuration = $this._Config.GetConfigurationName()
 
          switch ($Platform)
          {
@@ -509,7 +515,7 @@ class ThirdPartyBuilder
 
                if ($global:IsWindows)
                {
-                  Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                  Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                -D BUILD_SHARED_LIBS=OFF `
                -D BUILD_WITH_STATIC_CRT=OFF `
                -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -545,7 +551,7 @@ class ThirdPartyBuilder
                -D WITH_IPP=OFF `
                -D WITH_FFMPEG=OFF `
                $opencvDir" -ForegroundColor Yellow
-                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                                              -D BUILD_SHARED_LIBS=OFF `
                                              -D BUILD_WITH_STATIC_CRT=OFF `
                                              -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -581,14 +587,12 @@ class ThirdPartyBuilder
                                              -D WITH_IPP=OFF `
                                              -D WITH_FFMPEG=OFF `
                                              $opencvDir
-                  Write-Host "   nmake" -ForegroundColor Yellow
-                  nmake
-                  Write-Host "   nmake install" -ForegroundColor Yellow
-                  nmake install
+                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
                }
                else
                {
-                  Write-Host "   cmake -D CMAKE_BUILD_TYPE=Release `
+                  Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                -D BUILD_SHARED_LIBS=OFF `
                -D BUILD_WITH_STATIC_CRT=OFF `
                -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -628,7 +632,7 @@ class ThirdPartyBuilder
                -D WITH_IPP=OFF `
                -D WITH_FFMPEG=OFF `
                $opencvDir" -ForegroundColor Yellow
-                  cmake -D CMAKE_BUILD_TYPE=Release `
+                  cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
                         -D BUILD_WITH_STATIC_CRT=OFF `
                         -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -668,10 +672,8 @@ class ThirdPartyBuilder
                         -D WITH_IPP=OFF `
                         -D WITH_FFMPEG=OFF `
                         $opencvDir
-                  Write-Host "   make" -ForegroundColor Yellow
-                  make -j4
-                  Write-Host "   make install" -ForegroundColor Yellow
-                  make install
+                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
                }
             }
             "android"
@@ -689,7 +691,7 @@ class ThirdPartyBuilder
                $level = $this._Config.GetAndroidNativeAPILevel()
                $abi = $this._Config.GetAndroidABI()
 
-               Write-Host "   cmake -D CMAKE_BUILD_TYPE=Release `
+               Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
             -D BUILD_SHARED_LIBS=OFF `
             -D BUILD_WITH_STATIC_CRT=OFF `
             -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -733,7 +735,7 @@ class ThirdPartyBuilder
             -D ANDROID_PLATFORM=android-$level `
             $opencvDir" -ForegroundColor Yellow
                cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
-                     -D CMAKE_BUILD_TYPE=Release `
+                     -D CMAKE_BUILD_TYPE=$Configuration `
                      -D BUILD_SHARED_LIBS=OFF `
                      -D BUILD_WITH_STATIC_CRT=OFF `
                      -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -802,6 +804,7 @@ class ThirdPartyBuilder
       try
       {         
          $Platform = $this._Config.GetPlatform()
+         $Configuration = $this._Config.GetConfigurationName()
 
          switch ($Platform)
          {
@@ -814,18 +817,28 @@ class ThirdPartyBuilder
                New-Item $ncnnTarget -Force -ItemType Directory
                Set-Location $ncnnTarget
                $current2 = Get-Location
-               $installDir = Join-Path $current2 install
+               $installDir = Join-Path $current2 "install"
                $ret = $installDir
 
                if ($global:IsWindows)
                {
                   $includeDir = Join-Path $protobufInstallDir include
-                  $librarieFile = Join-Path $protobufInstallDir lib | `
-                                 Join-Path -ChildPath libprotobuf.lib
+
+                  if ($Configuration -eq "Debug")
+                  {
+                     $librarieFile = Join-Path $protobufInstallDir lib | `
+                                    Join-Path -ChildPath libprotobufd.lib
+                  }
+                  else
+                  {
+                     $librarieFile = Join-Path $protobufInstallDir lib | `
+                                    Join-Path -ChildPath libprotobuf.lib
+                  }
+
                   $exeDir = Join-Path $protobufInstallDir bin | `
                            Join-Path -ChildPath protoc.exe
 
-                  Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                  Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                -D BUILD_SHARED_LIBS=OFF `
                -D CMAKE_INSTALL_PREFIX="$installDir" `
                -D Protobuf_INCLUDE_DIR="$includeDir" `
@@ -834,7 +847,7 @@ class ThirdPartyBuilder
                -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                -D NCNN_OPENCV:BOOL=OFF `
                $ncnnDir" -ForegroundColor Yellow
-                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=Release `
+                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                                              -D BUILD_SHARED_LIBS=OFF `
                                              -D CMAKE_INSTALL_PREFIX="$installDir" `
                                              -D Protobuf_INCLUDE_DIR="$includeDir" `
@@ -843,10 +856,8 @@ class ThirdPartyBuilder
                                              -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                                              -D NCNN_OPENCV:BOOL=OFF `
                                              $ncnnDir
-                  Write-Host "   nmake" -ForegroundColor Yellow
-                  nmake
-                  Write-Host "   nmake install" -ForegroundColor Yellow
-                  nmake install
+                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
                }
                else
                {
@@ -862,7 +873,7 @@ class ThirdPartyBuilder
                   $exeDir = Join-Path $protobufInstallDir bin | `
                            Join-Path -ChildPath protoc
 
-                  Write-Host "   cmake -D CMAKE_BUILD_TYPE=Release `
+                  Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                -D BUILD_SHARED_LIBS=OFF `
                -D CMAKE_INSTALL_PREFIX="$installDir" `
                -D Protobuf_INCLUDE_DIR="$includeDir" `
@@ -871,7 +882,7 @@ class ThirdPartyBuilder
                -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                -D NCNN_OPENCV:BOOL=OFF `
                $ncnnDir" -ForegroundColor Yellow
-                  cmake -D CMAKE_BUILD_TYPE=Release `
+                  cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
                         -D CMAKE_INSTALL_PREFIX="$installDir" `
                         -D Protobuf_INCLUDE_DIR="$includeDir" `
@@ -880,10 +891,8 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         $ncnnDir
-                  Write-Host "   make" -ForegroundColor Yellow
-                  make -j4
-                  Write-Host "   make install" -ForegroundColor Yellow
-                  make install
+                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
                }               
             }
             "android"
@@ -902,13 +911,13 @@ class ThirdPartyBuilder
                $abi = $this._Config.GetAndroidABI()
 
                Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
-            -D CMAKE_BUILD_TYPE=Release `
+            -D CMAKE_BUILD_TYPE=$Configuration `
             -D ANDROID_ABI=$abi `
             -D ANDROID_PLATFORM=android-$level `
             -D NCNN_VULKAN:BOOL=$vulkanOnOff `
             $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
-                     -D CMAKE_BUILD_TYPE=Release `
+                     -D CMAKE_BUILD_TYPE=$Configuration `
                      -D ANDROID_ABI=$abi `
                      -D ANDROID_PLATFORM=android-$level `
                      -D NCNN_VULKAN:BOOL=$vulkanOnOff `

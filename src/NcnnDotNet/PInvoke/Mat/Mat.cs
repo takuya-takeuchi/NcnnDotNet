@@ -98,6 +98,16 @@ namespace NcnnDotNet
         public static extern ErrorType mat_Mat_create2(IntPtr mat, int w, int h, ulong elemSize, IntPtr allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_create_like_mat(IntPtr mat,
+                                                               IntPtr m,
+                                                               IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_Mat_create_like_vkmat(IntPtr mat,
+                                                                 IntPtr m,
+                                                                 IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool mat_Mat_empty(IntPtr mat);
 
