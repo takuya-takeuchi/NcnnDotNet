@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConvolution", "tests\te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConvolutionDepthWise", "tests\tests\TestConvolutionDepthWise\TestConvolutionDepthWise.csproj", "{4602F343-51A2-4D5A-9EFC-30B21ACD0D29}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestDeconvolution", "tests\tests\TestDeconvolution\TestDeconvolution.csproj", "{516226CF-57D7-4797-8DC0-74C9832E685C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,10 @@ Global
 		{4602F343-51A2-4D5A-9EFC-30B21ACD0D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4602F343-51A2-4D5A-9EFC-30B21ACD0D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4602F343-51A2-4D5A-9EFC-30B21ACD0D29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516226CF-57D7-4797-8DC0-74C9832E685C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516226CF-57D7-4797-8DC0-74C9832E685C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516226CF-57D7-4797-8DC0-74C9832E685C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516226CF-57D7-4797-8DC0-74C9832E685C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -155,6 +161,7 @@ Global
 		{853EAAA4-0539-4BA2-AC5E-34BC7BE2F8D7} = {43124B0A-942F-479D-B5AF-B928D6FD59D7}
 		{F208FF08-2F9C-41A5-A29A-B08DD0F07770} = {43124B0A-942F-479D-B5AF-B928D6FD59D7}
 		{4602F343-51A2-4D5A-9EFC-30B21ACD0D29} = {43124B0A-942F-479D-B5AF-B928D6FD59D7}
+		{516226CF-57D7-4797-8DC0-74C9832E685C} = {43124B0A-942F-479D-B5AF-B928D6FD59D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7789377-10BC-434A-87CC-8001AE7F93C6}
