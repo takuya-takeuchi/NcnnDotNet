@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * This example program is ported by C# from tests/testutil.h.
+*/
+
+using System;
 using NcnnDotNet;
 
 namespace TestUtil

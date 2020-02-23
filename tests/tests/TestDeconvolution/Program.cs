@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * This example program is ported by C# from tests/test_deconvolution.cpp.
+*/
+
+using System;
 using NcnnDotNet;
 using NcnnDotNet.Extensions;
 using NcnnDotNet.Layers;

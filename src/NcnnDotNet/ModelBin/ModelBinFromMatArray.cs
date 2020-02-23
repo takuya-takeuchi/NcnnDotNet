@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.InteropServices;
-using NcnnDotNet.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace NcnnDotNet

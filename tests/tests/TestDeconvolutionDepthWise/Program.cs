@@ -1,4 +1,8 @@
-﻿using System;
+﻿/*
+ * This example program is ported by C# from tests/test_deconvolutiondepthwise.cpp.
+*/
+
+using System;
 using NcnnDotNet;
 using NcnnDotNet.Extensions;
 using NcnnDotNet.Layers;
@@ -103,7 +107,7 @@ namespace TestDeconvolutionDepthWise
             pd.Set(6, outch / group * c / group * kernel * kernel * group);
             pd.Set(7, group);
 
-            var weights = new Mat[bias > 0 ? 2 : 1];
+            var weights = new Mat[2];
             weights[0] = TestUtil.TestUtil.RandomMat(outch / group * c / group * kernel * kernel * group);
             weights[1] = TestUtil.TestUtil.RandomMat(outch);
             using var vector = new StdVector<Mat>(weights);
