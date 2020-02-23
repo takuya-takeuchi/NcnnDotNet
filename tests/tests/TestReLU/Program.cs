@@ -1,5 +1,6 @@
 ﻿using System;
 using NcnnDotNet;
+using NcnnDotNet.Extensions;
 using NcnnDotNet.Layers;
 
 namespace TestReLU
@@ -36,9 +37,10 @@ namespace TestReLU
             using var pd = new ParamDict();
             pd.Set(0, slope);//slope
 
-            using var tmp = new NcnnDotNet.Mat();
+            using var tmp = new Mat();
             var weights = new[] { tmp };
-            using var mb = new ModelBinFromMatArray(weights);
+            using var vector = new StdVector<Mat>(weights);
+            using var mb = new ModelBinFromMatArray(vector);
 
             using var opt = new Option
             {
@@ -57,6 +59,8 @@ namespace TestReLU
             {
                 Console.Error.WriteLine($"test_relu failed slope={slope} use_packing_layout={usePackingLayout}");
             }
+
+            weights?.DisposeElement();
 
             return ret;
         }

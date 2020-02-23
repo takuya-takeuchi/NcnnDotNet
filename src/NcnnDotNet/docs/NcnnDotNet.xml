@@ -89,6 +89,11 @@
             Releases all unmanaged resources.
             </summary>
         </member>
+        <member name="M:NcnnDotNet.Layers.Convolution.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
         <member name="M:NcnnDotNet.Layers.ReLU.DisposeUnmanaged">
             <summary>
             Releases all unmanaged resources.

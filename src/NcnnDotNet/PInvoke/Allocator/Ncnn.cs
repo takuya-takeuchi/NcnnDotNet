@@ -9,10 +9,12 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType modelbin_ModelBinFromMatArray_new(IntPtr weights, out IntPtr returnValue);
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool allocator_Allocator_dynamic_cast(IntPtr mat, out AllocatorType type);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void modelbin_ModelBinFromMatArray_delete(IntPtr array);
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool allocator_VkAllocator_dynamic_cast(IntPtr mat, out VkAllocatorType type);
 
     }
 

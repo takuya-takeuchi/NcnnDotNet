@@ -9,10 +9,10 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType modelbin_ModelBinFromMatArray_new(IntPtr weights, out IntPtr returnValue);
+        public static extern ErrorType layer_layers_Convolution_new(out IntPtr layer);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void modelbin_ModelBinFromMatArray_delete(IntPtr array);
+        public static extern void layer_layers_Convolution_delete(IntPtr layer);
 
     }
 

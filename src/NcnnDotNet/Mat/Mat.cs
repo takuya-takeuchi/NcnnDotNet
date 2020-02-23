@@ -147,6 +147,22 @@ namespace NcnnDotNet
 
         #region Properties
 
+        public Allocator Allocator
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.mat_Mat_get_allocator(this.NativePtr);
+
+                if (NativeMethods.allocator_Allocator_dynamic_cast(ret, out var type))
+                {
+                    return Allocator.GetAllocator(ret, type);
+                }
+
+                return null;
+            }
+        }
+
         public int C
         {
             get

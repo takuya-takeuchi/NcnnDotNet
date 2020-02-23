@@ -145,6 +145,9 @@ namespace NcnnDotNet
         public static extern IntPtr mat_Mat_get_data(IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_Mat_get_allocator(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_get_operator_indexer(IntPtr mat, int index, out float returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

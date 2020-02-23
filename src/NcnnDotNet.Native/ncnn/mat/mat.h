@@ -285,6 +285,11 @@ DLLEXPORT void* mat_Mat_get_data(ncnn::Mat* mat)
     return mat->data;
 }
 
+DLLEXPORT ncnn::Allocator* mat_Mat_get_allocator(ncnn::Mat* mat)
+{
+    return mat->allocator;
+}
+
 DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, const int32_t index, float* returnValue)
 {
     int32_t error = ERR_OK;

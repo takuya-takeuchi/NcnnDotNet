@@ -21,6 +21,11 @@ DLLEXPORT void mat_VkMat_delete(ncnn::VkMat* vkmat)
     if (vkmat != nullptr) delete vkmat;
 }
 
+DLLEXPORT ncnn::VkAllocator* mat_VkMat_get_allocator(ncnn::VkMat* vkmat)
+{
+    return vkmat->allocator;
+}
+
 DLLEXPORT int32_t mat_VkMat_create_like_mat(ncnn::VkMat* vkmat,
                                             ncnn::Mat* mat,
                                             ncnn::VkAllocator* allocator,

@@ -37,7 +37,21 @@ namespace NcnnDotNet
             #endregion
 
         }
-        
+
+        internal enum AllocatorType
+        {
+            UnlockedPoolAllocator = 0,
+            PoolAllocator
+        };
+
+        internal enum VkAllocatorType
+        {
+            VkBlobBufferAllocator = 0,
+            VkWeightBufferAllocator,
+            VkStagingBufferAllocator,
+            VkWeightStagingBufferAllocator
+        };
+
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr get_version();
 

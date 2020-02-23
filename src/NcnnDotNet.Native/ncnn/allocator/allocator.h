@@ -64,6 +64,81 @@ MAKE_VKALLOCATOR(VkWeightBufferAllocator, VkWeightBufferAllocator)
 MAKE_VKALLOCATOR(VkStagingBufferAllocator, VkStagingBufferAllocator)
 MAKE_VKALLOCATOR(VkWeightStagingBufferAllocator, VkWeightStagingBufferAllocator)
 
+DLLEXPORT const ncnn::VulkanDevice* allocator_VkAllocator_get_vkdev(ncnn::VkAllocator* allocator)
+{
+    return allocator->vkdev;
+}
+
+DLLEXPORT uint32_t allocator_VkAllocator_get_memory_type_index(ncnn::VkAllocator* allocator)
+{
+    return allocator->memory_type_index;
+}
+
+DLLEXPORT bool allocator_VkAllocator_get_mappable(ncnn::VkAllocator* allocator)
+{
+    return allocator->mappable;
+}
+
+DLLEXPORT bool allocator_VkAllocator_get_coherent(ncnn::VkAllocator* allocator)
+{
+    return allocator->coherent;
+}
+
+#endif
+
+DLLEXPORT bool allocator_Allocator_dynamic_cast(ncnn::Allocator* allocator, allocator_type* type)
+{
+    auto unlockedPoolAllocator = dynamic_cast<ncnn::UnlockedPoolAllocator*>(allocator);
+    if (unlockedPoolAllocator != nullptr)
+    {
+        *type = allocator_type::UnlockedPoolAllocator;
+        return true;
+    }
+
+    auto poolAllocator = dynamic_cast<ncnn::PoolAllocator*>(allocator);
+    if (poolAllocator != nullptr)
+    {
+        *type = allocator_type::PoolAllocator;
+        return true;
+    }
+
+    return false;
+}
+
+#if NCNN_VULKAN
+
+DLLEXPORT bool allocator_VkAllocator_dynamic_cast(ncnn::VkAllocator* allocator, vkallocator_type* type)
+{
+    auto vkBlobBufferAllocator = dynamic_cast<ncnn::VkBlobBufferAllocator*>(allocator);
+    if (vkBlobBufferAllocator != nullptr)
+    {
+        *type = vkallocator_type::VkBlobBufferAllocator;
+        return true;
+    }
+
+    auto vkWeightBufferAllocator = dynamic_cast<ncnn::VkWeightBufferAllocator*>(allocator);
+    if (vkWeightBufferAllocator != nullptr)
+    {
+        *type = vkallocator_type::VkWeightBufferAllocator;
+        return true;
+    }
+    auto vkStagingBufferAllocator = dynamic_cast<ncnn::VkStagingBufferAllocator*>(allocator);
+    if (vkStagingBufferAllocator != nullptr)
+    {
+        *type = vkallocator_type::VkStagingBufferAllocator;
+        return true;
+    }
+
+    auto vkWeightStagingBufferAllocator = dynamic_cast<ncnn::VkWeightStagingBufferAllocator*>(allocator);
+    if (vkWeightStagingBufferAllocator != nullptr)
+    {
+        *type = vkallocator_type::VkWeightStagingBufferAllocator;
+        return true;
+    }
+
+    return false;
+}
+
 #endif
 
 #endif

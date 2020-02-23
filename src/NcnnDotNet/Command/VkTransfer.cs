@@ -30,7 +30,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.command_VkTransfer_get_staging_vkallocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
+                {
+                    return VkAllocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set
@@ -46,7 +51,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.command_VkTransfer_get_weight_vkallocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
+                {
+                    return VkAllocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set

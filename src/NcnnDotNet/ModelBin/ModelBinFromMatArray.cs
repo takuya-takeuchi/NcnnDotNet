@@ -12,15 +12,14 @@ namespace NcnnDotNet
         
         #region Constructors
 
-        public ModelBinFromMatArray(Mat[] weights)
+        public ModelBinFromMatArray(StdVector<Mat> weights)
         {
             if (weights == null) 
                 throw new ArgumentNullException(nameof(weights));
 
             weights.ThrowIfDisposed();
 
-            var array = weights.Select(mat => mat.NativePtr).ToArray();
-            NativeMethods.modelbin_ModelBinFromMatArray_new(array, weights.Length, out var ret);
+            NativeMethods.modelbin_ModelBinFromMatArray_new(weights.NativePtr, out var ret);
             this.NativePtr = ret;
         }
 

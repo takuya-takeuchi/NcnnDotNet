@@ -147,7 +147,7 @@ namespace TestUtil
                     opt.UsePackingLayout = false;
 
                 VulkanDevice vkDev = null;
-                VkWeightBufferAllocator gWeightVkAlocator = null;
+                VkWeightBufferAllocator gWeightVkAllocator = null;
                 VkWeightStagingBufferAllocator gWeightStagingVkAllocator = null;
                 VkBlobBufferAllocator gBlobVkAllocator = null;
                 VkStagingBufferAllocator gStagingVkAllocator = null;
@@ -156,7 +156,7 @@ namespace TestUtil
                 {
                     vkDev = Ncnn.GetGpuDevice();
 
-                    gWeightVkAlocator = new VkWeightBufferAllocator(vkDev);
+                    gWeightVkAllocator = new VkWeightBufferAllocator(vkDev);
                     gWeightStagingVkAllocator = new VkWeightStagingBufferAllocator(vkDev);
 
                     gBlobVkAllocator = new VkBlobBufferAllocator(vkDev);
@@ -182,64 +182,63 @@ namespace TestUtil
                 {
                     if (opt.UseVulkanCompute)
                     {
-                        using (var cmd = new VkTransfer(vkDev))
+                        using var cmd = new VkTransfer(vkDev)
                         {
-                            cmd.WeightVkAllocator = gWeightVkAlocator;
-                            cmd.StagingVkAllocator = gWeightStagingVkAllocator;
+                            WeightVkAllocator = gWeightVkAllocator,
+                            StagingVkAllocator = gWeightStagingVkAllocator
+                        };
 
-                            op.UploadModel(cmd, opt);
+                        op.UploadModel(cmd, opt);
 
-                            cmd.SubmitAndWait();
+                        cmd.SubmitAndWait();
 
-                            gWeightStagingVkAllocator.Clear();
-                        }
+                        gWeightStagingVkAllocator?.Clear();
                     }
                 }
 
-                using (var b = new Mat())
+                using var b = new Mat();
+                ((T)op).Forward(a, b, opt);
+
+                var c = new Mat();
                 {
-                    ((T)op).Forward(a, b, opt);
-
-                    var c = new Mat();
+                    Mat a4;
+                    if (opt.UsePackingLayout)
                     {
-                        var a4 = new Mat();
-                        var c4 = new Mat();
-
-                        if (opt.UsePackingLayout)
-                        {
-                            Ncnn.ConvertPacking(a, a4, 4, opt);
-                        }
-                        else
-                        {
-                            a4?.Dispose();
-                            a4 = a;
-                        }
-
-                        c4 = new Mat();
-                        op.Forward(a4, c4, opt);
-
-                        if (opt.UsePackingLayout)
-                        {
-                            Ncnn.ConvertPacking(c4, c, 1, opt);
-                            c4.Dispose();
-                        }
-                        else
-                        {
-                            c?.Dispose();
-                            c = c4;
-                        }
+                        a4 = new Mat();
+                        Ncnn.ConvertPacking(a, a4, 4, opt);
+                    }
+                    else
+                    {
+                        a4 = a;
                     }
 
-                    Mat d = null;
+                    var c4 = new Mat();
+                    op.Forward(a4, c4, opt);
+
+                    if (opt.UsePackingLayout)
+                    {
+                        Ncnn.ConvertPacking(c4, c, 1, opt);
+                        c4.Dispose();
+                    }
+                    else
+                    {
+                        c?.Dispose();
+                        c = c4;
+                    }
+                }
+
+                Mat d = null;
+
+                try
+                {
                     if (Ncnn.IsSupportVulkan)
                     {
                         d = new Mat();
 
                         if (opt.UseVulkanCompute)
                         {
-                            var a4 = new Mat();
-                            var a4_fp16 = new Mat();
-                            var a4_fp16_gpu = new VkMat();
+                            using var a4 = new Mat();
+                            Mat a4_fp16 = null;
 
                             try
                             {
@@ -249,77 +248,83 @@ namespace TestUtil
                                 // fp16
                                 if (opt.UseFP16Storage || a4.ElemPack == 4 && opt.UseFP16Packed)
                                 {
+                                    a4_fp16 = new Mat();
                                     Ncnn.CastFloat32ToFloat16(a4, a4_fp16, opt);
                                 }
                                 else
                                 {
-                                    a4_fp16?.Dispose();
                                     a4_fp16 = a4;
                                 }
 
                                 // upload
+                                using var a4_fp16_gpu = new VkMat();
                                 a4_fp16_gpu.CreateLike(a4_fp16, gBlobVkAllocator, gStagingVkAllocator);
                                 a4_fp16_gpu.PrepareStagingBuffer();
                                 a4_fp16_gpu.Upload(a4_fp16);
 
                                 // forward
-                                using (var cmd = new VkCompute(vkDev))
+                                using var cmd = new VkCompute(vkDev);
+
+                                cmd.RecordUpload(a4_fp16_gpu);
+
+                                using var d4_fp16_gpu = new VkMat();
+                                op.Forward(a4_fp16_gpu, d4_fp16_gpu, cmd, opt);
+
+                                d4_fp16_gpu.PrepareStagingBuffer();
+
+                                cmd.RecordDownload(d4_fp16_gpu);
+
+                                cmd.SubmitAndWait();
+
+                                // download
+                                using var d4_fp16 = new Mat();
+                                d4_fp16.CreateLike(d4_fp16_gpu);
+                                d4_fp16_gpu.Download(d4_fp16);
+
+                                // fp32
+                                Mat d4 = null;
+
+                                try
                                 {
-                                    cmd.RecordUpload(a4_fp16_gpu);
-
-                                    using (var d4_fp16_gpu = new VkMat())
+                                    if (opt.UseFP16Storage || d4_fp16.ElemPack == 4 && opt.UseFP16Packed)
                                     {
-                                        op.Forward(a4_fp16_gpu, d4_fp16_gpu, cmd, opt);
-
-                                        d4_fp16_gpu.PrepareStagingBuffer();
-
-                                        cmd.RecordDownload(d4_fp16_gpu);
-
-                                        cmd.SubmitAndWait();
-
-                                        // download
-                                        var d4_fp16 = new Mat();
-                                        d4_fp16.CreateLike(d4_fp16_gpu);
-                                        d4_fp16_gpu.Download(d4_fp16);
-
-                                        // fp32
-                                        Mat d4 = null;
-                                        if (opt.UseFP16Storage || d4_fp16.ElemPack == 4 && opt.UseFP16Packed)
-                                        {
-                                            d4 = new Mat();
-                                            Ncnn.CastFloat16ToFloat32(d4_fp16, d4, opt);
-                                        }
-                                        else
-                                        {
-                                            d4?.Dispose();
-                                            d4 = d4_fp16;
-                                        }
-
-                                        // unpack
-                                        Ncnn.ConvertPacking(d4, d, 1, opt);
+                                        d4 = new Mat();
+                                        Ncnn.CastFloat16ToFloat32(d4_fp16, d4, opt);
                                     }
+                                    else
+                                    {
+                                        d4 = d4_fp16;
+                                    }
+
+                                    // unpack
+                                    Ncnn.ConvertPacking(d4, d, 1, opt);
+                                }
+                                finally
+                                {
+                                    d4?.Dispose();
                                 }
                             }
                             finally
                             {
-                                a4?.Dispose();
                                 a4_fp16?.Dispose();
-                                a4_fp16_gpu?.Dispose();
                             }
                         }
                     }
 
                     op.DestroyPipeline(opt);
 
+                    // Must dispose here!!
+                    op.Dispose();
+
                     if (Ncnn.IsSupportVulkan)
                     {
                         gBlobVkAllocator.Clear();
                         gStagingVkAllocator.Clear();
-                        gWeightVkAlocator.Clear();
+                        gWeightVkAllocator.Clear();
 
                         gBlobVkAllocator?.Dispose();
                         gStagingVkAllocator?.Dispose();
-                        gWeightVkAlocator?.Dispose();
+                        gWeightVkAllocator?.Dispose();
                         gWeightStagingVkAllocator?.Dispose();
                     }
 
@@ -337,6 +342,11 @@ namespace TestUtil
                             return -1;
                         }
                     }
+                }
+                finally
+                {
+                    c?.Dispose();
+                    d?.Dispose();
                 }
             }
 

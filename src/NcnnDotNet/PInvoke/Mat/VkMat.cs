@@ -15,6 +15,9 @@ namespace NcnnDotNet
         public static extern void mat_VkMat_delete(IntPtr vkmat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr mat_VkMat_get_allocator(IntPtr mat);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_VkMat_create_like_mat(IntPtr vkmat,
                                                                  IntPtr mat,
                                                                  IntPtr allocator,

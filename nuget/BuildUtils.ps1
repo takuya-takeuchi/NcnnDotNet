@@ -516,41 +516,41 @@ class ThirdPartyBuilder
                if ($global:IsWindows)
                {
                   Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
-               -D BUILD_SHARED_LIBS=OFF `
-               -D BUILD_WITH_STATIC_CRT=OFF `
-               -D CMAKE_INSTALL_PREFIX="$installDir" `
-               -D BUILD_opencv_world=ON `
-               -D BUILD_opencv_java=OFF `
-               -D BUILD_opencv_python=OFF `
-               -D BUILD_opencv_python2=OFF `
-               -D BUILD_opencv_python3=OFF `
-               -D BUILD_PERF_TESTS=OFF `
-               -D BUILD_TESTS=OFF `
-               -D BUILD_DOCS=OFF `
-               -D BUILD_opencv_core=ON `
-               -D BUILD_opencv_highgui=ON `
-               -D BUILD_opencv_imgcodecs=ON `
-               -D BUILD_opencv_imgproc=ON `
-               -D BUILD_opencv_calib3d=OFF `
-               -D BUILD_opencv_features2d=OFF `
-               -D BUILD_opencv_flann=OFF `
-               -D BUILD_opencv_java_bindings_generator=OFF `
-               -D BUILD_opencv_ml=OFF `
-               -D BUILD_opencv_objdetect=OFF `
-               -D BUILD_opencv_photo=OFF `
-               -D BUILD_opencv_python_bindings_generator=OFF `
-               -D BUILD_opencv_shape=OFF `
-               -D BUILD_opencv_stitching=OFF `
-               -D BUILD_opencv_superres=OFF `
-               -D BUILD_opencv_video=OFF `
-               -D BUILD_opencv_videoio=OFF `
-               -D BUILD_opencv_videostab=OFF `
-               -D WITH_CUDA=OFF `
-               -D BUILD_PROTOBUF=OFF `
-               -D WITH_PROTOBUF=OFF `
-               -D WITH_IPP=OFF `
-               -D WITH_FFMPEG=OFF `
-               $opencvDir" -ForegroundColor Yellow
+         -D BUILD_SHARED_LIBS=OFF `
+         -D BUILD_WITH_STATIC_CRT=OFF `
+         -D CMAKE_INSTALL_PREFIX="$installDir" `
+         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=ON `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=OFF `
+         -D BUILD_opencv_videostab=OFF `
+         -D WITH_CUDA=OFF `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         $opencvDir" -ForegroundColor Yellow
                   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                                              -D BUILD_SHARED_LIBS=OFF `
                                              -D BUILD_WITH_STATIC_CRT=OFF `
@@ -593,45 +593,45 @@ class ThirdPartyBuilder
                else
                {
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
-               -D BUILD_SHARED_LIBS=OFF `
-               -D BUILD_WITH_STATIC_CRT=OFF `
-               -D CMAKE_INSTALL_PREFIX="$installDir" `
-               -D BUILD_opencv_world=ON `
-               -D BUILD_opencv_java=OFF `
-               -D BUILD_opencv_python=OFF `
-               -D BUILD_opencv_python2=OFF `
-               -D BUILD_opencv_python3=OFF `
-               -D BUILD_PERF_TESTS=OFF `
-               -D BUILD_TESTS=OFF `
-               -D BUILD_DOCS=OFF `
-               -D BUILD_opencv_core=ON `
-               -D BUILD_opencv_highgui=ON `
-               -D BUILD_opencv_imgcodecs=ON `
-               -D BUILD_opencv_imgproc=ON `
-               -D BUILD_opencv_calib3d=OFF `
-               -D BUILD_opencv_features2d=OFF `
-               -D BUILD_opencv_flann=OFF `
-               -D BUILD_opencv_java_bindings_generator=OFF `
-               -D BUILD_opencv_ml=OFF `
-               -D BUILD_opencv_objdetect=OFF `
-               -D BUILD_opencv_photo=OFF `
-               -D BUILD_opencv_python_bindings_generator=OFF `
-               -D BUILD_opencv_shape=OFF `
-               -D BUILD_opencv_stitching=OFF `
-               -D BUILD_opencv_superres=OFF `
-               -D BUILD_opencv_video=OFF `
-               -D BUILD_opencv_videoio=OFF `
-               -D BUILD_opencv_videostab=OFF `
-               -D BUILD_PNG=ON `
-               -D BUILD_JPEG=ON `
-               -D WITH_CUDA=OFF `
-               -D WITH_GTK=ON `
-               -D WITH_GTK_2_X=ON `
-               -D BUILD_PROTOBUF=OFF `
-               -D WITH_PROTOBUF=OFF `
-               -D WITH_IPP=OFF `
-               -D WITH_FFMPEG=OFF `
-               $opencvDir" -ForegroundColor Yellow
+         -D BUILD_SHARED_LIBS=OFF `
+         -D BUILD_WITH_STATIC_CRT=OFF `
+         -D CMAKE_INSTALL_PREFIX="$installDir" `
+         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=ON `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=OFF `
+         -D BUILD_opencv_videostab=OFF `
+         -D BUILD_PNG=ON `
+         -D BUILD_JPEG=ON `
+         -D WITH_CUDA=OFF `
+         -D WITH_GTK=ON `
+         -D WITH_GTK_2_X=ON `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         $opencvDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
                         -D BUILD_WITH_STATIC_CRT=OFF `
@@ -838,16 +838,19 @@ class ThirdPartyBuilder
                   $exeDir = Join-Path $protobufInstallDir bin | `
                            Join-Path -ChildPath protoc.exe
 
-                  Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
-               -D BUILD_SHARED_LIBS=OFF `
-               -D CMAKE_INSTALL_PREFIX="$installDir" `
-               -D Protobuf_INCLUDE_DIR="$includeDir" `
-               -D Protobuf_LIBRARIES="$librarieFile" `
-               -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
-               -D NCNN_VULKAN:BOOL=$vulkanOnOff `
-               -D NCNN_OPENCV:BOOL=OFF `
-               $ncnnDir" -ForegroundColor Yellow
-                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
+                  $vs = $this._Config.GetVisualStudio()
+                  $vsarc = $this._Config.GetVisualStudioArchitecture()
+
+                  Write-Host "   cmake -G $vs -A $vsarc -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX="$installDir" `
+         -D Protobuf_INCLUDE_DIR="$includeDir" `
+         -D Protobuf_LIBRARIES="$librarieFile" `
+         -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D NCNN_OPENCV:BOOL=OFF `
+         $ncnnDir" -ForegroundColor Yellow
+                  cmake -G $vs -A $vsarc -T host=x64 `
                                              -D BUILD_SHARED_LIBS=OFF `
                                              -D CMAKE_INSTALL_PREFIX="$installDir" `
                                              -D Protobuf_INCLUDE_DIR="$includeDir" `
@@ -874,14 +877,14 @@ class ThirdPartyBuilder
                            Join-Path -ChildPath protoc
 
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
-               -D BUILD_SHARED_LIBS=OFF `
-               -D CMAKE_INSTALL_PREFIX="$installDir" `
-               -D Protobuf_INCLUDE_DIR="$includeDir" `
-               -D Protobuf_LIBRARIES="$librarieFile" `
-               -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
-               -D NCNN_VULKAN:BOOL=$vulkanOnOff `
-               -D NCNN_OPENCV:BOOL=OFF `
-               $ncnnDir" -ForegroundColor Yellow
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX="$installDir" `
+         -D Protobuf_INCLUDE_DIR="$includeDir" `
+         -D Protobuf_LIBRARIES="$librarieFile" `
+         -D Protobuf_PROTOC_EXECUTABLE="$exeDir" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D NCNN_OPENCV:BOOL=OFF `
+         $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
                         -D CMAKE_INSTALL_PREFIX="$installDir" `
@@ -965,16 +968,19 @@ function ConfigCPU([Config]$Config)
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
    if ($IsWindows)
    {
+      $vs = $Config.GetVisualStudio()
+      $vsarc = $Config.GetVisualStudioArchitecture()
+
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
       $env:ncnn_SRC_DIR = $ncnnDir
-      Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
+      Write-Host "   cmake -G "$vs" -A $vsarc -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
-      cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
+      cmake -G "$vs" -A $vsarc -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
@@ -1035,16 +1041,19 @@ function ConfigVulkan([Config]$Config)
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
    if ($IsWindows)
    {
+      $vs = $Config.GetVisualStudio()
+      $vsarc = $Config.GetVisualStudioArchitecture()
+
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = $installNcnnDir
       $env:ncnn_SRC_DIR = $ncnnDir
-      Write-Host "   cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
+      Write-Host "   cmake -G "$vs" -A $vsarc -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=$installNcnnDir `
          .." -ForegroundColor Yellow
-      cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
+      cmake -G $vs -A $vsarc -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
@@ -1093,9 +1102,12 @@ function ConfigUWP([Config]$Config)
 {
    if ($IsWindows)
    {
+      $vs = $Config.GetVisualStudio()
+      $vsarc = $Config.GetVisualStudioArchitecture()
+
       if ($Config.GetTarget() -eq "arm")
       {
-         cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
+         cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
                -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
@@ -1107,7 +1119,7 @@ function ConfigUWP([Config]$Config)
       }
       else
       {         
-         cmake -G $Config.GetVisualStudio() -A $Config.GetVisualStudioArchitecture() -T host=x64 `
+         cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
                -D WINAPI_FAMILY=WINAPI_FAMILY_APP `

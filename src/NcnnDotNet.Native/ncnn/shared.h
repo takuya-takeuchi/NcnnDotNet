@@ -24,4 +24,21 @@
 
 #pragma endregion error-codegeneral
 
+
+#pragma endregion template
+
+enum struct allocator_type : int
+{
+    UnlockedPoolAllocator = 0,
+    PoolAllocator
+};
+
+enum struct vkallocator_type : int
+{
+    VkBlobBufferAllocator = 0,
+    VkWeightBufferAllocator,
+    VkStagingBufferAllocator,
+    VkWeightStagingBufferAllocator
+};
+
 #endif

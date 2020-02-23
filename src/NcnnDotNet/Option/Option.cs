@@ -217,7 +217,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.option_Option_get_blob_allocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_Allocator_dynamic_cast(value, out var type))
+                {
+                    return Allocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set
@@ -234,7 +239,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.option_Option_get_workspace_allocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_Allocator_dynamic_cast(value, out var type))
+                {
+                    return Allocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set
@@ -251,7 +261,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.option_Option_get_blob_vkallocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
+                {
+                    return VkAllocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set
@@ -268,7 +283,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.option_Option_get_staging_vkallocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
+                {
+                    return VkAllocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set
@@ -285,7 +305,12 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.option_Option_get_workspace_vkallocator(this.NativePtr, out var value);
-                // ToDo: check actual Alocator type
+
+                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
+                {
+                    return VkAllocator.GetAllocator(value, type);
+                }
+
                 return null;
             }
             set
