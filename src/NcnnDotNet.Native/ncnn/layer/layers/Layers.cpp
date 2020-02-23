@@ -1,4 +1,5 @@
 #include "Convolution.h"
 #include "ConvolutionDepthWise.h"
 #include "Deconvolution.h"
+#include "DeconvolutionDepthWise.h"
 #include "ReLU.h"
