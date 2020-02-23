@@ -3,7 +3,7 @@ using NcnnDotNet;
 using NcnnDotNet.Extensions;
 using NcnnDotNet.Layers;
 
-namespace TestConvolution
+namespace TestDeconvolution
 {
 
     internal class Program
@@ -15,12 +15,12 @@ namespace TestConvolution
         {
             TestUtil.TestUtil.SRAND(7767517);
 
-            return TestConvolution0() | TestConvolution1();
+            return TestDeconvolution0() | TestDeconvolution1();
         }
 
         #region Helpers
 
-        private static int TestConvolution0()
+        private static int TestDeconvolution0()
         {
             var kdsp = new[]
             {
@@ -53,24 +53,24 @@ namespace TestConvolution
             for (var i = 0; i < 24; i++)
             {
                 var ret = 0
-                          | TestConvolution(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 7, 7, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 15, 15, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
-                          | TestConvolution(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 7, 7, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 15, 15, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
+                          | TestDeconvolution(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, false)
 
-                          | TestConvolution(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 3, 12, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 8, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 16, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
-                          | TestConvolution(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 3, 12, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 8, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 16, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
+                          | TestDeconvolution(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1, true)
                     ;
 
                 if (ret != 0)
@@ -80,7 +80,7 @@ namespace TestConvolution
             return 0;
         }
 
-        private static int TestConvolution1()
+        private static int TestDeconvolution1()
         {
             var kdsp = new[]
             {
@@ -113,24 +113,24 @@ namespace TestConvolution
             for (var i = 0; i < 24; i++)
             {
                 var ret = 0
-                          | TestConvolutionInt8(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 7, 7, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 15, 15, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 7, 7, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 15, 15, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
 
-                          | TestConvolutionInt8(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 3, 12, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 8, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 16, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
-                          | TestConvolutionInt8(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 1, 1, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 2, 2, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 3, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 3, 12, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 4, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 8, 3, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 8, 8, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 16, 4, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
+                          | TestDeconvolutionInt8(13, 11, 16, 16, kdsp[i][0], kdsp[i][1], kdsp[i][2], kdsp[i][3], 1)
                     ;
 
                 if (ret != 0)
@@ -140,7 +140,7 @@ namespace TestConvolution
             return 0;
         }
 
-        private static int TestConvolution(int w, int h, int c, int outch, int kernel, int dilation, int stride, int pad, int bias, bool usePackingLayout)
+        private static int TestDeconvolution(int w, int h, int c, int outch, int kernel, int dilation, int stride, int pad, int bias, bool usePackingLayout)
         {
             using var a = TestUtil.TestUtil.RandomMat(w, h, c);
 
@@ -153,10 +153,9 @@ namespace TestConvolution
             pd.Set(5, bias);// bias_term
             pd.Set(6, outch * c * kernel * kernel);
 
-            var weights = new Mat[bias > 0 ? 2 : 1];
+            var weights = new Mat[2];
             weights[0] = TestUtil.TestUtil.RandomMat(outch * c * kernel * kernel);
-            if (bias > 0)
-                weights[1] = TestUtil.TestUtil.RandomMat(outch);
+            weights[1] = TestUtil.TestUtil.RandomMat(outch);
             using var vector = new StdVector<Mat>(weights);
             using var mb = new ModelBinFromMatArray(vector);
 
@@ -164,7 +163,6 @@ namespace TestConvolution
             {
                 NumThreads = 1,
                 UseVulkanCompute = true,
-                UseInt8Inference = false,
                 UseFP16Packed = false,
                 UseFP16Storage = false,
                 UseFP16Arithmetic = false,
@@ -173,10 +171,10 @@ namespace TestConvolution
                 UsePackingLayout = usePackingLayout
             };
 
-            var ret = TestUtil.TestUtil.TestLayer<Convolution>("Convolution", pd, mb, opt, a);
+            var ret = TestUtil.TestUtil.TestLayer<Deconvolution>("Deconvolution", pd, mb, opt, a);
             if (ret != 0)
             {
-                Console.Error.WriteLine($"test_convolution failed w={w} h={h} c={c} outch={outch} kernel={kernel} dilation={dilation} stride={stride} pad={pad} bias={bias} use_packing_layout={usePackingLayout}");
+                Console.Error.WriteLine($"test_deconvolution failed w={w} h={h} c={c} outch={outch} kernel={kernel} dilation={dilation} stride={stride} pad={pad} bias={bias} use_packing_layout={usePackingLayout}");
             }
 
             weights?.DisposeElement();
@@ -184,7 +182,7 @@ namespace TestConvolution
             return ret;
         }
 
-        private static int TestConvolutionInt8(int w, int h, int c, int outch, int kernel, int dilation, int stride, int pad, int bias)
+        private static int TestDeconvolutionInt8(int w, int h, int c, int outch, int kernel, int dilation, int stride, int pad, int bias)
         {
             using var a = TestUtil.TestUtil.RandomMat(w, h, c);
 
@@ -227,7 +225,7 @@ namespace TestConvolution
                 UsePackingLayout = false
             };
 
-            var ret = TestUtil.TestUtil.TestLayer<Convolution>("Convolution", pd, mb, opt, a);
+            var ret = TestUtil.TestUtil.TestLayer<Deconvolution>("Deconvolution", pd, mb, opt, a);
             if (ret != 0)
             {
                 Console.Error.WriteLine($"test_convolution failed w={w} h={h} c={c} outch={outch} kernel={kernel} dilation={dilation} stride={stride} pad={pad} bias={bias}");
