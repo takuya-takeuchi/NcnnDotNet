@@ -51,6 +51,32 @@ DLLEXPORT int net_Net_get_vulkan_device(ncnn::Net* net, const ncnn::VulkanDevice
 
 #endif
 
+DLLEXPORT int net_Net_register_custom_layer(ncnn::Net* net,
+                                            const char* type,
+                                            const int32_t type_len,
+                                            ncnn::layer_creator_func* creator)
+{
+    int32_t error = ERR_OK;
+
+    std::string name(type, type_len);
+    auto& c = *creator;
+    auto ret = net->register_custom_layer(name.c_str(), c);
+
+    return error;
+}
+
+DLLEXPORT int net_Net_register_custom_layer2(ncnn::Net* net,
+                                             const int32_t index,
+                                             ncnn::layer_creator_func* creator)
+{
+    int32_t error = ERR_OK;
+
+    auto& c = *creator;
+    auto ret = net->register_custom_layer(index, c);
+
+    return error;
+}
+
 DLLEXPORT int net_Net_create_extractor(ncnn::Net* net, ncnn::Extractor** returnValue)
 {
     int32_t error = ERR_OK;

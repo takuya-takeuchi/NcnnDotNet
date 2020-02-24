@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace NcnnDotNet
 {
 
-    internal sealed class DelegateHandler<T>
+    public sealed class DelegateHandler<T>
     {
 
         #region Fields

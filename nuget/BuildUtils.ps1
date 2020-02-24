@@ -519,7 +519,7 @@ class ThirdPartyBuilder
          -D BUILD_SHARED_LIBS=OFF `
          -D BUILD_WITH_STATIC_CRT=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
-         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_world=OFF `
          -D BUILD_opencv_java=OFF `
          -D BUILD_opencv_python=OFF `
          -D BUILD_opencv_python2=OFF `
@@ -555,7 +555,7 @@ class ThirdPartyBuilder
                                              -D BUILD_SHARED_LIBS=OFF `
                                              -D BUILD_WITH_STATIC_CRT=OFF `
                                              -D CMAKE_INSTALL_PREFIX="$installDir" `
-                                             -D BUILD_opencv_world=ON `
+                                             -D BUILD_opencv_world=OFF `
                                              -D BUILD_opencv_java=OFF `
                                              -D BUILD_opencv_python=OFF `
                                              -D BUILD_opencv_python2=OFF `
@@ -596,7 +596,7 @@ class ThirdPartyBuilder
          -D BUILD_SHARED_LIBS=OFF `
          -D BUILD_WITH_STATIC_CRT=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
-         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_world=OFF `
          -D BUILD_opencv_java=OFF `
          -D BUILD_opencv_python=OFF `
          -D BUILD_opencv_python2=OFF `
@@ -636,7 +636,7 @@ class ThirdPartyBuilder
                         -D BUILD_SHARED_LIBS=OFF `
                         -D BUILD_WITH_STATIC_CRT=OFF `
                         -D CMAKE_INSTALL_PREFIX="$installDir" `
-                        -D BUILD_opencv_world=ON `
+                        -D BUILD_opencv_world=OFF `
                         -D BUILD_opencv_java=OFF `
                         -D BUILD_opencv_python=OFF `
                         -D BUILD_opencv_python2=OFF `

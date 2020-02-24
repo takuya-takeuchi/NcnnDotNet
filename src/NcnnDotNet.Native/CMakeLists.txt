@@ -146,23 +146,31 @@ endif()
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/ncnn.lib
-        opencv_world
+        opencv_highgui
+        opencv_imgcodecs
+        opencv_imgproc
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
-        opencv_world
+        opencv_highgui
+        opencv_imgcodecs
+        opencv_imgproc
     )
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
-        opencv_world
+        opencv_highgui
+        opencv_imgcodecs
+        opencv_imgproc
         android
     )
 elseif(UNIX AND NOT APPLE)
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
-        opencv_world
+        opencv_highgui
+        opencv_imgcodecs
+        opencv_imgproc
     )
 else()
     message(FATAL_ERROR "Failed to link library")

@@ -10,9 +10,14 @@ namespace MobileNetV2SSDLite
     internal class Program
     {
 
-        // ToDo: Support Custom Layer from C#
-        //class Noop : public ncnn::Layer {};
-        //DEFINE_LAYER_CREATOR(Noop)
+        private sealed class Noop : CustomLayer
+        {
+        }
+
+        private static Noop NoopLayerCreator()
+        {
+            return new Noop();
+        }
 
         #region Methods
 
@@ -58,8 +63,7 @@ namespace MobileNetV2SSDLite
                 if (Ncnn.IsSupportVulkan)
                     mobilenetV2.Opt.UseVulkanCompute = true;
 
-                // ToDo: Support Custom Layer from C#
-                //mobilenetV2.register_custom_layer("Silence", Noop_layer_creator);
+                mobilenetV2.RegisterCustomLayer("Silence", new DelegateHandler<LayerCreatorFunc>(NoopLayerCreator));
 
                 // original pretrained model from https://github.com/chuanqi305/MobileNetv2-SSDLite
                 // https://github.com/chuanqi305/MobileNetv2-SSDLite/blob/master/ssdlite/voc/deploy.prototxt
