@@ -3,6 +3,7 @@
 
 #include "../export.h"
 #include "prng.h"
+#include <string.h>
 #include "../shared.h"
 
 DLLEXPORT int prng_prng_rand_t_new(prng_rand_t** returnValue)
