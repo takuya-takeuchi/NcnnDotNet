@@ -442,7 +442,7 @@ class ThirdPartyBuilder
          New-Item $protobufTarget -Force -ItemType Directory
          Set-Location $protobufTarget
          $current2 = Get-Location
-         $installDir = Join-Path $current2 "install"
+         $installDir = Join-Path $current2 install
          $ret = $installDir
 
          if ($global:IsWindows)
@@ -510,7 +510,7 @@ class ThirdPartyBuilder
                New-Item $opencvTarget -Force -ItemType Directory
                Set-Location $opencvTarget
                $current2 = Get-Location
-               $installDir = Join-Path $current2 "install"
+               $installDir = Join-Path $current2 install
                $ret = $installDir
 
                if ($global:IsWindows)
@@ -685,7 +685,7 @@ class ThirdPartyBuilder
                New-Item $opencvTarget -Force -ItemType Directory
                Set-Location $opencvTarget
                $current2 = Get-Location
-               $installDir = Join-Path $current2 "install"
+               $installDir = Join-Path $current2 install
                $ret = $installDir
 
                $level = $this._Config.GetAndroidNativeAPILevel()
@@ -817,7 +817,7 @@ class ThirdPartyBuilder
                New-Item $ncnnTarget -Force -ItemType Directory
                Set-Location $ncnnTarget
                $current2 = Get-Location
-               $installDir = Join-Path $current2 "install"
+               $installDir = Join-Path $current2 install
                $ret = $installDir
 
                if ($global:IsWindows)
