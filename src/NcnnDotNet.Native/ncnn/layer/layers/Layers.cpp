@@ -37,6 +37,7 @@
 #include "Packing.h"
 #include "Padding.h"
 #include "Permute.h"
+#include "PixelShuffle.h"
 #include "Pooling.h"
 #include "Power.h"
 #include "PReLU.h"
