@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\NCNNDotNet\NcnnDotNet.csproj" />
+    <ProjectReference Include="..\..\..\src\NcnnDotNet\NcnnDotNet.csproj" />
     <ProjectReference Include="..\TestUtil\TestUtil.csproj" />
   </ItemGroup>
 

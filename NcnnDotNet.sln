@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{65
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8E8E8DD9-0547-4E5E-AC68-F84FACE8C492}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NcnnDotNet", "src\NCNNDotNet\NcnnDotNet.csproj", "{6E3D0A4F-B08E-4BD1-8BCD-085F1D594F43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NcnnDotNet", "src\NcnnDotNet\NcnnDotNet.csproj", "{6E3D0A4F-B08E-4BD1-8BCD-085F1D594F43}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqueezeNet", "examples\SqueezeNet\SqueezeNet.csproj", "{BAE42720-E205-463E-A635-FAB44FFD367F}"
 EndProject
