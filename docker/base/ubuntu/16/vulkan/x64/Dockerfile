@@ -16,4 +16,12 @@ RUN apt-get update && apt-get install -y \
     libx11-6 \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# install vulkan sdk
+ENV VULKAN_SDK_VERSION 1.1.114.0
+WORKDIR /usr/share/vulkan
+RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
+RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
+RUN rm vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
+ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
+
 WORKDIR /
