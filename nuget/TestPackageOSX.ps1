@@ -14,7 +14,7 @@ Set-StrictMode -Version Latest
 $OperatingSystem="osx"
 
 # Store current directory
-$Current = Get-Location
+$Current = $PSScriptRoot
 
 $BuildTargets = @()
 $BuildTargets += New-Object PSObject -Property @{Package = "NcnnDotNet";     PlatformTarget="x64"; RID = "$OperatingSystem-x64"; }

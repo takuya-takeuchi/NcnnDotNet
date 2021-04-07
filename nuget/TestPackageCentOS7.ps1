@@ -16,7 +16,7 @@ $OperatingSystem="centos"
 $OperatingSystemVersion="7"
 
 # Store current directory
-$Current = Get-Location
+$Current = $PSScriptRoot
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $DockerDir = Join-Path $NcnnDotNetRoot docker
 
