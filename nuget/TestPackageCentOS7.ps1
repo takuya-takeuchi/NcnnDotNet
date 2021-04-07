@@ -3,7 +3,7 @@
 #%1: Version of Release (0.0.0.yyyyMMdd)
 #***************************************
 Param([Parameter(
-      Mandatory=$True,
+      Mandatory=$False,
       Position = 1
       )][string]
       $Version
@@ -20,11 +20,11 @@ $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $DockerDir = Join-Path $Current docker
 
-Set-Location -Path $DockerDir
-
 $DockerFileDir = Join-Path $DockerDir test  | `
                  Join-Path -ChildPath $OperatingSystem | `
                  Join-Path -ChildPath $OperatingSystemVersion
+
+Set-Location -Path $DockerDir
 
 # https://github.com/dotnet/coreclr/issues/9265
 # linux-x86 does not support
@@ -35,13 +35,50 @@ $BuildTargets += New-Object PSObject -Property @{Target = "vulkan"; Architecture
 foreach($BuildTarget in $BuildTargets)
 {
    $target = $BuildTarget.Target
+   $cudaVersion = $BuildTarget.CUDA
    $package = $BuildTarget.Package
    $platformTarget = $BuildTarget.PlatformTarget
    $rid = $BuildTarget.RID
    $postfix = $BuildTarget.Postfix
+   $versionStr = $Version
 
-   $dockername = "ncnndotnet/test/$OperatingSystem/$OperatingSystemVersion/$target" + $postfix
-   $imagename  = "ncnndotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$target" + $postfix
+   if ([string]::IsNullOrEmpty($versionStr))
+   {
+      $packages = Get-ChildItem "${Current}/*" -include *.nupkg | `
+                  Where-Object -FilterScript {$_.Name -match "${package}\.([0-9\.]+).nupkg"} | `
+                  Sort-Object -Property Name -Descending
+      foreach ($file in $packages)
+      {
+         Write-Host $file -ForegroundColor Blue
+      }
+
+      foreach ($file in $packages)
+      {
+         $file = Split-Path $file -leaf
+         $file = $file -replace "${package}\.",""
+         $file = $file -replace "\.nupkg",""
+         $versionStr = $file
+         break
+      }
+
+      if ([string]::IsNullOrEmpty($versionStr))
+      {
+         Write-Host "Version is not specified" -ForegroundColor Red
+         exit -1
+      }
+   }
+
+   if ($target -ne "cuda")
+   {
+      $dockername = "ncnndotnet/test/$OperatingSystem/$OperatingSystemVersion/$Target" + $postfix
+      $imagename  = "dlibdotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$Target" + $postfix
+   }
+   else
+   {
+      $cudaVersion = ($cudaVersion / 10).ToString("0.0")
+      $dockername = "ncnndotnet/test/$OperatingSystem/$OperatingSystemVersion/$Target/$cudaVersion"
+      $imagename  = "dlibdotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$Target/$cudaVersion"
+   }
 
    Write-Host "Start docker build -t $dockername $DockerFileDir --build-arg IMAGE_NAME=""$imagename""" -ForegroundColor Green
    docker build --force-rm=true -t $dockername $DockerFileDir --build-arg IMAGE_NAME="$imagename"
@@ -54,22 +91,22 @@ foreach($BuildTarget in $BuildTargets)
    }
 
    if ($BuildTarget.CUDA -ne 0)
-   {
-      Write-Host "Start docker run --runtime=nvidia --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t ""$dockername"" $Version $package $OperatingSystem $OperatingSystemVersion" -ForegroundColor Green
-      docker run --runtime=nvidia --rm `
-                  -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
-                  -e "LOCAL_UID=$(id -u $env:USER)" `
-                  -e "LOCAL_GID=$(id -g $env:USER)" `
-                  -t "$dockername" $Version $package $platformTarget $rid
+   {   
+      Write-Host "Start docker run--gpus all --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t ""$dockername"" $versionStr $package $OperatingSystem $OperatingSystemVersion" -ForegroundColor Green
+      docker run --gpus all --rm `
+                 -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
+                 -e "LOCAL_UID=$(id -u $env:USER)" `
+                 -e "LOCAL_GID=$(id -g $env:USER)" `
+                 -t "$dockername" $versionStr $package $OperatingSystem $OperatingSystemVersion
    }
    else
-   {
-      Write-Host "Start docker run --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t ""$dockername"" $Version $package $OperatingSystem $OperatingSystemVersion" -ForegroundColor Green
+   {   
+      Write-Host "Start docker run --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t ""$dockername"" $versionStr $package $OperatingSystem $OperatingSystemVersion" -ForegroundColor Green
       docker run --rm `
                   -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                   -e "LOCAL_UID=$(id -u $env:USER)" `
                   -e "LOCAL_GID=$(id -g $env:USER)" `
-                  -t "$dockername" $Version $package $platformTarget $rid
+                  -t "$dockername" $versionStr $package $OperatingSystem $OperatingSystemVersion
    }
 
    if ($lastexitcode -ne 0)

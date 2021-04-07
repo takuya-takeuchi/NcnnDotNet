@@ -3,7 +3,7 @@
 #%1: Version of Release (0.0.0.yyyyMMdd)
 #***************************************
 Param([Parameter(
-      Mandatory=$True,
+      Mandatory=$False,
       Position = 1
       )][string]
       $Version
@@ -19,6 +19,19 @@ $Current = Get-Location
 $BuildTargets = @()
 $BuildTargets += New-Object PSObject -Property @{Package = "NcnnDotNet";         PlatformTarget="x64"; RID = "$OperatingSystem-x64"; }
 $BuildTargets += New-Object PSObject -Property @{Package = "NcnnDotNet.GPU";     PlatformTarget="x64"; RID = "$OperatingSystem-x64"; }
+
+if ([string]::IsNullOrEmpty($Version))
+{
+   $packages = Get-ChildItem *.* -include *.nupkg | Sort-Object -Property Name -Descending
+   foreach ($file in $packages)
+   {
+      $file = Split-Path $file -leaf
+      $file = $file -replace "OpenJpegDotNet\.",""
+      $file = $file -replace "\.nupkg",""
+      $Version = $file
+      break
+   }
+}
 
 foreach($BuildTarget in $BuildTargets)
 {
