@@ -18,7 +18,7 @@ $OperatingSystemVersion="16"
 # Store current directory
 $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
-$DockerDir = Join-Path $Current docker
+$DockerDir = Join-Path $NcnnDotNetRoot docker
 
 $DockerFileDir = Join-Path $DockerDir test  | `
                  Join-Path -ChildPath $OperatingSystem | `
