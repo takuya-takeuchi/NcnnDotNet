@@ -20,6 +20,8 @@ $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $DockerDir = Join-Path $Current docker
 
+Set-Location -Path $DockerDir
+
 $DockerFileDir = Join-Path $DockerDir test  | `
                  Join-Path -ChildPath $OperatingSystem | `
                  Join-Path -ChildPath $OperatingSystemVersion
