@@ -69,13 +69,13 @@ foreach($BuildTarget in $BuildTargets)
    if ($target -ne "cuda")
    {
       $dockername = "ncnndotnet/test/$OperatingSystem/$OperatingSystemVersion/$Target" + $postfix
-      $imagename  = "dlibdotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$Target" + $postfix
+      $imagename  = "ncnndotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$Target" + $postfix
    }
    else
    {
       $cudaVersion = ($cudaVersion / 10).ToString("0.0")
       $dockername = "ncnndotnet/test/$OperatingSystem/$OperatingSystemVersion/$Target/$cudaVersion"
-      $imagename  = "dlibdotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$Target/$cudaVersion"
+      $imagename  = "ncnndotnet/runtime/$OperatingSystem/$OperatingSystemVersion/$Target/$cudaVersion"
    }
 
    Write-Host "Start docker build -t $dockername $DockerFileDir --build-arg IMAGE_NAME=""$imagename""" -ForegroundColor Green
