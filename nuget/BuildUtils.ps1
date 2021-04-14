@@ -859,7 +859,7 @@ class ThirdPartyBuilder
                                              -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                                              -D NCNN_OPENCV:BOOL=OFF `
                                              $ncnnDir
-                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }
                else
@@ -894,7 +894,7 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         $ncnnDir
-                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }               
             }
