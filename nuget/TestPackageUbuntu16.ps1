@@ -27,8 +27,8 @@ $DockerFileDir = Join-Path $DockerDir test  | `
 # https://github.com/dotnet/coreclr/issues/9265
 # linux-x86 does not support
 $BuildTargets = @()
-$BuildTargets += New-Object PSObject -Property @{Target = "cpu";     Architecture = 64; CUDA = 0;   Package = "NcnnDotNet";         PlatformTarget="x64"; Postfix = "/x64"; RID = "$RidOperatingSystem-x64"; }
-$BuildTargets += New-Object PSObject -Property @{Target = "vulkan";  Architecture = 64; CUDA = 0;   Package = "NcnnDotNet.GPU";     PlatformTarget="x64"; Postfix = "/x64"; RID = "$RidOperatingSystem-x64"; }
+$BuildTargets += New-Object PSObject -Property @{Target = "cpu";    Architecture = 64; CUDA = 0;   Package = "NcnnDotNet";         PlatformTarget="x64"; Postfix = "/x64"; RID = "$RidOperatingSystem-x64"; }
+$BuildTargets += New-Object PSObject -Property @{Target = "vulkan"; Architecture = 64; CUDA = 0;   Package = "NcnnDotNet.GPU";     PlatformTarget="x64"; Postfix = "/x64"; RID = "$RidOperatingSystem-x64"; }
 
 if ([string]::IsNullOrEmpty($Version))
 {
@@ -36,7 +36,7 @@ if ([string]::IsNullOrEmpty($Version))
    foreach ($file in $packages)
    {
       $file = Split-Path $file -leaf
-      $file = $file -replace "OpenJpegDotNet\.",""
+      $file = $file -replace "NcnnDotNet\.",""
       $file = $file -replace "\.nupkg",""
       $Version = $file
       break

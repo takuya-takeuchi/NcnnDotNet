@@ -26,7 +26,7 @@ if ([string]::IsNullOrEmpty($Version))
    foreach ($file in $packages)
    {
       $file = Split-Path $file -leaf
-      $file = $file -replace "OpenJpegDotNet\.",""
+      $file = $file -replace "NcnnDotNet\.",""
       $file = $file -replace "\.nupkg",""
       $Version = $file
       break
