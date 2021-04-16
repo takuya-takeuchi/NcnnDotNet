@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <NativeDependenciesVersion>1.0.0.0</NativeDependenciesVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(NugetPackageRoot)==''">
+    <NugetPackageRoot>
+      "$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..\..\))"
+    </NugetPackageRoot>
+  </PropertyGroup>
+
+ <Target Name="EmitNugetPackageRootMessage">
+   <Message Importance="High" Text='$(NugetPackageRoot)' />
+ </Target>
+
+  <ImportGroup>
+    <Import Project="$(NuGetPackageRoot)ncnnsotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets"
+            Condition="Exists('$(NuGetPackageRoot)ncnnsotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets')" />
+  </ImportGroup>
+</Project>
