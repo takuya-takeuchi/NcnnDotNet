@@ -91,7 +91,7 @@ function RunTest($BuildTargets)
 
       # restore package from local nuget pacakge
       # And drop stdout message
-      # dotnet remove reference "..\..\src\NcnnDotNet\NcnnDotNet.csproj" > $null
+      dotnet remove reference "..\..\src\NcnnDotNet\NcnnDotNet.csproj" > $null
       dotnet add package $package -v $VERSION --source "$NugetDir" > $null
 
       $ErrorActionPreference = "silentlycontinue"
@@ -129,8 +129,8 @@ function RunTest($BuildTargets)
          }
       }
 
-      Write-Host "${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --logger trx" -Foreground Yellow
-      & ${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --logger trx
+      Write-Host "${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --runtime ${RuntimeIdentifier} --logger trx" -Foreground Yellow
+      & ${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --runtime ${RuntimeIdentifier} --logger trx
       if ($lastexitcode -eq 0) {
          Write-Host "Test Successful" -ForegroundColor Green
       } else {
