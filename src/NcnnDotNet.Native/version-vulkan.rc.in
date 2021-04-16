@@ -72,7 +72,7 @@ BEGIN
 			VALUE "FileDescription",  "ncnn wrapper library with Vulkan"
 			VALUE "FileVersion",      VER_FILEVERSION_STR
 			VALUE "InternalName",     "NcnnDotNet.Native"
-			VALUE "LegalCopyright",   "Copyright (c) 2019-2020 Takuya Takeuchi."
+			VALUE "LegalCopyright",   "Copyright (c) 2019-2021 Takuya Takeuchi."
 			VALUE "OriginalFilename", "NcnnDotNet.Native.dll"
 			VALUE "ProductName",      "NcnnDotNet"
 			VALUE "ProductVersion",   VER_PRODUCTVERSION_STR

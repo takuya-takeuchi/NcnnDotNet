@@ -2,25 +2,26 @@
 <package>
   <metadata>
     <id>NcnnDotNet.GPU</id>
-    <version>0.0.0.20200106</version>
+    <version>0.0.0.20200417</version>
     <title>NcnnDotNet for GPU</title>
     <authors>Takuya Takeuchi</authors>
     <owners>Takuya Takeuchi</owners>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/takuya-takeuchi/NcnnDotNet</projectUrl>
-    <iconUrl>https://github.com/takuya-takeuchi/NcnnDotNet/blob/master/nuget/nn128.png?raw=true</iconUrl>
+    <icon>images\nn128.png</icon>
     <description>ncnn wrapper library written in C++ and C# for Windows, MacOS and Linux
 
 Requirements: Visual C++ 2017 Redistributable Package and Vulkan SDK
 </description>
     <releaseNotes></releaseNotes>
-    <copyright>© Takuya Takeuchi 2019-2020</copyright>
+    <copyright>© Takuya Takeuchi 2019-2021</copyright>
     <tags>ncnn .net neural-network</tags>
     <serviceable>true</serviceable>
   </metadata>
   
   <files>
+    <file src="..\nn128.png" target="images\" />
     <file src="build\NcnnDotNet.Native.props" target="build\NcnnDotNet.props" />
     <!-- cross-targetting via compile-time references -->
     <file src="ref\**\*" target="ref" />
