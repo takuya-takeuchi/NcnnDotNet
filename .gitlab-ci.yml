@@ -101,7 +101,7 @@ test:ubuntu:
   stage: test
   script:
     - cd nuget
-    - pwsh TestPackageUbuntu18.ps1
+    - pwsh TestPackageUbuntu16.ps1
   tags:
     - linux
     - cuda
