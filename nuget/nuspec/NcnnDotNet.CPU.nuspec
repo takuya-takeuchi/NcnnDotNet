@@ -28,7 +28,7 @@ Requirements: Visual C++ 2017 Redistributable Package</description>
     <file src="..\..\src\NcnnDotNet\bin\Release\netstandard2.0\NcnnDotNet.dll" target="lib\netstandard2.0" />
 
     <file src="..\artifacts\cpu\runtimes\win-x64\native\NcnnDotNetNative.dll" target="runtimes\win-x64\native\NcnnDotNetNative.dll" />
-    <!-- <file src="..\artifacts\cpu\runtimes\ubuntu-x64\native\libNcnnDotNetNative.so" target="runtimes\ubuntu-x64\native\libNcnnDotNetNative.so" /> -->
+    <file src="..\artifacts\cpu\runtimes\ubuntu-x64\native\libNcnnDotNetNative.so" target="runtimes\ubuntu-x64\native\libNcnnDotNetNative.so" />
     <file src="..\artifacts\cpu\runtimes\centos-x64\native\libNcnnDotNetNative.so" target="runtimes\centos-x64\native\libNcnnDotNetNative.so" />
     <file src="..\artifacts\cpu\runtimes\osx-x64\native\libNcnnDotNetNative.dylib" target="runtimes\osx-x64\native\libNcnnDotNetNative.dylib" />
 
