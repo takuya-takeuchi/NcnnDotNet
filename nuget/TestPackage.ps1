@@ -36,6 +36,10 @@ function Clear-PackakgeCache([string]$Package, [string]$Version)
    if ($global:IsWindows -or $global:IsMacOS)
    {
       $path = (dotnet nuget locals global-packages --list).Replace('info : global-packages: ', '').Trim()
+      if ($path)
+      {
+         $path = (dotnet nuget locals global-packages --list).Replace('global-packages: ', '').Trim()
+      }
       $path =  Join-Path $path $Package | `
                Join-Path -ChildPath $Version
       if (Test-Path $path)
@@ -72,7 +76,7 @@ function RunTest($BuildTargets)
       $env:NCNNDOTNET_VULKAN_SUPPORT = $BuildTarget.IsGPU
 
       $NativeTestDir = Join-Path $NcnnDotNetRoot tests | `
-                        Join-Path -ChildPath NcnnDotNet.Native.Tests
+                       Join-Path -ChildPath NcnnDotNet.Native.Tests
 
       $TargetDir = Join-Path $WorkDir NcnnDotNet.Native.Tests
       if (Test-Path "$TargetDir") {
@@ -87,11 +91,13 @@ function RunTest($BuildTargets)
 
       # restore package from local nuget pacakge
       # And drop stdout message
+      dotnet remove reference "..\..\src\NcnnDotNet\NcnnDotNet.csproj" > $null
       dotnet add package $package -v $VERSION --source "$NugetDir" > $null
 
       $ErrorActionPreference = "silentlycontinue"
       $env:PlatformTarget = $PlatformTarget
       $dotnetPath = ""
+      $runsetting = ""
       if ($global:IsWindows)
       {
          switch($PlatformTarget)
@@ -111,7 +117,20 @@ function RunTest($BuildTargets)
          $dotnetPath = "dotnet"
       }
 
-      & ${dotnetPath} test -c Release -r "$TestDir" -p:RuntimeIdentifier=$RuntimeIdentifier --logger trx
+      switch($PlatformTarget)
+      {
+         "x64"
+         {
+            $runsetting = "x64.runsettings"
+         }
+         "x86"
+         {
+            $runsetting = "x86.runsettings"
+         }
+      }
+
+      Write-Host "${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --runtime ${RuntimeIdentifier} --logger trx" -Foreground Yellow
+      & ${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --runtime ${RuntimeIdentifier} --logger trx
       if ($lastexitcode -eq 0) {
          Write-Host "Test Successful" -ForegroundColor Green
       } else {

@@ -29,7 +29,7 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20200106)
+set(VERSION_DATE 20210417)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -166,6 +166,10 @@ elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         android
     )
 elseif(UNIX AND NOT APPLE)
+    # centos7 uses glibc-2.17-292.el7.x86_64 but build dev uses latest GCC
+    # Therefore, link libmvec as static
+    # https://sourceware.org/glibc/wiki/libmvec
+    # But it is not linked. why?
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_highgui

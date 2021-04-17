@@ -459,7 +459,7 @@ class ThirdPartyBuilder
                                        -D protobuf_BUILD_TESTS=OFF `
                                        -D protobuf_MSVC_STATIC_RUNTIME=OFF `
                                        $protobufDir
-            Write-Host "   cmake build and install" -ForegroundColor Yellow
+            Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
             cmake --build . --config $Configuration --target install
          }
          else
@@ -476,7 +476,7 @@ class ThirdPartyBuilder
                   -D protobuf_BUILD_TESTS=OFF `
                   -D protobuf_MSVC_STATIC_RUNTIME=OFF `
                   $protobufDir
-            Write-Host "   cmake build and install" -ForegroundColor Yellow
+            Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
             cmake --build . --config $Configuration --target install
          }
       }
@@ -672,7 +672,7 @@ class ThirdPartyBuilder
                         -D WITH_IPP=OFF `
                         -D WITH_FFMPEG=OFF `
                         $opencvDir
-                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }
             }
@@ -859,7 +859,7 @@ class ThirdPartyBuilder
                                              -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                                              -D NCNN_OPENCV:BOOL=OFF `
                                              $ncnnDir
-                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }
                else
@@ -894,7 +894,7 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         $ncnnDir
-                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }               
             }
@@ -1248,7 +1248,9 @@ function Build([Config]$Config)
       }
    }
 
-   cmake --build . --config $Config.GetConfigurationName()
+   $cofiguration = $Config.GetConfigurationName()
+   Write-Host "cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
+   cmake --build . --config ${cofiguration}
 
    # Move to Root directory
    Set-Location -Path $Current
