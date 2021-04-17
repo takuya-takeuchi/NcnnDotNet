@@ -76,7 +76,7 @@ package:
   dependencies:
     - build:win
     - build:ubuntu
-    - build:cent
+    # - build:cent
     - build:osx
   artifacts:
     paths:
