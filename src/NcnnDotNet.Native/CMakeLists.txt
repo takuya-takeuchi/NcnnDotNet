@@ -167,15 +167,14 @@ elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     )
 elseif(UNIX AND NOT APPLE)
     # centos7 uses glibc-2.17-292.el7.x86_64 but build dev uses latest GCC
-    # Therefore, link libmvec and libm as static
+    # Therefore, link libmvec as static
     # https://sourceware.org/glibc/wiki/libmvec
+    # But it is not linked. why?
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
-        mvec
-        m
     )
 else()
     message(FATAL_ERROR "Failed to link library")
