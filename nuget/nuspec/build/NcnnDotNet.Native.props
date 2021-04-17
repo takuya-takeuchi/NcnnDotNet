@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project version="4.0">
+  <PropertyGroup>
+    <IsOSX Condition="Exists('/Library/Frameworks') and Exists ('/etc')">true</IsOSX>
+    <IsLinux Condition="Exists ('/proc') and Exists ('/etc/')">true</IsLinux>
+
+    <Platform Condition="'$(Platform)'==''">x64</Platform>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(OS)==''">
+    <OS>Windows_NT</OS>
+  </PropertyGroup>
+
+  <Target Name="TestMessage" AfterTargets="Build" >
+    <Message Text="NcnnDotNet.Native Build Message" Importance="high"/>
+    <Message Text="Platform: $(Platform)" Importance="high"/>
+    <Message Text="OS: $(OS)" Importance="high"/>
+    <Message Text="IsOSX: $(IsOSX)" Importance="high"/>
+    <Message Text="IsLinux: $(IsLinux)" Importance="high"/>
+  </Target>
+
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-$(Platform)\native\NcnnDotNetNative.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>NcnnDotNetNative.dll</Link>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsLinux)' == 'true'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\linux-$(Platform)\native\libNcnnDotNetNative.so">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>libNcnnDotNetNative.so</Link>
+      <DeploymentContent>True</DeploymentContent>
+    </Content>
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\runtimes\linux-$(Platform)\native\libNcnnDotNetNative.so" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsOSX)' == 'true'">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\osx-$(Platform)\native\libNcnnDotNetNative.dylib" Condition="'$(IsOSX)' == 'true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>libNcnnDotNetNative.dylib</Link>
+      <DeploymentContent>True</DeploymentContent>
+    </Content>
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)..\runtimes\osx-$(Platform)\native\libNcnnDotNetNative.dylib" />
+  </ItemGroup>
+
+</Project>

@@ -18,12 +18,27 @@ namespace NcnnDotNet
             this.NativePtr = device;
         }
 
-        internal VulkanDevice(IntPtr ptr)
+        internal VulkanDevice(IntPtr ptr, bool isEnabledDispose = true) :
+            base(isEnabledDispose)
         {
             if (ptr == IntPtr.Zero)
                 throw new ArgumentException("Can not pass IntPtr.Zero", nameof(ptr));
 
             this.NativePtr = ptr;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public GpuInfo Info
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.gpu_VulkanDevice_get_info(this.NativePtr, out var value);
+                return new GpuInfo(value, false);
+            }
         }
 
         #endregion

@@ -124,6 +124,35 @@ namespace NcnnDotNet
             return true;
         }
 
+        public bool RegisterCustomLayer(string type, DelegateHandler<LayerCreatorFunc> creator)
+        {
+            if (creator == null) 
+                throw new ArgumentNullException(nameof(creator));
+
+            this.ThrowIfDisposed();
+
+            var str = Ncnn.Encoding.GetBytes(type);
+            var error = NativeMethods.net_Net_register_custom_layer(this.NativePtr, str, str.Length, creator.Handle);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return true;
+        }
+
+        public bool RegisterCustomLayer(int index, DelegateHandler<LayerCreatorFunc> creator)
+        {
+            if (creator == null)
+                throw new ArgumentNullException(nameof(creator));
+
+            this.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_register_custom_layer2(this.NativePtr, index, creator.Handle);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return true;
+        }
+
         public void SetVulkanDevice(int deviceIndex)
         {
             this.ThrowIfDisposed();

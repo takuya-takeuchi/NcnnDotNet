@@ -11,6 +11,74 @@ namespace NcnnDotNet.OpenCV
     public static partial class Cv2
     {
 
+        #region Fields
+
+        public static readonly int CV_CN_MAX = 512;
+        public static readonly int CV_CN_SHIFT = 3;
+        public static readonly int CV_DEPTH_MAX = 1 << CV_CN_SHIFT;
+
+        public static readonly int CV_8U = 0;
+        public static readonly int CV_8S = 1;
+        public static readonly int CV_16U = 2;
+        public static readonly int CV_16S = 3;
+        public static readonly int CV_32S = 4;
+        public static readonly int CV_32F = 5;
+        public static readonly int CV_64F = 6;
+        public static readonly int CV_USRTYPE1 = 7;
+
+        public static readonly int CV_MAT_DEPTH_MASK = (CV_DEPTH_MAX - 1);
+
+        public static readonly int CV_8UC1 = CV_MAKETYPE(CV_8U, 1);
+        public static readonly int CV_8UC2 = CV_MAKETYPE(CV_8U, 2);
+        public static readonly int CV_8UC3 = CV_MAKETYPE(CV_8U, 3);
+        public static readonly int CV_8UC4 = CV_MAKETYPE(CV_8U, 4);
+
+        public static readonly int CV_8SC1 = CV_MAKETYPE(CV_8S, 1);
+        public static readonly int CV_8SC2 = CV_MAKETYPE(CV_8S, 2);
+        public static readonly int CV_8SC3 = CV_MAKETYPE(CV_8S, 3);
+        public static readonly int CV_8SC4 = CV_MAKETYPE(CV_8S, 4);
+
+        public static readonly int CV_16UC1 = CV_MAKETYPE(CV_16U, 1);
+        public static readonly int CV_16UC2 = CV_MAKETYPE(CV_16U, 2);
+        public static readonly int CV_16UC3 = CV_MAKETYPE(CV_16U, 3);
+        public static readonly int CV_16UC4 = CV_MAKETYPE(CV_16U, 4);
+
+        public static readonly int CV_16SC1 = CV_MAKETYPE(CV_16S, 1);
+        public static readonly int CV_16SC2 = CV_MAKETYPE(CV_16S, 2);
+        public static readonly int CV_16SC3 = CV_MAKETYPE(CV_16S, 3);
+        public static readonly int CV_16SC4 = CV_MAKETYPE(CV_16S, 4);
+
+        public static readonly int CV_32SC1 = CV_MAKETYPE(CV_32S, 1);
+        public static readonly int CV_32SC2 = CV_MAKETYPE(CV_32S, 2);
+        public static readonly int CV_32SC3 = CV_MAKETYPE(CV_32S, 3);
+        public static readonly int CV_32SC4 = CV_MAKETYPE(CV_32S, 4);
+
+        public static readonly int CV_32FC1 = CV_MAKETYPE(CV_32F, 1);
+        public static readonly int CV_32FC2 = CV_MAKETYPE(CV_32F, 2);
+        public static readonly int CV_32FC3 = CV_MAKETYPE(CV_32F, 3);
+        public static readonly int CV_32FC4 = CV_MAKETYPE(CV_32F, 4);
+
+        public static readonly int CV_64FC1 = CV_MAKETYPE(CV_64F, 1);
+        public static readonly int CV_64FC2 = CV_MAKETYPE(CV_64F, 2);
+        public static readonly int CV_64FC3 = CV_MAKETYPE(CV_64F, 3);
+        public static readonly int CV_64FC4 = CV_MAKETYPE(CV_64F, 4);
+
+        #region Helpers
+
+        private static int CV_MAT_DEPTH(int flags)
+        {
+            return flags & CV_MAT_DEPTH_MASK;
+        }
+
+        private static int CV_MAKETYPE(int depth, int cn)
+        {
+            return CV_MAT_DEPTH(depth) + ((cn - 1) << CV_CN_SHIFT);
+        }
+
+        #endregion
+
+        #endregion
+
         #region Methods
 
         public static void Circle(Mat mat,

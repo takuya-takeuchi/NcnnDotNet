@@ -108,6 +108,10 @@ namespace NcnnDotNet
                         return new FloatBridge() as Bridge<TItem>;
                     case StdVectorTypeRepository.ElementTypes.Double:
                         return new DoubleBridge() as Bridge<TItem>;
+                    case StdVectorTypeRepository.ElementTypes.Mat:
+                        return new MatBridge() as Bridge<TItem>;
+                    case StdVectorTypeRepository.ElementTypes.VkMat:
+                        return new VkMatBridge() as Bridge<TItem>;
                 }
             }
 
@@ -417,6 +421,144 @@ namespace NcnnDotNet
 
         }
         
+        private sealed class MatBridge : Bridge<Mat>
+        {
+
+            #region Methods
+
+            public override void CopyTo(IntPtr ptr, Mat[] array, int arrayIndex)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return;
+
+                var dst = new IntPtr[size];
+                NativeMethods.stdvector_Mat_copy(ptr, dst);
+                var tmp = dst.Select(p => new Mat(p)).ToArray();
+                Array.Copy(tmp, 0, array, arrayIndex, tmp.Length);
+            }
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.stdvector_Mat_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return NativeMethods.stdvector_Mat_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<Mat> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(rectangle => rectangle.NativePtr).ToArray();
+                return NativeMethods.stdvector_Mat_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                NativeMethods.stdvector_Mat_delete(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return NativeMethods.stdvector_Mat_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return NativeMethods.stdvector_Mat_getSize(ptr).ToInt32();
+            }
+
+            public override Mat[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new Mat[0];
+
+                var dst = new IntPtr[size];
+                NativeMethods.stdvector_Mat_copy(ptr, dst);
+                return dst.Select(p => new Mat(p)).ToArray();
+            }
+
+            #endregion
+
+        }
+        
+        private sealed class VkMatBridge : Bridge<VkMat>
+        {
+
+            #region Methods
+
+            public override void CopyTo(IntPtr ptr, VkMat[] array, int arrayIndex)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return;
+
+                var dst = new IntPtr[size];
+                NativeMethods.stdvector_VkMat_copy(ptr, dst);
+                var tmp = dst.Select(p => new VkMat(p)).ToArray();
+                Array.Copy(tmp, 0, array, arrayIndex, tmp.Length);
+            }
+
+            public override IntPtr Create()
+            {
+                return NativeMethods.stdvector_VkMat_new1();
+            }
+
+            public override IntPtr Create(int size)
+            {
+                if (size < 0)
+                    throw new ArgumentOutOfRangeException(nameof(size));
+
+                return NativeMethods.stdvector_VkMat_new2(new IntPtr(size));
+            }
+
+            public override IntPtr Create(IEnumerable<VkMat> data)
+            {
+                if (data == null)
+                    throw new ArgumentNullException(nameof(data));
+
+                var array = data.Select(rectangle => rectangle.NativePtr).ToArray();
+                return NativeMethods.stdvector_VkMat_new3(array, new IntPtr(array.Length));
+            }
+
+            public override void Dispose(IntPtr ptr)
+            {
+                NativeMethods.stdvector_VkMat_delete(ptr);
+            }
+
+            public override IntPtr GetElementPtr(IntPtr ptr)
+            {
+                return NativeMethods.stdvector_VkMat_getPointer(ptr);
+            }
+
+            public override int GetSize(IntPtr ptr)
+            {
+                return NativeMethods.stdvector_VkMat_getSize(ptr).ToInt32();
+            }
+
+            public override VkMat[] ToArray(IntPtr ptr)
+            {
+                var size = this.GetSize(ptr);
+                if (size == 0)
+                    return new VkMat[0];
+
+                var dst = new IntPtr[size];
+                NativeMethods.stdvector_VkMat_copy(ptr, dst);
+                return dst.Select(p => new VkMat(p)).ToArray();
+            }
+
+            #endregion
+
+        }
+
         #endregion
 
         #region IEnumerable<TItem> Members

@@ -7,7 +7,7 @@ $NugetPath = Join-Path $NcnnDotNetRoot "nuget" | `
              Join-Path -ChildPath "BuildUtils.ps1"
 import-module $NugetPath -function *
 
-$OperatingSystem="ubuntu"
+$OperatingSystem="linux"
 $Distribution="ubuntu"
 $DistributionVersion="16"
 
@@ -15,7 +15,7 @@ $DistributionVersion="16"
 $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
-$DockerDir = Join-Path $Current docker
+$DockerDir = Join-Path $NcnnDotNetRoot docker
 
 Set-Location -Path $DockerDir
 
@@ -37,18 +37,31 @@ foreach($BuildTarget in $BuildTargets)
    $target = $BuildTarget.Target
    $architecture = $BuildTarget.Architecture
    $rid = $BuildTarget.RID
+   $cudaVersion = $BuildTarget.CUDA
    $postfix = $BuildTarget.Postfix
-   $option = ""
 
-   $dockername = "ncnndotnet/build/$Distribution/$DistributionVersion/$Target" + $postfix
-   $imagename  = "ncnndotnet/devel/$Distribution/$DistributionVersion/$Target" + $postfix
+   if ($target -ne "cuda")
+   {
+      $option = ""
+      
+      $dockername = "ncnndotnet/build/$Distribution/$DistributionVersion/$Target" + $postfix
+      $imagename  = "ncnndotnet/devel/$Distribution/$DistributionVersion/$Target" + $postfix
+   }
+   else
+   {
+      $option = $cudaVersion
+
+      $cudaVersion = ($cudaVersion / 10).ToString("0.0")
+      $dockername = "ncnndotnet/build/$Distribution/$DistributionVersion/$Target/$cudaVersion"
+      $imagename  = "ncnndotnet/devel/$Distribution/$DistributionVersion/$Target/$cudaVersion"
+   }
 
    $Config = [Config]::new($NcnnDotNetRoot, "Release", $target, $architecture, $platform, $option)
    $libraryDir = Join-Path "artifacts" $Config.GetArtifactDirectoryName()
    $build = $Config.GetBuildDirectoryName($OperatingSystem)
 
    Write-Host "Start 'docker build -t $dockername $DockerFileDir --build-arg IMAGE_NAME=""$imagename""'" -ForegroundColor Green
-   docker build --force-rm=true -t $dockername $DockerFileDir --build-arg IMAGE_NAME="$imagename"
+   docker build --network host --force-rm=true -t $dockername $DockerFileDir --build-arg IMAGE_NAME="$imagename"
 
    if ($lastexitcode -ne 0)
    {
@@ -60,7 +73,7 @@ foreach($BuildTarget in $BuildTargets)
    foreach ($key in $BuildSourceHash.keys)
    {
       Write-Host "Start 'docker run --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t $dockername'" -ForegroundColor Green
-      docker run --rm `
+      docker run --rm --network host `
                   -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                   -e "LOCAL_UID=$(id -u $env:USER)" `
                   -e "LOCAL_GID=$(id -g $env:USER)" `

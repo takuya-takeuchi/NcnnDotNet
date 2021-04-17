@@ -10,6 +10,67 @@ namespace NcnnDotNet
 
         #region Methods
 
+        public static void CastFloat16ToFloat32(Mat src, Mat dst, Option option = null)
+        {
+            var inputOption = option != null;
+            var opt = inputOption ? option : new Option();
+
+            try
+            {
+                var error = NativeMethods.mat_cast_float16_to_float32(src.NativePtr,
+                                                                      dst.NativePtr,
+                                                                      opt.NativePtr);
+                if (error != NativeMethods.ErrorType.OK)
+                    throw new NcnnException("Unknown Exception");
+            }
+            finally
+            {
+                if (!inputOption)
+                    opt?.Dispose();
+            }
+        }
+
+        public static void CastFloat32ToFloat16(Mat src, Mat dst, Option option = null)
+        {
+            var inputOption = option != null;
+            var opt = inputOption ? option : new Option();
+
+            try
+            {
+                var error = NativeMethods.mat_cast_float32_to_float16(src.NativePtr,
+                                                                      dst.NativePtr,
+                                                                      opt.NativePtr);
+                if (error != NativeMethods.ErrorType.OK)
+                    throw new NcnnException("Unknown Exception");
+            }
+            finally
+            {
+                if (!inputOption)
+                    opt?.Dispose();
+            }
+        }
+
+        public static void ConvertPacking(Mat src, Mat dst, int elemPack, Option option = null)
+        {
+            var inputOption = option != null;
+            var opt = inputOption ? option : new Option();
+
+            try
+            {
+                var error = NativeMethods.mat_convert_packing(src.NativePtr,
+                                                              dst.NativePtr,
+                                                              elemPack,
+                                                              opt.NativePtr);
+                if (error != NativeMethods.ErrorType.OK)
+                    throw new NcnnException("Unknown Exception");
+            }
+            finally
+            {
+                if (!inputOption)
+                    opt?.Dispose();
+            }
+        }
+
         public static void ResizeBilinear(Mat src, Mat dst, int width, int height, Option option = null)
         {
             var inputOption = option != null;

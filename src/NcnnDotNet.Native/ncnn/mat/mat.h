@@ -23,7 +23,11 @@ DLLEXPORT int mat_Mat_new2(const int32_t w, const size_t elemsize, ncnn::Allocat
     return error;
 }
 
-DLLEXPORT int mat_Mat_new3(const int32_t w, const int32_t h, const size_t elemsize, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+DLLEXPORT int mat_Mat_new3(const int32_t w,
+                           const int32_t h,
+                           const size_t elemsize,
+                           ncnn::Allocator* allocator,
+                           ncnn::Mat** returnValue)
 {
     int32_t error = ERR_OK;
 
@@ -32,11 +36,58 @@ DLLEXPORT int mat_Mat_new3(const int32_t w, const int32_t h, const size_t elemsi
     return error;
 }
 
-DLLEXPORT int mat_Mat_new4(const int32_t w, const int32_t h, const int32_t c, const size_t elemsize, ncnn::Allocator* allocator, ncnn::Mat** returnValue)
+DLLEXPORT int mat_Mat_new4(const int32_t w,
+                           const int32_t h,
+                           const int32_t c,
+                           const size_t elemsize,
+                           ncnn::Allocator* allocator,
+                           ncnn::Mat** returnValue)
 {
     int32_t error = ERR_OK;
 
     *returnValue = new ncnn::Mat(w, h, c, elemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_new5(const int32_t w,
+                               void* data,
+                               const size_t elemsize,
+                               ncnn::Allocator* allocator,
+                               ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, data, elemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_new6(const int32_t w,
+                               const int32_t h,
+                               void* data,
+                               const size_t elemsize,
+                               ncnn::Allocator* allocator,
+                               ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, h, data, elemsize, allocator);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_new7(const int32_t w,
+                               const int32_t h,
+                               const int32_t c,
+                               void* data,
+                               const size_t elemsize,
+                               ncnn::Allocator* allocator,
+                               ncnn::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    *returnValue = new ncnn::Mat(w, h, c, data, elemsize, allocator);
 
     return error;
 }
@@ -138,11 +189,48 @@ DLLEXPORT int32_t mat_Mat_create2(ncnn::Mat* mat,
     return error;
 }
 
-#pragma endregion reshape
+#pragma endregion create
+
+#pragma region create_like
+
+DLLEXPORT int32_t mat_Mat_create_like_mat(ncnn::Mat* mat,
+                                          ncnn::Mat* m,
+                                          ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    const auto& in_m = *m;
+    mat->create_like(in_m, allocator);
+
+    return error;
+}
+
+#if NCNN_VULKAN
+
+DLLEXPORT int32_t mat_Mat_create_like_vkmat(ncnn::Mat* mat,
+                                            ncnn::VkMat* m,
+                                            ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    const auto& in_m = *m;
+    mat->create_like(in_m, allocator);
+
+    return error;
+}
+
+#endif
+
+#pragma endregion create_like
 
 DLLEXPORT bool mat_Mat_empty(ncnn::Mat* mat)
 {
     return mat->empty();
+}
+
+DLLEXPORT size_t mat_Mat_total(ncnn::Mat* mat)
+{
+    return mat->total();
 }
 
 DLLEXPORT float* mat_Mat_row(ncnn::Mat* mat, const int32_t y)
@@ -197,6 +285,11 @@ DLLEXPORT void* mat_Mat_get_data(ncnn::Mat* mat)
     return mat->data;
 }
 
+DLLEXPORT ncnn::Allocator* mat_Mat_get_allocator(ncnn::Mat* mat)
+{
+    return mat->allocator;
+}
+
 DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, const int32_t index, float* returnValue)
 {
     int32_t error = ERR_OK;
@@ -208,6 +301,25 @@ DLLEXPORT int32_t mat_Mat_get_operator_indexer(ncnn::Mat* mat, const int32_t ind
 }
 
 DLLEXPORT int32_t mat_Mat_set_operator_indexer(ncnn::Mat* mat, const int32_t index, const float value)
+{
+    int32_t error = ERR_OK;
+
+    mat->operator[](index) = value;
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_get_operator_indexer2(ncnn::Mat* mat, const size_t index, float* returnValue)
+{
+    int32_t error = ERR_OK;
+
+    const auto& m = *mat;
+    *returnValue = m[index];
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_set_operator_indexer2(ncnn::Mat* mat, const size_t index, const float value)
 {
     int32_t error = ERR_OK;
 
@@ -347,6 +459,49 @@ DLLEXPORT int32_t mat_resize_bilinear(ncnn::Mat* src,
     auto& d = *dst;
     const auto& o = *opt;
     ncnn::resize_bilinear(s, d, w, h, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_convert_packing(ncnn::Mat* src,
+                                      ncnn::Mat* dst,
+                                      const int32_t elempack,
+                                      ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::convert_packing(s, d, elempack, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_cast_float16_to_float32(ncnn::Mat* src,
+                                              ncnn::Mat* dst,
+                                              ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::cast_float16_to_float32(s, d, o);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_cast_float32_to_float16(ncnn::Mat* src,
+                                              ncnn::Mat* dst,
+                                              ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::cast_float32_to_float16(s, d, o);
 
     return error;
 }

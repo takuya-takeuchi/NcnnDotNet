@@ -54,7 +54,27 @@
             Provides the methods of ncnn.
             </summary>
         </member>
+        <member name="M:NcnnDotNet.Command.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkCompute.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkTransfer.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
         <member name="M:NcnnDotNet.DataReader.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.GpuInfo.DisposeUnmanaged">
             <summary>
             Releases all unmanaged resources.
             </summary>
@@ -69,7 +89,27 @@
             Releases all unmanaged resources.
             </summary>
         </member>
+        <member name="M:NcnnDotNet.Layers.Convolution.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.Layers.ReLU.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
         <member name="M:NcnnDotNet.Mat.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.VkMat.DisposeUnmanaged">
+            <summary>
+            Releases all unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NcnnDotNet.ModelBinFromMatArray.DisposeUnmanaged">
             <summary>
             Releases all unmanaged resources.
             </summary>

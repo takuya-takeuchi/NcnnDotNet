@@ -21,6 +21,11 @@ DLLEXPORT void gpu_VulkanDevice_delete(ncnn::VulkanDevice* device)
     if (device != nullptr) delete device;
 }
 
+DLLEXPORT void gpu_VulkanDevice_get_info(ncnn::VulkanDevice* device, const ncnn::GpuInfo** returnValue)
+{
+    *returnValue = &(device->info);
+}
+
 #endif
 
 #endif

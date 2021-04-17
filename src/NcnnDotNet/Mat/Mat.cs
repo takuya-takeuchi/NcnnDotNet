@@ -18,7 +18,7 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
-        public Mat(int w, long elemSize = 4u, Allocator allocator = null)
+        public Mat(int w, ulong elemSize = 4u, Allocator allocator = null)
         {
             allocator?.ThrowIfDisposed();
 
@@ -29,7 +29,7 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
-        public Mat(int w, int h, long elemSize = 4u, Allocator allocator = null)
+        public Mat(int w, int h, ulong elemSize = 4u, Allocator allocator = null)
         {
             allocator?.ThrowIfDisposed();
 
@@ -40,11 +40,95 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
-        public Mat(int w, int h, int c, long elemSize = 4u, Allocator allocator = null)
+        public Mat(int w, int h, int c, ulong elemSize = 4u, Allocator allocator = null)
         {
             allocator?.ThrowIfDisposed();
 
             var error = NativeMethods.mat_Mat_new4(w, h, c, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, byte[] data, ulong elemSize = 4u, Allocator allocator = null)
+        {
+            if (data == null) 
+                throw new ArgumentNullException(nameof(data));
+
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_new5(w, data, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, IntPtr data, ulong elemSize = 4u, Allocator allocator = null)
+        {
+            if (data == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(data));
+
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_new5(w, data, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, int h, byte[] data, ulong elemSize = 4u, Allocator allocator = null)
+        {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_new6(w, h, data, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, int h, IntPtr data, ulong elemSize = 4u, Allocator allocator = null)
+        {
+            if (data == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(data));
+
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_new6(w, h, data, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, int h, int c, byte[] data, ulong elemSize = 4u, Allocator allocator = null)
+        {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_new7(w, h, c, data, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            this.NativePtr = net;
+        }
+
+        public Mat(int w, int h, int c, IntPtr data, ulong elemSize = 4u, Allocator allocator = null)
+        {
+            if (data == IntPtr.Zero)
+                throw new ArgumentException("Can not pass IntPtr.Zero", nameof(data));
+
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_new7(w, h, c, data, elemSize, allocator?.NativePtr ?? IntPtr.Zero, out var net);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
 
@@ -62,6 +146,22 @@ namespace NcnnDotNet
         #endregion
 
         #region Properties
+
+        public Allocator Allocator
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.mat_Mat_get_allocator(this.NativePtr);
+
+                if (NativeMethods.allocator_Allocator_dynamic_cast(ret, out var type))
+                {
+                    return Allocator.GetAllocator(ret, type);
+                }
+
+                return null;
+            }
+        }
 
         public int C
         {
@@ -126,6 +226,15 @@ namespace NcnnDotNet
             }
         }
 
+        public ulong Total
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                return NativeMethods.mat_Mat_total(this.NativePtr);
+            }
+        }
+
         public int W
         {
             get
@@ -147,6 +256,21 @@ namespace NcnnDotNet
             {
                 this.ThrowIfDisposed();
                 NativeMethods.mat_Mat_set_operator_indexer(this.NativePtr, index, value);
+            }
+        }
+
+        public float this[ulong index]
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.mat_Mat_get_operator_indexer2(this.NativePtr, index, out var returnValue);
+                return returnValue;
+            }
+            set
+            {
+                this.ThrowIfDisposed();
+                NativeMethods.mat_Mat_set_operator_indexer2(this.NativePtr, index, value);
             }
         }
 
@@ -172,7 +296,7 @@ namespace NcnnDotNet
 
         #region Create
 
-        public void Create(int w, long elemSize = 4u, Allocator allocator = null)
+        public void Create(int w, ulong elemSize = 4u, Allocator allocator = null)
         {
             this.ThrowIfDisposed();
             allocator?.ThrowIfDisposed();
@@ -180,12 +304,48 @@ namespace NcnnDotNet
             var ret = NativeMethods.mat_Mat_create(this.NativePtr, w, elemSize, allocator?.NativePtr ?? IntPtr.Zero);
         }
 
-        public void Create(int w, int h, long elemSize = 4u, Allocator allocator = null)
+        public void Create(int w, int h, ulong elemSize = 4u, Allocator allocator = null)
         {
             this.ThrowIfDisposed();
             allocator?.ThrowIfDisposed();
 
             var ret = NativeMethods.mat_Mat_create2(this.NativePtr, w, h, elemSize, allocator?.NativePtr ?? IntPtr.Zero);
+        }
+
+        #endregion
+
+        #region CreateLike
+        
+        public void CreateLike(Mat mat, Allocator allocator = null)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            this.ThrowIfDisposed();
+            mat.ThrowIfDisposed();
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_create_like_mat(this.NativePtr,
+                                                              mat.NativePtr,
+                                                              allocator?.NativePtr ?? IntPtr.Zero);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+        }
+
+        public void CreateLike(VkMat mat, Allocator allocator = null)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+
+            this.ThrowIfDisposed();
+            mat.ThrowIfDisposed();
+            allocator?.ThrowIfDisposed();
+
+            var error = NativeMethods.mat_Mat_create_like_vkmat(this.NativePtr,
+                                                                mat.NativePtr,
+                                                                allocator?.NativePtr ?? IntPtr.Zero);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
         }
 
         #endregion

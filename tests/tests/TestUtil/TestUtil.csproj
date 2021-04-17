@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Takuya Takeuchi</Authors>
+    <Description>Test Utility Library</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\NcnnDotNet\NcnnDotNet.csproj" />
+  </ItemGroup>
+
+</Project>

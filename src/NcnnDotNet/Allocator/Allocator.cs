@@ -24,6 +24,23 @@ namespace NcnnDotNet
 
         #endregion
 
+        #region Methods
+
+        internal static Allocator GetAllocator(IntPtr allocator, NativeMethods.AllocatorType type, bool isEnabledDispose = true)
+        {
+            switch (type)
+            {
+                case NativeMethods.AllocatorType.UnlockedPoolAllocator:
+                    return new UnlockedPoolAllocator(allocator, isEnabledDispose);
+                case NativeMethods.AllocatorType.PoolAllocator:
+                    return new PoolAllocator(allocator, isEnabledDispose);
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
+            }
+        }
+
+        #endregion
+
     }
 
 }

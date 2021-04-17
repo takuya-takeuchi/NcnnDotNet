@@ -156,6 +156,62 @@ namespace NcnnDotNet
 
         #endregion
 
+        #region Mat
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_Mat_new1();
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_Mat_new2(IntPtr size);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_Mat_new3([In] IntPtr[] data, IntPtr dataLength);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_Mat_getSize(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_Mat_getPointer(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_Mat_at(IntPtr vector, int index);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void stdvector_Mat_delete(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void stdvector_Mat_copy(IntPtr vector, IntPtr[] dst);
+
+        #endregion
+
+        #region VkMat
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_VkMat_new1();
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_VkMat_new2(IntPtr size);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_VkMat_new3([In] IntPtr[] data, IntPtr dataLength);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_VkMat_getSize(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_VkMat_getPointer(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern IntPtr stdvector_VkMat_at(IntPtr vector, int index);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void stdvector_VkMat_delete(IntPtr vector);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern void stdvector_VkMat_copy(IntPtr vector, IntPtr[] dst);
+
+        #endregion
+
         #endregion
 
     }
