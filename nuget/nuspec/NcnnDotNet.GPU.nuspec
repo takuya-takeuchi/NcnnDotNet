@@ -31,7 +31,7 @@ Requirements: Visual C++ 2017 Redistributable Package and Vulkan SDK
 
     <file src="..\artifacts\vulkan\runtimes\win-x64\native\NcnnDotNetNative.dll" target="runtimes\win-x64\native\NcnnDotNetNative.dll" />
     <file src="..\artifacts\vulkan\runtimes\linux-x64\native\libNcnnDotNetNative.so" target="runtimes\linux-x64\native\libNcnnDotNetNative.so" />
-    <file src="..\artifacts\vulkan\runtimes\centos-x64\native\libNcnnDotNetNative.so" target="runtimes\centos-x64\native\libNcnnDotNetNative.so" />
+    <!-- <file src="..\artifacts\vulkan\runtimes\centos-x64\native\libNcnnDotNetNative.so" target="runtimes\centos-x64\native\libNcnnDotNetNative.so" /> -->
     <file src="..\artifacts\vulkan\runtimes\osx-x64\native\libNcnnDotNetNative.dylib" target="runtimes\osx-x64\native\libNcnnDotNetNative.dylib" />
 
     <!-- license -->
