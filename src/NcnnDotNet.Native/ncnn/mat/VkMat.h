@@ -61,35 +61,6 @@ DLLEXPORT int32_t mat_VkMat_prepare_staging_buffer(ncnn::VkMat* vkmat)
     return error;
 }
 
-DLLEXPORT int32_t mat_VkMat_discard_staging_buffer(ncnn::VkMat* vkmat)
-{
-    int32_t error = ERR_OK;
-
-    vkmat->discard_staging_buffer();
-
-    return error;
-}
-
-DLLEXPORT int32_t mat_VkMat_upload(ncnn::VkMat* vkmat, ncnn::Mat* mat)
-{
-    int32_t error = ERR_OK;
-
-    const auto& m = *mat;
-    vkmat->upload(m);
-
-    return error;
-}
-
-DLLEXPORT int32_t mat_VkMat_download(ncnn::VkMat* vkmat, ncnn::Mat* mat)
-{
-    int32_t error = ERR_OK;
-
-    auto& m = *mat;
-    vkmat->download(m);
-
-    return error;
-}
-
 #endif
 
 #endif

@@ -30,16 +30,7 @@ namespace NcnnDotNet
                                                                    IntPtr stagingAllocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType mat_VkMat_discard_staging_buffer(IntPtr vkmat);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType mat_VkMat_download(IntPtr vkmat, IntPtr mat);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_VkMat_prepare_staging_buffer(IntPtr vkmat);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType mat_VkMat_upload(IntPtr vkmat, IntPtr mat);
 
     }
 

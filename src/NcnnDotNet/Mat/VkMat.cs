@@ -74,46 +74,11 @@ namespace NcnnDotNet
                 throw new NcnnException("Unknown Exception");
         }
 
-        public void DiscardStagingBuffer()
-        {
-            this.ThrowIfDisposed();
-
-            var error = NativeMethods.mat_VkMat_discard_staging_buffer(this.NativePtr);
-            if (error != NativeMethods.ErrorType.OK)
-                throw new NcnnException("Unknown Exception");
-        }
-
-        public void Download(Mat mat)
-        {
-            if (mat == null)
-                throw new ArgumentNullException(nameof(mat));
-
-            this.ThrowIfDisposed();
-            mat.ThrowIfDisposed();
-
-            var error = NativeMethods.mat_VkMat_download(this.NativePtr, mat.NativePtr);
-            if (error != NativeMethods.ErrorType.OK)
-                throw new NcnnException("Unknown Exception");
-        }
-
         public void PrepareStagingBuffer()
         {
             this.ThrowIfDisposed();
 
             var error = NativeMethods.mat_VkMat_prepare_staging_buffer(this.NativePtr);
-            if (error != NativeMethods.ErrorType.OK)
-                throw new NcnnException("Unknown Exception");
-        }
-
-        public void Upload(Mat mat)
-        {
-            if (mat == null)
-                throw new ArgumentNullException(nameof(mat));
-
-            this.ThrowIfDisposed();
-            mat.ThrowIfDisposed();
-
-            var error = NativeMethods.mat_VkMat_upload(this.NativePtr, mat.NativePtr);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
         }

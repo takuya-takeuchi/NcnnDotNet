@@ -24,20 +24,29 @@ namespace NcnnDotNet
 
         #region Methods
 
-        public void RecordDownload(VkMat mat)
+        public void RecordDownload(VkMat mat, Mat dst, Option option)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
+            if (dst == null)
+                throw new ArgumentNullException(nameof(dst));
+            if (option == null)
+                throw new ArgumentNullException(nameof(option));
 
             this.ThrowIfDisposed();
             mat.ThrowIfDisposed();
+            dst.ThrowIfDisposed();
+            option.ThrowIfDisposed();
 
-            var error = NativeMethods.command_VkCompute_record_download(this.NativePtr, mat.NativePtr);
+            var error = NativeMethods.command_VkCompute_record_download(this.NativePtr,
+                                                                        mat.NativePtr,
+                                                                        dst.NativePtr,
+                                                                        option.NativePtr);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
         }
 
-        public void RecordUpload(Mat mat, VkMat dst, Option option, bool flatten)
+        public void RecordUpload(Mat mat, VkMat dst, Option option)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
@@ -54,13 +63,7 @@ namespace NcnnDotNet
             var error = NativeMethods.command_VkCompute_record_upload(this.NativePtr,
                                                                       mat.NativePtr,
                                                                       dst.NativePtr,
-                                                                      option.NativePtr,
-                                                                      flatten);
-            // public static extern ErrorType command_VkCompute_record_upload(IntPtr compute,
-            //                                                                IntPtr mat,
-            //                                                                IntPtr dst,
-            //                                                                IntPtr opt,
-            //                                                                bool flattern);
+                                                                      option.NativePtr);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
         }

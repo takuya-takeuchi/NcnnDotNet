@@ -24,25 +24,29 @@ DLLEXPORT void command_VkCompute_delete(ncnn::VkCompute * compute)
 DLLEXPORT int32_t command_VkCompute_record_upload(ncnn::VkCompute* compute,
                                                   ncnn::Mat* mat,
                                                   ncnn::VkMat* dst,
-                                                  ncnn::Option* opt,
-                                                  const bool flatten)
+                                                  ncnn::Option* opt)
 {
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
     const auto& d = *dst;
     const auto& o = *opt;
-    compute->record_upload(m, d, o. flatten);
+    compute->record_upload(m, d, o);
 
     return error;
 }
 
-DLLEXPORT int32_t command_VkCompute_record_download(ncnn::VkCompute* compute, ncnn::VkMat* mat)
+DLLEXPORT int32_t command_VkCompute_record_download(ncnn::VkCompute* compute,
+                                                    ncnn::VkMat* mat,
+                                                    ncnn::Mat* dst,
+                                                    ncnn::Option* opt)
 {
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
-    compute->record_download(m);
+    const auto& d = *dst;
+    const auto& o = *opt;
+    compute->record_download(m, d, o);
 
     return error;
 }
