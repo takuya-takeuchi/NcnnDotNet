@@ -35,7 +35,7 @@ enum struct allocator_type : int
 
 enum struct vkallocator_type : int
 {
-    VkBlobBufferAllocator = 0,
+    VkBlobAllocator = 0,
     VkWeightAllocator,
     VkStagingAllocator,
     VkWeightStagingAllocator

@@ -69,9 +69,14 @@ DLLEXPORT const ncnn::VulkanDevice* allocator_VkAllocator_get_vkdev(ncnn::VkAllo
     return allocator->vkdev;
 }
 
-DLLEXPORT uint32_t allocator_VkAllocator_get_memory_type_index(ncnn::VkAllocator* allocator)
+DLLEXPORT uint32_t allocator_VkAllocator_get_buffer_memory_type_index(ncnn::VkAllocator* allocator)
 {
-    return allocator->memory_type_index;
+    return allocator->buffer_memory_type_index;
+}
+
+DLLEXPORT uint32_t allocator_VkAllocator_get_image_memory_type_index(ncnn::VkAllocator* allocator)
+{
+    return allocator->image_memory_type_index;
 }
 
 DLLEXPORT bool allocator_VkAllocator_get_mappable(ncnn::VkAllocator* allocator)

@@ -4,7 +4,7 @@
 namespace NcnnDotNet
 {
 
-    public sealed class VkCompute : Command
+    public sealed class VkCompute : NcnnObject
     {
 
         #region Constructors
@@ -37,15 +37,30 @@ namespace NcnnDotNet
                 throw new NcnnException("Unknown Exception");
         }
 
-        public void RecordUpload(VkMat mat)
+        public void RecordUpload(Mat mat, VkMat dst, Option option, bool flatten)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
+            if (dst == null)
+                throw new ArgumentNullException(nameof(dst));
+            if (option == null)
+                throw new ArgumentNullException(nameof(option));
 
             this.ThrowIfDisposed();
             mat.ThrowIfDisposed();
+            dst.ThrowIfDisposed();
+            option.ThrowIfDisposed();
 
-            var error = NativeMethods.command_VkCompute_record_upload(this.NativePtr, mat.NativePtr);
+            var error = NativeMethods.command_VkCompute_record_upload(this.NativePtr,
+                                                                      mat.NativePtr,
+                                                                      dst.NativePtr,
+                                                                      option.NativePtr,
+                                                                      flatten);
+            // public static extern ErrorType command_VkCompute_record_upload(IntPtr compute,
+            //                                                                IntPtr mat,
+            //                                                                IntPtr dst,
+            //                                                                IntPtr opt,
+            //                                                                bool flattern);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
         }

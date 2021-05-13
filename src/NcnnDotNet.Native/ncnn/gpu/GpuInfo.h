@@ -9,52 +9,27 @@
 
 DLLEXPORT void gpu_GpuInfo_get_support_fp16_packed(ncnn::GpuInfo* info, bool* returnValue)
 {
-    *returnValue = info->support_fp16_packed;
-}
-
-DLLEXPORT void gpu_GpuInfo_set_support_fp16_packed(ncnn::GpuInfo* info, bool value)
-{
-    info->support_fp16_packed = value;
+    *returnValue = info->support_fp16_packed();
 }
 
 DLLEXPORT void gpu_GpuInfo_get_support_fp16_storage(ncnn::GpuInfo* info, bool* returnValue)
 {
-    *returnValue = info->support_fp16_storage;
-}
-
-DLLEXPORT void gpu_GpuInfo_set_support_fp16_storage(ncnn::GpuInfo* info, bool value)
-{
-    info->support_fp16_storage = value;
+    *returnValue = info->support_fp16_storage();
 }
 
 DLLEXPORT void gpu_GpuInfo_get_support_fp16_arithmetic(ncnn::GpuInfo* info, bool* returnValue)
 {
-    *returnValue = info->support_fp16_arithmetic;
-}
-
-DLLEXPORT void gpu_GpuInfo_set_support_fp16_arithmetic(ncnn::GpuInfo* info, bool value)
-{
-    info->support_fp16_arithmetic = value;
+    *returnValue = info->support_fp16_arithmetic();
 }
 
 DLLEXPORT void gpu_GpuInfo_get_support_int8_storage(ncnn::GpuInfo* info, bool* returnValue)
 {
-    *returnValue = info->support_int8_storage;
-}
-
-DLLEXPORT void gpu_GpuInfo_set_support_int8_storage(ncnn::GpuInfo* info, bool value)
-{
-    info->support_int8_storage = value;
+    *returnValue = info->support_int8_storage();
 }
 
 DLLEXPORT void gpu_GpuInfo_get_support_int8_arithmetic(ncnn::GpuInfo* info, bool* returnValue)
 {
-    *returnValue = info->support_int8_arithmetic;
-}
-
-DLLEXPORT void gpu_GpuInfo_set_support_int8_arithmetic(ncnn::GpuInfo* info, bool value)
-{
-    info->support_int8_arithmetic = value;
+    *returnValue = info->support_int8_arithmetic();
 }
 
 #endif

@@ -46,12 +46,22 @@ namespace NcnnDotNet
             }
         }
 
-        public uint MemoryTypeIndex
+        public uint BufferMemoryTypeIndex
         {
             get
             {
                 this.ThrowIfDisposed();
-                var ret = NativeMethods.allocator_VkAllocator_get_memory_type_index(this.NativePtr);
+                var ret = NativeMethods.allocator_VkAllocator_get_buffer_memory_type_index(this.NativePtr);
+                return ret;
+            }
+        }
+
+        public uint ImageMemoryTypeIndex
+        {
+            get
+            {
+                this.ThrowIfDisposed();
+                var ret = NativeMethods.allocator_VkAllocator_get_image_memory_type_index(this.NativePtr);
                 return ret;
             }
         }

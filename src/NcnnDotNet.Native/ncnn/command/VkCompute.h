@@ -21,12 +21,18 @@ DLLEXPORT void command_VkCompute_delete(ncnn::VkCompute * compute)
     if (compute != nullptr) delete compute;
 }
 
-DLLEXPORT int32_t command_VkCompute_record_upload(ncnn::VkCompute* compute, ncnn::VkMat* mat)
+DLLEXPORT int32_t command_VkCompute_record_upload(ncnn::VkCompute* compute,
+                                                  ncnn::Mat* mat,
+                                                  ncnn::VkMat* dst,
+                                                  ncnn::Option* opt,
+                                                  const bool flatten)
 {
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
-    compute->record_upload(m);
+    const auto& d = *dst;
+    const auto& o = *opt;
+    compute->record_upload(m, d, o. flatten);
 
     return error;
 }
