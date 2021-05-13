@@ -151,20 +151,20 @@ namespace TestUtil
                     opt.UsePackingLayout = false;
 
                 VulkanDevice vkDev = null;
-                VkWeightBufferAllocator gWeightVkAllocator = null;
-                VkWeightStagingBufferAllocator gWeightStagingVkAllocator = null;
-                VkBlobBufferAllocator gBlobVkAllocator = null;
-                VkStagingBufferAllocator gStagingVkAllocator = null;
+                VkWeightAllocator gWeightVkAllocator = null;
+                VkWeightStagingAllocator gWeightStagingVkAllocator = null;
+                VkBlobAllocator gBlobVkAllocator = null;
+                VkStagingAllocator gStagingVkAllocator = null;
 
                 if (Ncnn.IsSupportVulkan)
                 {
                     vkDev = Ncnn.GetGpuDevice();
 
-                    gWeightVkAllocator = new VkWeightBufferAllocator(vkDev);
-                    gWeightStagingVkAllocator = new VkWeightStagingBufferAllocator(vkDev);
+                    gWeightVkAllocator = new VkWeightAllocator(vkDev);
+                    gWeightStagingVkAllocator = new VkWeightStagingAllocator(vkDev);
 
-                    gBlobVkAllocator = new VkBlobBufferAllocator(vkDev);
-                    gStagingVkAllocator = new VkStagingBufferAllocator(vkDev);
+                    gBlobVkAllocator = new VkBlobAllocator(vkDev);
+                    gStagingVkAllocator = new VkStagingAllocator(vkDev);
 
                     opt.BlobVkAllocator = gBlobVkAllocator;
                     opt.WorkspaceVkAllocator = gBlobVkAllocator;

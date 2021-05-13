@@ -4,23 +4,23 @@
 namespace NcnnDotNet
 {
 
-    public sealed class VkStagingBufferAllocator : VkAllocator
+    public sealed class VkWeightStagingAllocator : VkAllocator
     {
 
         #region Constructors
 
-        public VkStagingBufferAllocator(VulkanDevice vulkanDevice)
+        public VkWeightStagingAllocator(VulkanDevice vulkanDevice)
         {
             if (vulkanDevice == null)
                 throw new ArgumentNullException(nameof(vulkanDevice));
 
             vulkanDevice.ThrowIfDisposed();
 
-            NativeMethods.allocator_VkStagingBufferAllocator_new(vulkanDevice.NativePtr, out var returnValue);
+            NativeMethods.allocator_VkWeightStagingAllocator_new(vulkanDevice.NativePtr, out var returnValue);
             this.NativePtr = returnValue;
         }
 
-        internal VkStagingBufferAllocator(IntPtr ptr, bool isEnabledDispose = true) :
+        internal VkWeightStagingAllocator(IntPtr ptr, bool isEnabledDispose = true) :
             base(ptr, isEnabledDispose)
         {
         }
@@ -33,7 +33,7 @@ namespace NcnnDotNet
         {
             this.ThrowIfDisposed();
 
-            NativeMethods.allocator_VkStagingBufferAllocator_clear(this.NativePtr);
+            NativeMethods.allocator_VkWeightStagingAllocator_clear(this.NativePtr);
         }
 
         #region Overrides 
@@ -48,7 +48,7 @@ namespace NcnnDotNet
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            NativeMethods.allocator_VkStagingBufferAllocator_delete(this.NativePtr);
+            NativeMethods.allocator_VkWeightStagingAllocator_delete(this.NativePtr);
         }
 
         #endregion

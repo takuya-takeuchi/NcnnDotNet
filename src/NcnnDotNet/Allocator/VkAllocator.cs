@@ -76,14 +76,14 @@ namespace NcnnDotNet
         {
             switch (type)
             {
-                case NativeMethods.VkAllocatorType.VkBlobBufferAllocator:
-                    return new VkBlobBufferAllocator(allocator, isEnabledDispose);
-                case NativeMethods.VkAllocatorType.VkWeightBufferAllocator:
-                    return new VkWeightBufferAllocator(allocator, isEnabledDispose);
-                case NativeMethods.VkAllocatorType.VkStagingBufferAllocator:
-                    return new VkStagingBufferAllocator(allocator, isEnabledDispose);
-                case NativeMethods.VkAllocatorType.VkWeightStagingBufferAllocator:
-                    return new VkWeightStagingBufferAllocator(allocator, isEnabledDispose);
+                case NativeMethods.VkAllocatorType.VkBlobAllocator:
+                    return new VkBlobAllocator(allocator, isEnabledDispose);
+                case NativeMethods.VkAllocatorType.VkWeightAllocator:
+                    return new VkWeightAllocator(allocator, isEnabledDispose);
+                case NativeMethods.VkAllocatorType.VkStagingAllocator:
+                    return new VkStagingAllocator(allocator, isEnabledDispose);
+                case NativeMethods.VkAllocatorType.VkWeightStagingAllocator:
+                    return new VkWeightStagingAllocator(allocator, isEnabledDispose);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
