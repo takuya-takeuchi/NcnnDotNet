@@ -543,7 +543,7 @@ class ThirdPartyBuilder
          -D BUILD_opencv_stitching=OFF `
          -D BUILD_opencv_superres=OFF `
          -D BUILD_opencv_video=OFF `
-         -D BUILD_opencv_videoio=OFF `
+         -D BUILD_opencv_videoio=ON `
          -D BUILD_opencv_videostab=OFF `
          -D WITH_CUDA=OFF `
          -D BUILD_PROTOBUF=OFF `
@@ -579,7 +579,7 @@ class ThirdPartyBuilder
                                              -D BUILD_opencv_stitching=OFF `
                                              -D BUILD_opencv_superres=OFF `
                                              -D BUILD_opencv_video=OFF `
-                                             -D BUILD_opencv_videoio=OFF `
+                                             -D BUILD_opencv_videoio=ON `
                                              -D BUILD_opencv_videostab=OFF `
                                              -D WITH_CUDA=OFF `
                                              -D BUILD_PROTOBUF=OFF `
@@ -620,7 +620,7 @@ class ThirdPartyBuilder
          -D BUILD_opencv_stitching=OFF `
          -D BUILD_opencv_superres=OFF `
          -D BUILD_opencv_video=OFF `
-         -D BUILD_opencv_videoio=OFF `
+         -D BUILD_opencv_videoio=ON `
          -D BUILD_opencv_videostab=OFF `
          -D BUILD_PNG=ON `
          -D BUILD_JPEG=ON `
@@ -660,7 +660,7 @@ class ThirdPartyBuilder
                         -D BUILD_opencv_stitching=OFF `
                         -D BUILD_opencv_superres=OFF `
                         -D BUILD_opencv_video=OFF `
-                        -D BUILD_opencv_videoio=OFF `
+                        -D BUILD_opencv_videoio=ON `
                         -D BUILD_opencv_videostab=OFF `
                         -D BUILD_PNG=ON `
                         -D BUILD_JPEG=ON `
@@ -719,7 +719,7 @@ class ThirdPartyBuilder
             -D BUILD_opencv_stitching=OFF `
             -D BUILD_opencv_superres=OFF `
             -D BUILD_opencv_video=OFF `
-            -D BUILD_opencv_videoio=OFF `
+            -D BUILD_opencv_videoio=ON `
             -D BUILD_opencv_videostab=OFF `
             -D BUILD_PNG=ON `
             -D BUILD_JPEG=ON `
@@ -763,7 +763,7 @@ class ThirdPartyBuilder
                      -D BUILD_opencv_stitching=OFF `
                      -D BUILD_opencv_superres=OFF `
                      -D BUILD_opencv_video=OFF `
-                     -D BUILD_opencv_videoio=OFF `
+                     -D BUILD_opencv_videoio=ON `
                      -D BUILD_opencv_videostab=OFF `
                      -D BUILD_PNG=ON `
                      -D BUILD_JPEG=ON `
