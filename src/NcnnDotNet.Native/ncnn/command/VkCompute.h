@@ -29,7 +29,7 @@ DLLEXPORT int32_t command_VkCompute_record_upload(ncnn::VkCompute* compute,
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
-    const auto& d = *dst;
+    auto& d = *dst;
     const auto& o = *opt;
     compute->record_upload(m, d, o);
 
@@ -44,7 +44,7 @@ DLLEXPORT int32_t command_VkCompute_record_download(ncnn::VkCompute* compute,
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
-    const auto& d = *dst;
+    auto& d = *dst;
     const auto& o = *opt;
     compute->record_download(m, d, o);
 

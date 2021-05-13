@@ -30,55 +30,38 @@ namespace NcnnDotNet
 
         #region Methods
 
-        public void CreateLike(Mat mat, VkAllocator allocator, VkAllocator stagingAllocator)
+        public void CreateLike(Mat mat, VkAllocator allocator)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
             if (allocator == null)
                 throw new ArgumentNullException(nameof(allocator));
-            if (stagingAllocator == null)
-                throw new ArgumentNullException(nameof(stagingAllocator));
 
             this.ThrowIfDisposed();
             mat.ThrowIfDisposed();
             allocator.ThrowIfDisposed();
-            stagingAllocator.ThrowIfDisposed();
 
             var error = NativeMethods.mat_VkMat_create_like_mat(this.NativePtr,
                                                                 mat.NativePtr,
-                                                                allocator.NativePtr,
-                                                                stagingAllocator.NativePtr);
+                                                                allocator.NativePtr);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
         }
 
-        public void CreateLike(VkMat mat, VkAllocator allocator, VkAllocator stagingAllocator)
+        public void CreateLike(VkMat mat, VkAllocator allocator)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));
             if (allocator == null)
                 throw new ArgumentNullException(nameof(allocator));
-            if (stagingAllocator == null)
-                throw new ArgumentNullException(nameof(stagingAllocator));
 
             this.ThrowIfDisposed();
             mat.ThrowIfDisposed();
             allocator.ThrowIfDisposed();
-            stagingAllocator.ThrowIfDisposed();
 
             var error = NativeMethods.mat_VkMat_create_like_vkmat(this.NativePtr,
                                                                   mat.NativePtr,
-                                                                  allocator.NativePtr,
-                                                                  stagingAllocator.NativePtr);
-            if (error != NativeMethods.ErrorType.OK)
-                throw new NcnnException("Unknown Exception");
-        }
-
-        public void PrepareStagingBuffer()
-        {
-            this.ThrowIfDisposed();
-
-            var error = NativeMethods.mat_VkMat_prepare_staging_buffer(this.NativePtr);
+                                                                  allocator.NativePtr);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
         }
