@@ -194,12 +194,12 @@ if (NCNN_VULKAN)
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.dylib
-            $ENV{ncnn_DIR}/lib/libglslang.dylib
-            $ENV{ncnn_DIR}/lib/libGenericCodeGen.dylib
-            $ENV{ncnn_DIR}/lib/libMachineIndependent.dylib
-            $ENV{ncnn_DIR}/lib/libOGLCompiler.dylib
-            $ENV{ncnn_DIR}/lib/libOSDependent.dylib
-            $ENV{ncnn_DIR}/lib/libSPIRV.dylib
+            $ENV{ncnn_DIR}/lib/libglslang.a
+            $ENV{ncnn_DIR}/lib/libGenericCodeGen.a
+            $ENV{ncnn_DIR}/lib/libMachineIndependent.a
+            $ENV{ncnn_DIR}/lib/libOGLCompiler.a
+            $ENV{ncnn_DIR}/lib/libOSDependent.a
+            $ENV{ncnn_DIR}/lib/libSPIRV.a
         )   
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
