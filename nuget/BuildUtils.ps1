@@ -996,35 +996,35 @@ function ConfigCPU([Config]$Config)
       $vsarc = $Config.GetVisualStudioArchitecture()
 
       $env:OpenCV_DIR = $installOpenCVDir
-      $env:ncnn_DIR = $installNcnnDir
-      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -G "$vs" -A $vsarc -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=`"${installNcnnDir}`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -G "$vs" -A $vsarc -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR="${installNcnnDir}" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
    else
    {
       $env:OpenCV_DIR = $installOpenCVDir
-      $env:ncnn_DIR = $installNcnnDir
-      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=`"${installNcnnDir}`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR="${installNcnnDir}" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
 }
@@ -1069,35 +1069,35 @@ function ConfigVulkan([Config]$Config)
       $vsarc = $Config.GetVisualStudioArchitecture()
 
       $env:OpenCV_DIR = $installOpenCVDir
-      $env:ncnn_DIR = $installNcnnDir
-      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -G "$vs" -A $vsarc -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=`"${installNcnnDir}`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -G $vs -A $vsarc -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR="${installNcnnDir}" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
    else
    {
       $env:OpenCV_DIR = $installOpenCVDir
-      $env:ncnn_DIR = $installNcnnDir
-      $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
          -D ncnn_DIR=`"${installNcnnDir}`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
             -D ncnn_DIR="${installNcnnDir}" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
 }
@@ -1193,8 +1193,6 @@ function ConfigANDROID([Config]$Config)
    # https://github.com/Tencent/ncnn/wiki/FAQ-ncnn-throw-error#undefined-reference-to-__kmpc_xyz_xyz
    # $env:NDK_TOOLCHAIN_VERSION = 4.9
    $env:OpenCV_DIR = "$installOpenCVDir/sdk/native/jni"
-   $env:ncnn_DIR = $installNcnnDir
-   $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
    -D ANDROID_ABI=$abi `
    -D ANDROID_PLATFORM=android-$level `
@@ -1204,6 +1202,7 @@ function ConfigANDROID([Config]$Config)
    -D OpenCV_INSTALL_DIR=`"${installOpenCVDir}`" `
    -D NCNN_VULKAN:BOOL=ON `
    -D ncnn_DIR=`"${installNcnnDir}`" `
+   -D ncnn_SRC_DIR=`"${ncnnDir}`" `
    .." -ForegroundColor Yellow
       cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
             -D ANDROID_ABI=$abi `
@@ -1214,6 +1213,7 @@ function ConfigANDROID([Config]$Config)
             -D OpenCV_INSTALL_DIR="${installOpenCVDir}" `
             -D NCNN_VULKAN:BOOL=ON `
             -D ncnn_DIR="${installNcnnDir}" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
 }
 
