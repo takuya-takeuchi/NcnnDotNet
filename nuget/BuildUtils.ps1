@@ -1002,13 +1002,13 @@ function ConfigCPU([Config]$Config)
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
-         -D ncnn_DIR=$installNcnnDir `
+         -D ncnn_DIR=`"${installNcnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -G "$vs" -A $vsarc -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
-            -D ncnn_DIR=$installNcnnDir `
+            -D ncnn_DIR="${installNcnnDir}" `
             ..
    }
    else
@@ -1019,12 +1019,12 @@ function ConfigCPU([Config]$Config)
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=$installOpenCVDir `
-         -D ncnn_DIR=$installNcnnDir `
+         -D ncnn_DIR=`"${installNcnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR=$installOpenCVDir `
-            -D ncnn_DIR=$installNcnnDir `
+            -D ncnn_DIR="${installNcnnDir}" `
             ..
    }
 }
@@ -1075,13 +1075,13 @@ function ConfigVulkan([Config]$Config)
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
-         -D ncnn_DIR=$installNcnnDir `
+         -D ncnn_DIR=`"${installNcnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -G $vs -A $vsarc -T host=x64 `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
-            -D ncnn_DIR=$installNcnnDir `
+            -D ncnn_DIR="${installNcnnDir}" `
             ..
    }
    else
@@ -1092,12 +1092,12 @@ function ConfigVulkan([Config]$Config)
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=$installOpenCVDir `
-         -D ncnn_DIR=$installNcnnDir `
+         -D ncnn_DIR=`"${installNcnnDir}`" `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR=$installOpenCVDir `
-            -D ncnn_DIR=$installNcnnDir `
+            -D ncnn_DIR="${installNcnnDir}" `
             ..
    }
 }
@@ -1139,6 +1139,7 @@ function ConfigUWP([Config]$Config)
                -D _WIN32_UNIVERSAL_APP=ON `
                -D BUILD_SHARED_LIBS=ON `
                -D USE_NCNN_VULKAN=OFF `
+               -D ncnn_DIR="${installNcnnDir}" `
                ..
       }
       else
@@ -1151,6 +1152,7 @@ function ConfigUWP([Config]$Config)
                -D _WIN32_UNIVERSAL_APP=ON `
                -D BUILD_SHARED_LIBS=ON `
                -D USE_NCNN_VULKAN=OFF `
+               -D ncnn_DIR="${installNcnnDir}" `
                ..
       }
 
@@ -1189,6 +1191,7 @@ function ConfigANDROID([Config]$Config)
    # $env:NDK_TOOLCHAIN_VERSION = 4.9
    $env:OpenCV_DIR = "$installOpenCVDir/sdk/native/jni"
    $env:ncnn_DIR = $installNcnnDir
+   $env:ncnn_SRC_DIR = $ncnnDir
       Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
    -D ANDROID_ABI=$abi `
    -D ANDROID_PLATFORM=android-$level `
@@ -1196,6 +1199,7 @@ function ConfigANDROID([Config]$Config)
    -D BUILD_SHARED_LIBS=ON `
    -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
    -D NCNN_VULKAN:BOOL=ON `
+   -D ncnn_DIR=`"${installNcnnDir}`" `
    .." -ForegroundColor Yellow
       cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
             -D ANDROID_ABI=$abi `
@@ -1204,6 +1208,7 @@ function ConfigANDROID([Config]$Config)
             -D BUILD_SHARED_LIBS=ON `
             -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
             -D NCNN_VULKAN:BOOL=ON `
+            -D ncnn_DIR="${installNcnnDir}" `
             ..
 }
 
