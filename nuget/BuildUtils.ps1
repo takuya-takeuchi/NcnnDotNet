@@ -1004,7 +1004,7 @@ function ConfigCPU([Config]$Config)
       $vsarc = $Config.GetVisualStudioArchitecture()
 
       $env:OpenCV_DIR = $installOpenCVDir
-      Write-Host "   cmake -G "$vs" -A $vsarc -T host=x64 `
+      Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
@@ -1078,7 +1078,7 @@ function ConfigVulkan([Config]$Config)
 
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
-      Write-Host "   cmake -G "$vs" -A $vsarc -T host=x64 `
+      Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
@@ -1136,11 +1136,41 @@ function ConfigUWP([Config]$Config)
 {
    if ($IsWindows)
    {
+      $Builder = [ThirdPartyBuilder]::new($Config)
+   
+      # Build Protobuf
+      $installProtobufDir = $Builder.BuildProtobuf()
+   
+      # Build opencv
+      $installOpenCVDir = $Builder.BuildOpenCV()
+   
+      # Build ncnn
+      $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
+   
+      # To inclue src/layer
+      $ncnnDir = $Config.GetNcnnRootDir()
+   
+      # Build NcnnDotNet.Native
+      Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
+
       $vs = $Config.GetVisualStudio()
       $vsarc = $Config.GetVisualStudioArchitecture()
 
       if ($Config.GetTarget() -eq "arm")
       {
+         $env:OpenCV_DIR = $installOpenCVDir
+         Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+      -D CMAKE_SYSTEM_NAME=WindowsStore `
+      -D CMAKE_SYSTEM_VERSION=10.0 `
+      -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
+      -D _WINDLL=ON `
+      -D _WIN32_UNIVERSAL_APP=ON `
+      -D BUILD_SHARED_LIBS=ON `
+      -D NCNN_VULKAN:BOOL=OFF `
+      -D OpenCV_DIR=`"${installOpenCVDir}`" `
+      -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+      -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+      .." -ForegroundColor Yellow
          cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
@@ -1148,12 +1178,27 @@ function ConfigUWP([Config]$Config)
                -D _WINDLL=ON `
                -D _WIN32_UNIVERSAL_APP=ON `
                -D BUILD_SHARED_LIBS=ON `
-               -D USE_NCNN_VULKAN=OFF `
+               -D NCNN_VULKAN:BOOL=OFF `
+               -D OpenCV_DIR="${installOpenCVDir}" `
                -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+               -D ncnn_SRC_DIR="${ncnnDir}" `
                ..
       }
       else
       {
+         $env:OpenCV_DIR = $installOpenCVDir
+         Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+      -D CMAKE_SYSTEM_NAME=WindowsStore `
+      -D CMAKE_SYSTEM_VERSION=10.0 `
+      -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
+      -D _WINDLL=ON `
+      -D _WIN32_UNIVERSAL_APP=ON `
+      -D BUILD_SHARED_LIBS=ON `
+      -D NCNN_VULKAN:BOOL=OFF `
+      -D OpenCV_DIR=`"${installOpenCVDir}`" `
+      -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+      -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+      .." -ForegroundColor Yellow
          cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
@@ -1161,8 +1206,10 @@ function ConfigUWP([Config]$Config)
                -D _WINDLL=ON `
                -D _WIN32_UNIVERSAL_APP=ON `
                -D BUILD_SHARED_LIBS=ON `
-               -D USE_NCNN_VULKAN=OFF `
+               -D NCNN_VULKAN:BOOL=OFF `
+               -D OpenCV_DIR="${installOpenCVDir}" `
                -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+               -D ncnn_SRC_DIR="${ncnnDir}" `
                ..
       }
 
