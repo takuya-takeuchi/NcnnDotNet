@@ -17,7 +17,10 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Label Text="Welcome to Xamarin Forms and Prism!" />
-        <Image Grid.Row="1" Source="{Binding SelectedImage}" />
+        <Image Grid.Row="1"
+               HorizontalOptions="FillAndExpand"
+               Source="{Binding SelectedImage}"
+               VerticalOptions="FillAndExpand" />
         <Button Grid.Row="2"
                 Command="{Binding FilePickCommand}"
                 HorizontalOptions="Center"

@@ -3,7 +3,6 @@ using Prism;
 using Prism.Ioc;
 using UIKit;
 
-
 namespace YoloV3.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 

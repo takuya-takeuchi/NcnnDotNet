@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
-
-using YoloV3.Services.Interfaces;
-
 using NcnnDotNet;
 using NcnnDotNet.OpenCV;
+using YoloV3.Models;
+using YoloV3.Services.Interfaces;
 using Mat = NcnnDotNet.Mat;
 using Object = YoloV3.Models.Object;
 
@@ -26,7 +24,7 @@ namespace YoloV3.Services
 
         #region IDetectService Members
 
-        public IEnumerable<Object> Detect(string file)
+        public DetectResult Detect(string file)
         {
             using var m = Cv2.ImRead(file, CvLoadImage.Grayscale);
             if (m.IsEmpty)
@@ -43,9 +41,7 @@ namespace YoloV3.Services
             if (Ncnn.IsSupportVulkan)
                 Ncnn.DestroyGpuInstance();
 
-            //DrawObjects(m, objects);
-
-            return objects;
+            return new DetectResult(m.Cols, m.Rows, objects);
         }
 
 
@@ -109,66 +105,6 @@ namespace YoloV3.Services
             }
 
             return 0;
-        }
-
-        private static void DrawObjects(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
-        {
-            string[] classNames =
-            {
-                "background",
-                "aeroplane",
-                "bicycle",
-                "bird",
-                "boat",
-                "bottle",
-                "bus",
-                "car",
-                "cat",
-                "chair",
-                "cow",
-                "diningtable",
-                "dog",
-                "horse",
-                "motorbike",
-                "person",
-                "pottedplant",
-                "sheep",
-                "sofa",
-                "train",
-                "tvmonitor"
-            };
-
-            using var image = bgr.Clone();
-            for (var i = 0; i < objects.Count; i++)
-            {
-                var obj = objects[i];
-
-                Console.WriteLine($"{obj.Label} = {obj.Prob:f5} at {obj.Rect.X:f2} {obj.Rect.Y:f2} {obj.Rect.Width:f2} {obj.Rect.Height:f2}");
-
-                Cv2.Rectangle(image, obj.Rect, new Scalar<double>(255, 0, 0));
-
-                var text = $"{classNames[obj.Label]} {(obj.Prob * 100):f1}";
-
-                var baseLine = 0;
-                var labelSize = Cv2.GetTextSize(text, CvHersheyFonts.HersheySimplex, 0.5, 1, ref baseLine);
-
-                var x = (int)obj.Rect.X;
-                var y = (int)(obj.Rect.Y - labelSize.Height - baseLine);
-                if (y < 0)
-                    y = 0;
-                if (x + labelSize.Width > image.Cols)
-                    x = image.Cols - labelSize.Width;
-
-                Cv2.Rectangle(image, new Rect<int>(new Point<int>(x, y),
-                                                   new Size<int>(labelSize.Width, labelSize.Height + baseLine)),
-                              new Scalar<double>(255, 255, 255), -1);
-
-                Cv2.PutText(image, text, new Point<int>(x, y + labelSize.Height),
-                            CvHersheyFonts.HersheySimplex, 0.5, new Scalar<double>(0, 0, 0));
-            }
-
-            //Cv2.ImShow("image", image);
-            //Cv2.WaitKey(0);
         }
 
         #endregion
