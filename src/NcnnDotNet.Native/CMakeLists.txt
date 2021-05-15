@@ -184,18 +184,42 @@ if (NCNN_VULKAN)
     if (MSVC OR MSYS OR MINGW)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
+            $ENV{ncnn_DIR}/lib/glslang.lib
+            $ENV{ncnn_DIR}/lib/GenericCodeGen.lib
+            $ENV{ncnn_DIR}/lib/MachineIndependent.lib
+            $ENV{ncnn_DIR}/lib/OGLCompiler.lib
+            $ENV{ncnn_DIR}/lib/OSDependent.lib
+            $ENV{ncnn_DIR}/lib/SPIRV.lib
         )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            $ENV{ncnn_DIR}/lib/libglslang.dylib
+            $ENV{ncnn_DIR}/lib/libGenericCodeGen.dylib
+            $ENV{ncnn_DIR}/lib/libMachineIndependent.dylib
+            $ENV{ncnn_DIR}/lib/libOGLCompiler.dylib
+            $ENV{ncnn_DIR}/lib/libOSDependent.dylib
+            $ENV{ncnn_DIR}/lib/libSPIRV.dylib
         )   
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
             vulkan
+            $ENV{ncnn_DIR}/lib/libglslang.so
+            $ENV{ncnn_DIR}/lib/libGenericCodeGen.so
+            $ENV{ncnn_DIR}/lib/libMachineIndependent.so
+            $ENV{ncnn_DIR}/lib/libOGLCompiler.so
+            $ENV{ncnn_DIR}/lib/libOSDependent.so
+            $ENV{ncnn_DIR}/lib/libSPIRV.so
         )
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.so
+            $ENV{ncnn_DIR}/lib/libglslang.a
+            $ENV{ncnn_DIR}/lib/libGenericCodeGen.a
+            $ENV{ncnn_DIR}/lib/libMachineIndependent.a
+            $ENV{ncnn_DIR}/lib/libOGLCompiler.a
+            $ENV{ncnn_DIR}/lib/libOSDependent.a
+            $ENV{ncnn_DIR}/lib/libSPIRV.a
         )
     endif()
 endif()
