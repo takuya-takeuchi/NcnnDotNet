@@ -150,7 +150,7 @@ if (MSVC OR MSYS OR MINGW)
         opencv_imgcodecs
         opencv_imgproc
     )
-elseif(iOS)
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
     set(STATIC_LIBRARIES
         ncnn
         zlib
@@ -212,7 +212,7 @@ if (NCNN_VULKAN)
             OSDependent
             SPIRV
         )
-    elseif(iOS)
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.dylib
             glslang
