@@ -161,11 +161,24 @@ elseif(APPLE)
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     set(STATIC_LIBRARIES
         $ENV{ncnn_DIR}/lib/libncnn.a
-        opencv_highgui
-        opencv_imgcodecs
-        opencv_imgproc
+        ${OpenCV_INSTALL_DIR}/sdk/native/staticlibs/${ANDROID_ABI}/libopencv_world.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libcpufeatures.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libIlmImf.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibjasper.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibjpeg.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibpng.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibtiff.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibwebp.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libtegra_hal.a
+        z
+        log
         android
     )
+    if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64|i686")
+        list(REMOVE_ITEM STATIC_LIBRARIES
+            ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libtegra_hal.a
+        )
+    endif()
 elseif(UNIX AND NOT APPLE)
     # centos7 uses glibc-2.17-292.el7.x86_64 but build dev uses latest GCC
     # Therefore, link libmvec as static

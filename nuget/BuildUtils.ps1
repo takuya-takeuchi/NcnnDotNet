@@ -1201,6 +1201,7 @@ function ConfigANDROID([Config]$Config)
    -D ANDROID_CPP_FEATURES:STRING=`"exceptions rtti`" `
    -D BUILD_SHARED_LIBS=ON `
    -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
+   -D OpenCV_INSTALL_DIR=`"${installOpenCVDir}`" `
    -D NCNN_VULKAN:BOOL=ON `
    -D ncnn_DIR=`"${installNcnnDir}`" `
    .." -ForegroundColor Yellow
@@ -1210,6 +1211,7 @@ function ConfigANDROID([Config]$Config)
             -D ANDROID_CPP_FEATURES:STRING="exceptions rtti" `
             -D BUILD_SHARED_LIBS=ON `
             -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
+            -D OpenCV_INSTALL_DIR="${installOpenCVDir}" `
             -D NCNN_VULKAN:BOOL=ON `
             -D ncnn_DIR="${installNcnnDir}" `
             ..
@@ -1300,18 +1302,18 @@ function CopyToArtifact()
    if ($configuration)
    {
       $binary = Join-Path ${srcDir} ${build}  | `
-               Join-Path -ChildPath ${configuration} | `
-               Join-Path -ChildPath ${libraryName}
+                Join-Path -ChildPath ${configuration} | `
+                Join-Path -ChildPath ${libraryName}
    }
    else
    {
       $binary = Join-Path ${srcDir} ${build}  | `
-               Join-Path -ChildPath ${libraryName}
+                Join-Path -ChildPath ${libraryName}
    }
 
    $output = Join-Path $dstDir runtimes | `
-            Join-Path -ChildPath ${rid} | `
-            Join-Path -ChildPath native
+             Join-Path -ChildPath ${rid} | `
+             Join-Path -ChildPath native
 
    if (!(Test-Path $output))
    {
@@ -1321,6 +1323,6 @@ function CopyToArtifact()
 
    $output = Join-Path $output $libraryName
 
-   Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
+   Write-Host "Copy ${binary} to ${output}" -ForegroundColor Green
    Copy-Item ${binary} ${output}
 }
