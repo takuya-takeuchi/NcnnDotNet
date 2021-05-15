@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_REQUANTIZE_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/requantize.h>
 #include "../../shared.h"
 

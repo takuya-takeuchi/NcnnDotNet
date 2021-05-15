@@ -2,7 +2,7 @@
 #define _CPP_ALLOCATOR_ALLOCATOR_H_
 
 #include "../export.h"
-#include <ncnn/allocator.h>
+#include <allocator.h>
 #include "../shared.h"
 
 #pragma region template
@@ -59,19 +59,24 @@ MAKE_ALLOCATOR(PoolAllocator, PoolAllocator)
 
 #if NCNN_VULKAN
 
-MAKE_VKALLOCATOR(VkBlobBufferAllocator, VkBlobBufferAllocator)
-MAKE_VKALLOCATOR(VkWeightBufferAllocator, VkWeightBufferAllocator)
-MAKE_VKALLOCATOR(VkStagingBufferAllocator, VkStagingBufferAllocator)
-MAKE_VKALLOCATOR(VkWeightStagingBufferAllocator, VkWeightStagingBufferAllocator)
+MAKE_VKALLOCATOR(VkBlobAllocator, VkBlobAllocator)
+MAKE_VKALLOCATOR(VkWeightAllocator, VkWeightAllocator)
+MAKE_VKALLOCATOR(VkStagingAllocator, VkStagingAllocator)
+MAKE_VKALLOCATOR(VkWeightStagingAllocator, VkWeightStagingAllocator)
 
 DLLEXPORT const ncnn::VulkanDevice* allocator_VkAllocator_get_vkdev(ncnn::VkAllocator* allocator)
 {
     return allocator->vkdev;
 }
 
-DLLEXPORT uint32_t allocator_VkAllocator_get_memory_type_index(ncnn::VkAllocator* allocator)
+DLLEXPORT uint32_t allocator_VkAllocator_get_buffer_memory_type_index(ncnn::VkAllocator* allocator)
 {
-    return allocator->memory_type_index;
+    return allocator->buffer_memory_type_index;
+}
+
+DLLEXPORT uint32_t allocator_VkAllocator_get_image_memory_type_index(ncnn::VkAllocator* allocator)
+{
+    return allocator->image_memory_type_index;
 }
 
 DLLEXPORT bool allocator_VkAllocator_get_mappable(ncnn::VkAllocator* allocator)
@@ -109,30 +114,30 @@ DLLEXPORT bool allocator_Allocator_dynamic_cast(ncnn::Allocator* allocator, allo
 
 DLLEXPORT bool allocator_VkAllocator_dynamic_cast(ncnn::VkAllocator* allocator, vkallocator_type* type)
 {
-    auto vkBlobBufferAllocator = dynamic_cast<ncnn::VkBlobBufferAllocator*>(allocator);
-    if (vkBlobBufferAllocator != nullptr)
+    auto VkBlobAllocator = dynamic_cast<ncnn::VkBlobAllocator*>(allocator);
+    if (VkBlobAllocator != nullptr)
     {
-        *type = vkallocator_type::VkBlobBufferAllocator;
+        *type = vkallocator_type::VkBlobAllocator;
         return true;
     }
 
-    auto vkWeightBufferAllocator = dynamic_cast<ncnn::VkWeightBufferAllocator*>(allocator);
-    if (vkWeightBufferAllocator != nullptr)
+    auto VkWeightAllocator = dynamic_cast<ncnn::VkWeightAllocator*>(allocator);
+    if (VkWeightAllocator != nullptr)
     {
-        *type = vkallocator_type::VkWeightBufferAllocator;
+        *type = vkallocator_type::VkWeightAllocator;
         return true;
     }
-    auto vkStagingBufferAllocator = dynamic_cast<ncnn::VkStagingBufferAllocator*>(allocator);
-    if (vkStagingBufferAllocator != nullptr)
+    auto VkStagingAllocator = dynamic_cast<ncnn::VkStagingAllocator*>(allocator);
+    if (VkStagingAllocator != nullptr)
     {
-        *type = vkallocator_type::VkStagingBufferAllocator;
+        *type = vkallocator_type::VkStagingAllocator;
         return true;
     }
 
-    auto vkWeightStagingBufferAllocator = dynamic_cast<ncnn::VkWeightStagingBufferAllocator*>(allocator);
-    if (vkWeightStagingBufferAllocator != nullptr)
+    auto VkWeightStagingAllocator = dynamic_cast<ncnn::VkWeightStagingAllocator*>(allocator);
+    if (VkWeightStagingAllocator != nullptr)
     {
-        *type = vkallocator_type::VkWeightStagingBufferAllocator;
+        *type = vkallocator_type::VkWeightStagingAllocator;
         return true;
     }
 

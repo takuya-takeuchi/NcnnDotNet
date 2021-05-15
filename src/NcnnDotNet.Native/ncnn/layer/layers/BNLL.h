@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_BNLL_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/bnll.h>
 #include "../../shared.h"
 

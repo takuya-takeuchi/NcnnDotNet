@@ -30,11 +30,6 @@ namespace NcnnDotNet
                 NativeMethods.gpu_GpuInfo_get_support_fp16_packed(this.NativePtr, out var value);
                 return value;
             }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.gpu_GpuInfo_set_support_fp16_packed(this.NativePtr, value);
-            }
         }
 
         public bool SupportFP16Storage
@@ -44,11 +39,6 @@ namespace NcnnDotNet
                 this.ThrowIfDisposed();
                 NativeMethods.gpu_GpuInfo_get_support_fp16_storage(this.NativePtr, out var value);
                 return value;
-            }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.gpu_GpuInfo_set_support_fp16_storage(this.NativePtr, value);
             }
         }
 
@@ -60,11 +50,6 @@ namespace NcnnDotNet
                 NativeMethods.gpu_GpuInfo_get_support_fp16_arithmetic(this.NativePtr, out var value);
                 return value;
             }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.gpu_GpuInfo_set_support_fp16_arithmetic(this.NativePtr, value);
-            }
         }
 
         public bool SupportInt8Storage
@@ -75,11 +60,6 @@ namespace NcnnDotNet
                 NativeMethods.gpu_GpuInfo_get_support_int8_storage(this.NativePtr, out var value);
                 return value;
             }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.gpu_GpuInfo_set_support_int8_storage(this.NativePtr, value);
-            }
         }
 
         public bool SupportInt8Arithmetic
@@ -89,11 +69,6 @@ namespace NcnnDotNet
                 this.ThrowIfDisposed();
                 NativeMethods.gpu_GpuInfo_get_support_int8_arithmetic(this.NativePtr, out var value);
                 return value;
-            }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.gpu_GpuInfo_set_support_int8_arithmetic(this.NativePtr, value);
             }
         }
 

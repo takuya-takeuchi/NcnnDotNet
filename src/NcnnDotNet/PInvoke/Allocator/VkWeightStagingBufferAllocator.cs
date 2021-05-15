@@ -9,13 +9,13 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType allocator_VkWeightStagingBufferAllocator_new(IntPtr vulkanDevice, out IntPtr returnValue);
+        public static extern ErrorType allocator_VkWeightStagingAllocator_new(IntPtr vulkanDevice, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void allocator_VkWeightStagingBufferAllocator_delete(IntPtr allocator);
+        public static extern void allocator_VkWeightStagingAllocator_delete(IntPtr allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void allocator_VkWeightStagingBufferAllocator_clear(IntPtr allocator);
+        public static extern void allocator_VkWeightStagingAllocator_clear(IntPtr allocator);
 
     }
 

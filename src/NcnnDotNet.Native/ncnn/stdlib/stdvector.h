@@ -2,7 +2,7 @@
 #define _CPP_STDLIB_VECTOR_H_
 
 #include "../export.h"
-#include <ncnn/mat.h>
+#include <mat.h>
 #include "../shared.h"
 
 #pragma region template

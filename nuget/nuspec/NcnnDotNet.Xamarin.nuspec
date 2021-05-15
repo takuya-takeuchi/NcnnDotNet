@@ -1,0 +1,38 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>NcnnDotNet.Xamarin</id>
+    <version>0.0.0.20210417</version>
+    <title>NcnnDotNet for Xamarin</title>
+    <authors>Takuya Takeuchi</authors>
+    <owners>Takuya Takeuchi</owners>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="file">LICENSE.txt</license>
+    <projectUrl>https://github.com/takuya-takeuchi/NcnnDotNet</projectUrl>
+    <icon>images/nn128.png</icon>
+    <description>ncnn wrapper library written in C++ and C# for Xamarin.Android</description>
+    <releaseNotes></releaseNotes>
+    <copyright>© Takuya Takeuchi 2019-2021</copyright>
+    <tags>ncnn .net neural-network</tags>
+    <serviceable>true</serviceable>
+  </metadata>
+  
+  <files>
+    <file src="../nn128.png" target="images/" />
+
+    <!-- Android -->  
+    <file src="build/NcnnDotNet.Android.targets" target="build/MonoAndroid/NcnnDotNet.targets"/>
+    <file src="../../src/NcnnDotNet/bin/Release/netstandard2.0/NcnnDotNet.dll" target="lib/MonoAndroid" />
+    <!-- <file src="../artifacts/android/runtimes/armeabi/native/libNcnnDotNetNative.so" target="native/android/armeabi" /> -->
+    <file src="../artifacts/android/runtimes/armeabi-v7a/native/libNcnnDotNetNative.so" target="native/android/armeabi-v7a" />
+    <file src="../artifacts/android/runtimes/arm64-v8a/native/libNcnnDotNetNative.so" target="native/android/arm64-v8a" />
+    <file src="../artifacts/android/runtimes/x86/native/libNcnnDotNetNative.so" target="native/android/x86" />
+    <file src="../artifacts/android/runtimes/x86_64/native/libNcnnDotNetNative.so" target="native/android/x86_64" />
+
+    <!-- license -->
+    <file src="../../LICENSE.txt" target="" />
+    <file src="../../Licenses/ncnn.txt" target="licenses" />
+    <file src="../../Licenses/OpenCV.txt" target="licenses" />
+  </files>
+
+</package>

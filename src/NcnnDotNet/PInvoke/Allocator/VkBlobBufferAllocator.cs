@@ -9,13 +9,13 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType allocator_VkBlobBufferAllocator_new(IntPtr vulkanDevice, out IntPtr returnValue);
+        public static extern ErrorType allocator_VkBlobAllocator_new(IntPtr vulkanDevice, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void allocator_VkBlobBufferAllocator_delete(IntPtr allocator);
+        public static extern void allocator_VkBlobAllocator_delete(IntPtr allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void allocator_VkBlobBufferAllocator_clear(IntPtr allocator);
+        public static extern void allocator_VkBlobAllocator_clear(IntPtr allocator);
 
     }
 

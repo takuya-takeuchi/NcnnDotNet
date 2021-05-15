@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_BATCHNORM_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/batchnorm.h>
 #include "../../shared.h"
 

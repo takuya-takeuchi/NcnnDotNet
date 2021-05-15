@@ -1,6 +1,7 @@
 $targets = @(
    "CPU",
-   "GPU"
+   "GPU",
+   "Xamarin"
 )
 
 $ScriptPath = $PSScriptRoot

@@ -2,7 +2,7 @@
 #define _CPP_DATAREADER_DATAREADER_H_
 
 #include "../export.h"
-#include <ncnn/datareader.h>
+#include <datareader.h>
 #include "../shared.h"
 
 class DataReader : ncnn::DataReader
