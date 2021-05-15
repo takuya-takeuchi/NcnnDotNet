@@ -29,23 +29,23 @@ class Config
    )
 
    $VisualStudio = "Visual Studio 15 2017"
-   
-   static $BuildLibraryWindowsHash = 
+
+   static $BuildLibraryWindowsHash =
    @{
       "NcnnDotNet.Native"     = "NcnnDotNetNative.dll";
    }
-   
-   static $BuildLibraryLinuxHash = 
+
+   static $BuildLibraryLinuxHash =
    @{
       "NcnnDotNet.Native"     = "libNcnnDotNetNative.so";
    }
-   
-   static $BuildLibraryOSXHash = 
+
+   static $BuildLibraryOSXHash =
    @{
       "NcnnDotNet.Native"     = "libNcnnDotNetNative.dylib";
    }
-   
-   static $BuildLibraryIOSHash = 
+
+   static $BuildLibraryIOSHash =
    @{
       "NcnnDotNet.Native"     = "libNcnnDotNetNative.a";
    }
@@ -327,7 +327,7 @@ class Config
       {
          $osname = $this.GetOSName()
       }
-      
+
       $target = $this._Target
       $platform = $this._Platform
       $architecture = $this.GetArchitectureName()
@@ -359,7 +359,7 @@ class Config
    {
       $architecture = $this._Architecture
       $target = $this._Target
-      
+
       if ($target -eq "arm")
       {
          if ($architecture -eq 32)
@@ -495,7 +495,7 @@ class ThirdPartyBuilder
       $current = Get-Location
 
       try
-      {  
+      {
          $Platform = $this._Config.GetPlatform()
          $Configuration = $this._Config.GetConfigurationName()
 
@@ -550,6 +550,7 @@ class ThirdPartyBuilder
          -D WITH_PROTOBUF=OFF `
          -D WITH_IPP=OFF `
          -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
          $opencvDir" -ForegroundColor Yellow
                   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                                              -D BUILD_SHARED_LIBS=OFF `
@@ -586,6 +587,7 @@ class ThirdPartyBuilder
                                              -D WITH_PROTOBUF=OFF `
                                              -D WITH_IPP=OFF `
                                              -D WITH_FFMPEG=OFF `
+                                             -D WITH_ITT=OFF `
                                              $opencvDir
                   Write-Host "   cmake build and install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
@@ -625,12 +627,13 @@ class ThirdPartyBuilder
          -D BUILD_PNG=ON `
          -D BUILD_JPEG=ON `
          -D WITH_CUDA=OFF `
-         -D WITH_GTK=ON `
-         -D WITH_GTK_2_X=ON `
+         -D WITH_GTK=OFF `
+         -D WITH_GTK_2_X=OFF `
          -D BUILD_PROTOBUF=OFF `
          -D WITH_PROTOBUF=OFF `
          -D WITH_IPP=OFF `
          -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
          $opencvDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
@@ -665,12 +668,13 @@ class ThirdPartyBuilder
                         -D BUILD_PNG=ON `
                         -D BUILD_JPEG=ON `
                         -D WITH_CUDA=OFF `
-                        -D WITH_GTK=ON `
-                        -D WITH_GTK_2_X=ON `
+                        -D WITH_GTK=OFF `
+                        -D WITH_GTK_2_X=OFF `
                         -D BUILD_PROTOBUF=OFF `
                         -D WITH_PROTOBUF=OFF `
                         -D WITH_IPP=OFF `
                         -D WITH_FFMPEG=OFF `
+                        -D WITH_ITT=OFF `
                         $opencvDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
@@ -724,12 +728,13 @@ class ThirdPartyBuilder
             -D BUILD_PNG=ON `
             -D BUILD_JPEG=ON `
             -D WITH_CUDA=OFF `
-            -D WITH_GTK=ON `
-            -D WITH_GTK_2_X=ON `
+            -D WITH_GTK=OFF `
+            -D WITH_GTK_2_X=OFF `
             -D BUILD_PROTOBUF=OFF `
             -D WITH_PROTOBUF=OFF `
             -D WITH_IPP=OFF `
             -D WITH_FFMPEG=OFF `
+            -D WITH_ITT=OFF `
             -D ANDROID_ABI=$abi `
             -D ANDROID_ARM_NEON=ON `
             -D ANDROID_PLATFORM=android-$level `
@@ -768,12 +773,13 @@ class ThirdPartyBuilder
                      -D BUILD_PNG=ON `
                      -D BUILD_JPEG=ON `
                      -D WITH_CUDA=OFF `
-                     -D WITH_GTK=ON `
-                     -D WITH_GTK_2_X=ON `
+                     -D WITH_GTK=OFF `
+                     -D WITH_GTK_2_X=OFF `
                      -D BUILD_PROTOBUF=OFF `
                      -D WITH_PROTOBUF=OFF `
                      -D WITH_IPP=OFF `
                      -D WITH_FFMPEG=OFF `
+                     -D WITH_ITT=OFF `
                      -D ANDROID_ABI=$abi `
                      -D ANDROID_ARM_NEON=ON `
                      -D ANDROID_PLATFORM=android-$level `
@@ -802,10 +808,10 @@ class ThirdPartyBuilder
       $current = Get-Location
 
       try
-      {         
+      {
          $Platform = $this._Config.GetPlatform()
          $Configuration = $this._Config.GetConfigurationName()
-   
+
          # Build opencv
          $installOpenCVDir = $this.BuildOpenCV()
          if (!(Test-Path $installOpenCVDir))
@@ -916,7 +922,7 @@ class ThirdPartyBuilder
                   {
                      Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
                   }
-               }               
+               }
             }
             "android"
             {
@@ -940,6 +946,7 @@ class ThirdPartyBuilder
             -D ANDROID_ABI=$abi `
             -D ANDROID_PLATFORM=android-$level `
             -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+            -D NCNN_DISABLE_RTTI:BOOL=OFF `
             -D OpenCV_DIR=`"${installOpenCVDir}`" `
             $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_TOOLCHAIN_FILE="${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake" `
@@ -947,6 +954,7 @@ class ThirdPartyBuilder
                      -D ANDROID_ABI=$abi `
                      -D ANDROID_PLATFORM=android-$level `
                      -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                     -D NCNN_DISABLE_RTTI:BOOL=OFF `
                      -D OpenCV_DIR="${installOpenCVDir}" `
                      $ncnnDir
 
@@ -955,7 +963,7 @@ class ThirdPartyBuilder
                Write-Host "   make install" -ForegroundColor Yellow
                make install
             }
-         }         
+         }
       }
       finally
       {
@@ -975,13 +983,13 @@ function ConfigCPU([Config]$Config)
    }
 
    $Builder = [ThirdPartyBuilder]::new($Config)
-      
+
    # Build Protobuf
    $installProtobufDir = $Builder.BuildProtobuf()
-   
+
    # Build opencv
    $installOpenCVDir = $Builder.BuildOpenCV()
-   
+
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
 
@@ -1048,13 +1056,13 @@ function ConfigVulkan([Config]$Config)
    }
 
    $Builder = [ThirdPartyBuilder]::new($Config)
-      
+
    # Build Protobuf
    $installProtobufDir = $Builder.BuildProtobuf()
-   
+
    # Build opencv
    $installOpenCVDir = $Builder.BuildOpenCV()
-   
+
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
 
@@ -1143,7 +1151,7 @@ function ConfigUWP([Config]$Config)
                ..
       }
       else
-      {         
+      {
          cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
@@ -1174,10 +1182,10 @@ function ConfigANDROID([Config]$Config)
    }
 
    $Builder = [ThirdPartyBuilder]::new($Config)
-   
+
    # Build opencv
    $installOpenCVDir = $Builder.BuildOpenCV()
-   
+
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
 
@@ -1229,7 +1237,7 @@ function ConfigIOS([Config]$Config)
             ..
    }
    else
-   {      
+   {
       Write-Host "Error: This platform can not build iOS binary" -ForegroundColor Red
       exit -1
    }
@@ -1238,7 +1246,7 @@ function ConfigIOS([Config]$Config)
 function Build([Config]$Config)
 {
    $Current = Get-Location
-   
+
    Write-Host "git submodule update --init --recursive" -ForegroundColor Yellow
    git submodule update --init --recursive
 
