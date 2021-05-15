@@ -17,7 +17,7 @@ $AndroidNativeApiLevel="24"
 $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
-$DockerDir = Join-Path $Current docker
+$DockerDir = Join-Path $NcnnDotNetRoot docker
 
 Set-Location -Path $DockerDir
 
