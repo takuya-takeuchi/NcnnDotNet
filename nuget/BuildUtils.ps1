@@ -846,7 +846,7 @@ class ThirdPartyBuilder
                   }
 
                   $exeDir = Join-Path $protobufInstallDir bin | `
-                           Join-Path -ChildPath protoc.exe
+                            Join-Path -ChildPath protoc.exe
 
                   $vs = $this._Config.GetVisualStudio()
                   $vsarc = $this._Config.GetVisualStudioArchitecture()
@@ -886,7 +886,7 @@ class ThirdPartyBuilder
                                     Join-Path -ChildPath libprotobuf.a
                   }
                   $exeDir = Join-Path $protobufInstallDir bin | `
-                           Join-Path -ChildPath protoc
+                            Join-Path -ChildPath protoc
 
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
@@ -896,7 +896,7 @@ class ThirdPartyBuilder
          -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
-            -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
@@ -910,6 +910,12 @@ class ThirdPartyBuilder
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
+
+                  # centos generates some libraries into lib64
+                  if (Test-Path "${installDir}/lib64")
+                  {
+                     Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
+                  }
                }               
             }
             "android"
