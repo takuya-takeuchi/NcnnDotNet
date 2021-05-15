@@ -1181,6 +1181,9 @@ function ConfigANDROID([Config]$Config)
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
 
+   # To inclue src/layer
+   $ncnnDir = $Config.GetNcnnRootDir()
+
    # # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
 
