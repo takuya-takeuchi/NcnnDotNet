@@ -1200,16 +1200,17 @@ function ConfigANDROID([Config]$Config)
 
    # https://github.com/Tencent/ncnn/wiki/FAQ-ncnn-throw-error#undefined-reference-to-__kmpc_xyz_xyz
    # $env:NDK_TOOLCHAIN_VERSION = 4.9
-   $env:OpenCV_DIR = "$installOpenCVDir/sdk/native/jni"
+   $env:OpenCV_DIR = "${installOpenCVDir}/sdk/native/jni"
+   $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
       Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
    -D ANDROID_ABI=$abi `
    -D ANDROID_PLATFORM=android-$level `
    -D ANDROID_CPP_FEATURES:STRING=`"exceptions rtti`" `
    -D BUILD_SHARED_LIBS=ON `
-   -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
+   -D OpenCV_DIR=${installOpenCVDir}/sdk/native/jni `
    -D OpenCV_INSTALL_DIR=`"${installOpenCVDir}`" `
    -D NCNN_VULKAN:BOOL=ON `
-   -D ncnn_DIR=`"${installNcnnDir}`" `
+   -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
    -D ncnn_SRC_DIR=`"${ncnnDir}`" `
    .." -ForegroundColor Yellow
       cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
@@ -1217,10 +1218,10 @@ function ConfigANDROID([Config]$Config)
             -D ANDROID_PLATFORM=android-$level `
             -D ANDROID_CPP_FEATURES:STRING="exceptions rtti" `
             -D BUILD_SHARED_LIBS=ON `
-            -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
+            -D OpenCV_DIR=${installOpenCVDir}/sdk/native/jni `
             -D OpenCV_INSTALL_DIR="${installOpenCVDir}" `
             -D NCNN_VULKAN:BOOL=ON `
-            -D ncnn_DIR="${installNcnnDir}" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
 }

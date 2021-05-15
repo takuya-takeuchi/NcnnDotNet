@@ -82,7 +82,7 @@ endif()
 
 # https://github.com/Tencent/ncnn/wiki/FAQ-ncnn-throw-error#undefined-reference-to-__kmpc_xyz_xyz
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
-    FIND_PACKAGE( OpenMP REQUIRED)
+    FIND_PACKAGE(OpenMP REQUIRED)
 
     if(OPENMP_FOUND)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -159,8 +159,9 @@ elseif(APPLE)
         opencv_imgproc
     )
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+    find_package(ncnn REQUIRED)
     set(STATIC_LIBRARIES
-        ${ncnn_DIR}/lib/libncnn.a
+        ncnn
         ${OpenCV_INSTALL_DIR}/sdk/native/staticlibs/${ANDROID_ABI}/libopencv_world.a
         ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libcpufeatures.a
         ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libIlmImf.a
@@ -208,22 +209,22 @@ if (NCNN_VULKAN)
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.dylib
-            ${ncnn_DIR}/lib/libglslang.a
-            ${ncnn_DIR}/lib/libGenericCodeGen.a
-            ${ncnn_DIR}/lib/libMachineIndependent.a
-            ${ncnn_DIR}/lib/libOGLCompiler.a
-            ${ncnn_DIR}/lib/libOSDependent.a
-            ${ncnn_DIR}/lib/libSPIRV.a
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )   
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
             vulkan
-            ${ncnn_DIR}/lib/libglslang.a
-            ${ncnn_DIR}/lib/libGenericCodeGen.a
-            ${ncnn_DIR}/lib/libMachineIndependent.a
-            ${ncnn_DIR}/lib/libOGLCompiler.a
-            ${ncnn_DIR}/lib/libOSDependent.a
-            ${ncnn_DIR}/lib/libSPIRV.a
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
