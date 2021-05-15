@@ -1192,6 +1192,7 @@ function ConfigANDROID([Config]$Config)
       Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
    -D ANDROID_ABI=$abi `
    -D ANDROID_PLATFORM=android-$level `
+   -D ANDROID_CPP_FEATURES:STRING=`"exceptions rtti`" `
    -D BUILD_SHARED_LIBS=ON `
    -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
    -D NCNN_VULKAN:BOOL=ON `
@@ -1199,6 +1200,7 @@ function ConfigANDROID([Config]$Config)
       cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
             -D ANDROID_ABI=$abi `
             -D ANDROID_PLATFORM=android-$level `
+            -D ANDROID_CPP_FEATURES:STRING="exceptions rtti" `
             -D BUILD_SHARED_LIBS=ON `
             -D OpenCV_DIR=$installOpenCVDir/sdk/native/jni `
             -D NCNN_VULKAN:BOOL=ON `

@@ -40,7 +40,8 @@ endif()
 # typeinfo for DataReader_: error: undefined reference to 'typeinfo for ncnn::DataReader'
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
 	set(CMAKE_C_FLAGS "-fPIC")
-	set(CMAKE_CXX_FLAGS "-fPIC -fno-rtti")
+    # use rtti to use dynamic_cast
+	set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
 # set architecture
