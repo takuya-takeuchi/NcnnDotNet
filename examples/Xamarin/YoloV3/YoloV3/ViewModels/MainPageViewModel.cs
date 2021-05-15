@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 using Prism.Commands;
 using Prism.Navigation;
+using YoloV3.Services.Interfaces;
 using YoloV3.ViewModels.Interfaces;
 
 namespace YoloV3.ViewModels
@@ -12,13 +14,21 @@ namespace YoloV3.ViewModels
     public class MainPageViewModel : ViewModelBase, IMainPageViewModel
     {
 
+        #region Fields
+
+        private readonly IDetectService _DetectService;
+
+        #endregion
+
         #region Constructors
 
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel(INavigationService navigationService,
+                                 IDetectService detectService)
             : base(navigationService)
         {
-            Title = "Yolo V3";
+            this.Title = "Yolo V3";
 
+            this._DetectService = detectService;
             this._FilePickCommand = new Lazy<DelegateCommand>(this.FilePickCommandFactory);
         }
 
@@ -38,9 +48,15 @@ namespace YoloV3.ViewModels
                     FileTypes = FilePickerFileType.Images
                 });
 
-                //Text = $"File Name: {result.FileName}";
-                var stream = await result.OpenReadAsync();
-                this.SelectedImage = ImageSource.FromStream(() => stream);
+                if (result != null)
+                {
+
+                    //Text = $"File Name: {result.FileName}";
+                    var stream = await result.OpenReadAsync();
+                    this._DetectService.Detect(result.FullPath);
+
+                    this.SelectedImage = ImageSource.FromStream(() => stream);
+                }
             });
         }
 
