@@ -2,7 +2,7 @@
 #define _CPP_OPTION_OPTION_H_
 
 #include "../export.h"
-#include <ncnn/option.h>
+#include <option.h>
 #include "../shared.h"
 
 DLLEXPORT int option_Option_new(ncnn::Option** returnValue)

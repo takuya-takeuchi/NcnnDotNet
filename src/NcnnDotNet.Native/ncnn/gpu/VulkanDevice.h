@@ -2,7 +2,7 @@
 #define _CPP_GPU_VULKANDEVICE_H_
 
 #include "../export.h"
-#include <ncnn/gpu.h>
+#include <gpu.h>
 #include "../shared.h"
 
 #if NCNN_VULKAN

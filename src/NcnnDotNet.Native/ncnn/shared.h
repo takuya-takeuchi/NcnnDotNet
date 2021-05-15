@@ -1,7 +1,7 @@
 #ifndef _CPP_SHARED_H_
 #define _CPP_SHARED_H_
 
-#include <ncnn/platform.h>
+#include <platform.h>
 #include <cstdint>
 #include <string>
 #include <vector>

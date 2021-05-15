@@ -65,6 +65,7 @@ endif()
 get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
+find_package(ncnn REQUIRED)
 set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)
 
@@ -94,13 +95,11 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
 endif()
 
 if (MSVC OR MSYS OR MINGW)
-    include_directories("${ncnn_DIR}/include"
-                        "${ncnn_SRC_DIR}/src"
+    include_directories("${ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
 else()
-    include_directories("${ncnn_DIR}/include"
-                        "${ncnn_SRC_DIR}/src"
+    include_directories("${ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
 endif()
@@ -146,20 +145,19 @@ endif()
 # STATIC_LIBRARIES
 if (MSVC OR MSYS OR MINGW)
     set(STATIC_LIBRARIES
-        ${ncnn_DIR}/lib/ncnn.lib
+        ncnn
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
-        ${ncnn_DIR}/lib/libncnn.a
+        ncnn
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
     )
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
-    find_package(ncnn REQUIRED)
     set(STATIC_LIBRARIES
         ncnn
         ${OpenCV_INSTALL_DIR}/sdk/native/staticlibs/${ANDROID_ABI}/libopencv_world.a
@@ -186,7 +184,7 @@ elseif(UNIX AND NOT APPLE)
     # https://sourceware.org/glibc/wiki/libmvec
     # But it is not linked. why?
     set(STATIC_LIBRARIES
-        ${ncnn_DIR}/lib/libncnn.a
+        ncnn
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
@@ -199,12 +197,12 @@ if (NCNN_VULKAN)
     if (MSVC OR MSYS OR MINGW)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
-            ${ncnn_DIR}/lib/glslang.lib
-            ${ncnn_DIR}/lib/GenericCodeGen.lib
-            ${ncnn_DIR}/lib/MachineIndependent.lib
-            ${ncnn_DIR}/lib/OGLCompiler.lib
-            ${ncnn_DIR}/lib/OSDependent.lib
-            ${ncnn_DIR}/lib/SPIRV.lib
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
@@ -229,12 +227,12 @@ if (NCNN_VULKAN)
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.so
-            ${ncnn_DIR}/lib/libglslang.a
-            ${ncnn_DIR}/lib/libGenericCodeGen.a
-            ${ncnn_DIR}/lib/libMachineIndependent.a
-            ${ncnn_DIR}/lib/libOGLCompiler.a
-            ${ncnn_DIR}/lib/libOSDependent.a
-            ${ncnn_DIR}/lib/libSPIRV.a
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )
     endif()
 endif()

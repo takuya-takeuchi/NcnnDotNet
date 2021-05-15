@@ -2,7 +2,7 @@
 #define _CPP_COMMAND_VKTRANSFER_H_
 
 #include "../export.h"
-#include <ncnn/command.h>
+#include <command.h>
 #include "../shared.h"
 
 #if NCNN_VULKAN

@@ -2,7 +2,7 @@
 #define _CPP_MAT_VKMAT_H_
 
 #include "../export.h"
-#include <ncnn/mat.h>
+#include <mat.h>
 #include "../shared.h"
 
 #if NCNN_VULKAN

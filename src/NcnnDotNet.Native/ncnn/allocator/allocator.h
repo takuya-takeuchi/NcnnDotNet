@@ -2,7 +2,7 @@
 #define _CPP_ALLOCATOR_ALLOCATOR_H_
 
 #include "../export.h"
-#include <ncnn/allocator.h>
+#include <allocator.h>
 #include "../shared.h"
 
 #pragma region template

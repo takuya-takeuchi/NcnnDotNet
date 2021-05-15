@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_YOLOV3DETECTIONOUTPUT_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/yolov3detectionoutput.h>
 #include "../../shared.h"
 

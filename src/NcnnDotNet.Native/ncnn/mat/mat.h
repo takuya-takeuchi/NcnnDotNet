@@ -2,7 +2,7 @@
 #define _CPP_MAT_MAT_H_
 
 #include "../export.h"
-#include <ncnn/mat.h>
+#include <mat.h>
 #include "../shared.h"
 
 DLLEXPORT int mat_Mat_new(ncnn::Mat** returnValue)

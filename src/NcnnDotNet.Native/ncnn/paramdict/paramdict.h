@@ -2,7 +2,7 @@
 #define _CPP_PARAMDICT_PARAMDICT_H_
 
 #include "../export.h"
-#include <ncnn/paramdict.h>
+#include <paramdict.h>
 #include "../shared.h"
 
 DLLEXPORT int paramdict_ParamDict_new(ncnn::ParamDict** returnValue)
