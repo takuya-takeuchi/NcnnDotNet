@@ -129,6 +129,10 @@ class Config
             $this._AndroidABI            = $setting.ANDROID_ABI
             $this._AndroidNativeAPILevel = $setting.ANDROID_NATIVE_API_LEVEL
          }
+         "ios"
+         {
+            $this._Target = $Option
+         }
       }
    }
 
@@ -185,6 +189,12 @@ class Config
    {
       return   Join-Path $this.GetRootDir() src |
                Join-Path -ChildPath protobuf
+   }
+
+   [string] GetIOSCmakeRootDir()
+   {
+      return   Join-Path $this.GetRootDir() src |
+               Join-Path -ChildPath "ios-cmake"
    }
 
    [string] GetNugetDir()
@@ -387,19 +397,14 @@ class Config
       exit -1
    }
 
-   [string] GetAVXINSTRUCTIONS()
+   [void] SetupXcode()
    {
-      return "ON"
-   }
-
-   [string] GetSSE4INSTRUCTIONS()
-   {
-      return "ON"
-   }
-
-   [string] GetSSE2INSTRUCTIONS()
-   {
-      return "OFF"
+      if (![string]::IsNullOrEmpty($env:NCNN_BUILD_XCODE))
+      {
+         # ex: DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer
+         Write-Host "Use ${env:DEVELOPER_DIR}" -ForegroundColor Blue
+         $env:DEVELOPER_DIR = $env:NCNN_BUILD_XCODE
+      }
    }
 
 }
@@ -527,6 +532,7 @@ class ThirdPartyBuilder
          -D BUILD_PERF_TESTS=OFF `
          -D BUILD_TESTS=OFF `
          -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_apps=OFF `
          -D BUILD_opencv_core=ON `
          -D BUILD_opencv_highgui=ON `
          -D BUILD_opencv_imgcodecs=ON `
@@ -564,6 +570,7 @@ class ThirdPartyBuilder
                                              -D BUILD_PERF_TESTS=OFF `
                                              -D BUILD_TESTS=OFF `
                                              -D BUILD_DOCS=OFF `
+                                             -D BUILD_opencv_apps=OFF `
                                              -D BUILD_opencv_core=ON `
                                              -D BUILD_opencv_highgui=ON `
                                              -D BUILD_opencv_imgcodecs=ON `
@@ -596,7 +603,6 @@ class ThirdPartyBuilder
                {
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
-         -D BUILD_WITH_STATIC_CRT=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
          -D BUILD_opencv_world=OFF `
          -D BUILD_opencv_java=OFF `
@@ -606,6 +612,7 @@ class ThirdPartyBuilder
          -D BUILD_PERF_TESTS=OFF `
          -D BUILD_TESTS=OFF `
          -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_apps=OFF `
          -D BUILD_opencv_core=ON `
          -D BUILD_opencv_highgui=ON `
          -D BUILD_opencv_imgcodecs=ON `
@@ -637,7 +644,6 @@ class ThirdPartyBuilder
          $opencvDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
-                        -D BUILD_WITH_STATIC_CRT=OFF `
                         -D CMAKE_INSTALL_PREFIX="${installDir}" `
                         -D BUILD_opencv_world=OFF `
                         -D BUILD_opencv_java=OFF `
@@ -647,6 +653,7 @@ class ThirdPartyBuilder
                         -D BUILD_PERF_TESTS=OFF `
                         -D BUILD_TESTS=OFF `
                         -D BUILD_DOCS=OFF `
+                        -D BUILD_opencv_apps=OFF `
                         -D BUILD_opencv_core=ON `
                         -D BUILD_opencv_highgui=ON `
                         -D BUILD_opencv_imgcodecs=ON `
@@ -695,55 +702,55 @@ class ThirdPartyBuilder
                $level = $this._Config.GetAndroidNativeAPILevel()
                $abi = $this._Config.GetAndroidABI()
 
-               Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
-            -D BUILD_SHARED_LIBS=OFF `
-            -D BUILD_WITH_STATIC_CRT=OFF `
-            -D CMAKE_INSTALL_PREFIX=`"$installDir`" `
-            -D BUILD_opencv_world=ON `
-            -D BUILD_opencv_java=OFF `
-            -D BUILD_opencv_python=OFF `
-            -D BUILD_opencv_python2=OFF `
-            -D BUILD_opencv_python3=OFF `
-            -D BUILD_PERF_TESTS=OFF `
-            -D BUILD_TESTS=OFF `
-            -D BUILD_DOCS=OFF `
-            -D BUILD_opencv_core=ON `
-            -D BUILD_opencv_highgui=ON `
-            -D BUILD_opencv_imgcodecs=ON `
-            -D BUILD_opencv_imgproc=ON `
-            -D BUILD_opencv_calib3d=OFF `
-            -D BUILD_opencv_features2d=OFF `
-            -D BUILD_opencv_flann=OFF `
-            -D BUILD_opencv_java_bindings_generator=OFF `
-            -D BUILD_opencv_ml=OFF `
-            -D BUILD_opencv_objdetect=OFF `
-            -D BUILD_opencv_photo=OFF `
-            -D BUILD_opencv_python_bindings_generator=OFF `
-            -D BUILD_opencv_shape=OFF `
-            -D BUILD_opencv_stitching=OFF `
-            -D BUILD_opencv_superres=OFF `
-            -D BUILD_opencv_video=OFF `
-            -D BUILD_opencv_videoio=ON `
-            -D BUILD_opencv_videostab=OFF `
-            -D BUILD_PNG=ON `
-            -D BUILD_JPEG=ON `
-            -D WITH_CUDA=OFF `
-            -D WITH_GTK=OFF `
-            -D WITH_GTK_2_X=OFF `
-            -D BUILD_PROTOBUF=OFF `
-            -D WITH_PROTOBUF=OFF `
-            -D WITH_IPP=OFF `
-            -D WITH_FFMPEG=OFF `
-            -D WITH_ITT=OFF `
-            -D ANDROID_ABI=$abi `
-            -D ANDROID_ARM_NEON=ON `
-            -D ANDROID_PLATFORM=android-$level `
-            $opencvDir" -ForegroundColor Yellow
+               Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
+         -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_apps=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=ON `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=ON `
+         -D BUILD_opencv_videostab=OFF `
+         -D BUILD_PNG=ON `
+         -D BUILD_JPEG=ON `
+         -D WITH_CUDA=OFF `
+         -D WITH_GTK=OFF `
+         -D WITH_GTK_2_X=OFF `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
+         -D ANDROID_ABI=$abi `
+         -D ANDROID_ARM_NEON=ON `
+         -D ANDROID_PLATFORM=android-$level `
+         $opencvDir" -ForegroundColor Yellow
                cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
                      -D CMAKE_BUILD_TYPE=$Configuration `
                      -D BUILD_SHARED_LIBS=OFF `
-                     -D BUILD_WITH_STATIC_CRT=OFF `
-                     -D CMAKE_INSTALL_PREFIX="$installDir" `
+                     -D CMAKE_INSTALL_PREFIX="${installDir}" `
                      -D BUILD_opencv_world=ON `
                      -D BUILD_opencv_java=OFF `
                      -D BUILD_opencv_python=OFF `
@@ -752,6 +759,7 @@ class ThirdPartyBuilder
                      -D BUILD_PERF_TESTS=OFF `
                      -D BUILD_TESTS=OFF `
                      -D BUILD_DOCS=OFF `
+                     -D BUILD_opencv_apps=OFF `
                      -D BUILD_opencv_core=ON `
                      -D BUILD_opencv_highgui=ON `
                      -D BUILD_opencv_imgcodecs=ON `
@@ -788,6 +796,123 @@ class ThirdPartyBuilder
                make -j4
                Write-Host "   make install" -ForegroundColor Yellow
                make install
+            }            
+            "ios"
+            {
+               Write-Host "Start Build OpenCV" -ForegroundColor Green
+
+               $opencvDir = $this._Config.GetOpenCVRootDir()
+               $opencvTarget = Join-Path $current opencv
+               New-Item $opencvTarget -Force -ItemType Directory
+               Set-Location $opencvTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+
+               $toolchain = $this._Config.GetIOSCmakeRootDir()
+               $this._Config.SetupXcode()
+               $iosTarget = $this._Config.GetTarget().ToUpper()
+
+               Write-Host "   cmake -G Xcode `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}/ios.toolchain.cmake`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_apps=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=ON `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=OFF `
+         -D BUILD_opencv_videostab=OFF `
+         -D BUILD_PNG=ON `
+         -D BUILD_JPEG=ON `
+         -D BUILD_ZLIB=ON `
+         -D BUILD_WEBP=OFF `
+         -D WITH_PNG=ON `
+         -D WITH_JPEG=ON `
+         -D WITH_ZLIB=ON `
+         -D WITH_WEBP=OFF `
+         -D WITH_CUDA=OFF `
+         -D WITH_GTK=OFF `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
+         -D PLATFORM=${iosTarget} `
+         $opencvDir" -ForegroundColor Yellow
+               cmake -G Xcode `
+                     -D CMAKE_TOOLCHAIN_FILE="${toolchain}/ios.toolchain.cmake" `
+                     -D CMAKE_BUILD_TYPE=$Configuration `
+                     -D BUILD_SHARED_LIBS=OFF `
+                     -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                     -D BUILD_opencv_world=ON `
+                     -D BUILD_opencv_java=OFF `
+                     -D BUILD_opencv_python=OFF `
+                     -D BUILD_opencv_python2=OFF `
+                     -D BUILD_opencv_python3=OFF `
+                     -D BUILD_PERF_TESTS=OFF `
+                     -D BUILD_TESTS=OFF `
+                     -D BUILD_DOCS=OFF `
+                     -D BUILD_opencv_apps=OFF `
+                     -D BUILD_opencv_core=ON `
+                     -D BUILD_opencv_highgui=ON `
+                     -D BUILD_opencv_imgcodecs=ON `
+                     -D BUILD_opencv_imgproc=ON `
+                     -D BUILD_opencv_calib3d=OFF `
+                     -D BUILD_opencv_features2d=OFF `
+                     -D BUILD_opencv_flann=OFF `
+                     -D BUILD_opencv_java_bindings_generator=OFF `
+                     -D BUILD_opencv_ml=OFF `
+                     -D BUILD_opencv_objdetect=OFF `
+                     -D BUILD_opencv_photo=OFF `
+                     -D BUILD_opencv_python_bindings_generator=OFF `
+                     -D BUILD_opencv_shape=OFF `
+                     -D BUILD_opencv_stitching=OFF `
+                     -D BUILD_opencv_superres=OFF `
+                     -D BUILD_opencv_video=OFF `
+                     -D BUILD_opencv_videoio=OFF `
+                     -D BUILD_opencv_videostab=OFF `
+                     -D BUILD_PNG=ON `
+                     -D BUILD_JPEG=ON `
+                     -D BUILD_ZLIB=ON `
+                     -D BUILD_WEBP=OFF `
+                     -D WITH_PNG=ON `
+                     -D WITH_JPEG=ON `
+                     -D WITH_ZLIB=ON `
+                     -D WITH_WEBP=OFF `
+                     -D WITH_CUDA=OFF `
+                     -D WITH_GTK=OFF `
+                     -D BUILD_PROTOBUF=OFF `
+                     -D WITH_PROTOBUF=OFF `
+                     -D WITH_IPP=OFF `
+                     -D WITH_FFMPEG=OFF `
+                     -D WITH_ITT=OFF `
+                     -D PLATFORM=${iosTarget} `
+                     $opencvDir
+               Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+               cmake --build . --config $Configuration --target install
             }
          }
 
@@ -916,12 +1041,6 @@ class ThirdPartyBuilder
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
-
-                  # centos generates some libraries into lib64
-                  if (Test-Path "${installDir}/lib64")
-                  {
-                     Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
-                  }
                }
             }
             "android"
@@ -962,6 +1081,46 @@ class ThirdPartyBuilder
                make -j4
                Write-Host "   make install" -ForegroundColor Yellow
                make install
+            }            
+            "ios"
+            {
+               Write-Host "Start Build ncnn" -ForegroundColor Green
+
+               $env:OpenCV_DIR = "$installOpenCVDir/share/OpenCV"
+
+               $ncnnDir = $this._Config.GetNcnnRootDir()
+               $ncnnTarget = Join-Path $current ncnn
+               New-Item $ncnnTarget -Force -ItemType Directory
+               Set-Location $ncnnTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+
+               $toolchain = $this._Config.GetIOSCmakeRootDir()
+               $this._Config.SetupXcode()
+               $iosTarget = $this._Config.GetTarget().ToUpper()
+
+               Write-Host "   cmake -G Xcode `
+            -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}/ios.toolchain.cmake`" `
+            -D CMAKE_BUILD_TYPE=$Configuration `
+            -D PLATFORM=${iosTarget} `
+            -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+            -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
+            -D NCNN_DISABLE_RTTI:BOOL=OFF `
+            -D OpenCV_DIR=`"${installOpenCVDir}`" `
+            $ncnnDir" -ForegroundColor Yellow
+               cmake -G Xcode `
+                     -D CMAKE_TOOLCHAIN_FILE="${toolchain}/ios.toolchain.cmake" `
+                     -D CMAKE_BUILD_TYPE=$Configuration `
+                     -D PLATFORM=${iosTarget} `
+                     -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                     -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
+                     -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                     -D OpenCV_DIR="${installOpenCVDir}" `
+                     $ncnnDir
+
+               Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+               cmake --build . --config $Configuration --target install
             }
          }
       }
@@ -1279,11 +1438,43 @@ function ConfigIOS([Config]$Config)
 {
    if ($IsMacOS)
    {
+      $Builder = [ThirdPartyBuilder]::new($Config)
+
+      # Build opencv
+      $installOpenCVDir = $Builder.BuildOpenCV()
+
+      # Build ncnn
+      $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
+
+      # To inclue src/layer
+      $ncnnDir = $Config.GetNcnnRootDir()
+
+      # # Build NcnnDotNet.Native
+      Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
+
+      $toolchain = $Config.GetIOSCmakeRootDir()
+      $Config.SetupXcode()
+      $iosTarget = $Config.GetTarget().ToUpper()
+            
+      $env:OpenCV_DIR = "${installOpenCVDir}/share/OpenCV"
+      $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
+      Write-Host "   cmake -G Xcode `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}/ios.toolchain.cmake`" `
+         -D PLATFORM=${iosTarget} `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D NCNN_VULKAN:BOOL=ON `
+         -D OpenCV_DIR=`"${installOpenCVDir}/share/OpenCV`" `
+         -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         .." -ForegroundColor Yellow
       cmake -G Xcode `
-            -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
-            -D PLATFORM=OS64COMBINED `
-            -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF `
+            -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}/ios.toolchain.cmake`" `
+            -D PLATFORM=${iosTarget} `
+            -D BUILD_SHARED_LIBS=OFF `
+            -D NCNN_VULKAN:BOOL=ON `
+            -D OpenCV_DIR="${installOpenCVDir}/share/OpenCV" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+            -D ncnn_SRC_DIR=`"${ncnnDir}`" `
             ..
    }
    else

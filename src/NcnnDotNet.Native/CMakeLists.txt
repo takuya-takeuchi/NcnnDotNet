@@ -150,6 +150,14 @@ if (MSVC OR MSYS OR MINGW)
         opencv_imgcodecs
         opencv_imgproc
     )
+elseif(iOS)
+    set(STATIC_LIBRARIES
+        ncnn
+        zlib
+        libjpeg
+        libpng
+        opencv_world
+    )
 elseif(APPLE)
     set(STATIC_LIBRARIES
         ncnn
@@ -204,6 +212,16 @@ if (NCNN_VULKAN)
             OSDependent
             SPIRV
         )
+    elseif(iOS)
+        list(APPEND STATIC_LIBRARIES
+            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
+        )   
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.dylib
