@@ -44,11 +44,6 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
 	set(CMAKE_CXX_FLAGS "-fPIC")
 endif()
 
-# ios does not support libstdc++
-if("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi"
-endif()
-
 # set architecture
 if (NOT ${CMAKE_GENERATOR} MATCHES "Visual Studio")
     if ("${ARCH_TYPE}" STREQUAL "32")

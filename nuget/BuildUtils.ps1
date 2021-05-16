@@ -863,7 +863,10 @@ class ThirdPartyBuilder
 
                $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
 
+               # use libc++ rather than libstdc++
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++`" `
          -D CMAKE_SYSTEM_NAME=iOS `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
@@ -914,6 +917,8 @@ class ThirdPartyBuilder
          -D WITH_ITT=OFF `
          $opencvDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
+                     -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" `
+                     -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++" `
                      -D CMAKE_SYSTEM_NAME=iOS `
                      -D BUILD_SHARED_LIBS=OFF `
                      -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
@@ -1195,7 +1200,10 @@ class ThirdPartyBuilder
 
                $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
 
+               # use libc++ rather than libstdc++
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++`" `
          -D CMAKE_SYSTEM_NAME=iOS `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
@@ -1209,6 +1217,8 @@ class ThirdPartyBuilder
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
+                     -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" `
+                     -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++" `
                      -D CMAKE_SYSTEM_NAME=iOS `
                      -D BUILD_SHARED_LIBS=OFF `
                      -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
@@ -1608,11 +1618,14 @@ function ConfigIOS([Config]$Config)
       $env:OpenCV_DIR = "${installOpenCVDir}/share/OpenCV"
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
+      # use libc++ rather than libstdc++
       Write-Host "   cmake `
          -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
          -D CMAKE_TOOLCHAIN_FILE=`"${toolchainDir}/${osxArchitectures}-ios.cmake`" `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++`" `
          -D NCNN_VULKAN:BOOL=${vulkanOnOff} `
          -D OpenCV_DIR=`"${installOpenCVDir}/share/OpenCV`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
@@ -1624,6 +1637,8 @@ function ConfigIOS([Config]$Config)
             -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
             -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
             -D CMAKE_TOOLCHAIN_FILE="${toolchainDir}/${osxArchitectures}-ios.cmake" `
+            -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" `
+            -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++" `
             -D BUILD_SHARED_LIBS=OFF `
             -D NCNN_VULKAN:BOOL=${vulkanOnOff} `
             -D OpenCV_DIR="${installOpenCVDir}/share/OpenCV" `
