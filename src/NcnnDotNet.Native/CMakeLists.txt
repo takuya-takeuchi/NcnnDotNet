@@ -228,7 +228,7 @@ if (NCNN_VULKAN)
         )
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
         list(APPEND STATIC_LIBRARIES
-            $ENV{VULKAN_SDK}/MoltenVK/iOS/static/libMoltenVK.a
+            ${Vulkan_LIBRARY}
             glslang
             GenericCodeGen
             MachineIndependent
@@ -269,9 +269,15 @@ if (NCNN_VULKAN)
     endif()
 endif()
 
-add_library(${PROJ_NAME} SHARED ${HEADERS}
-                                ${SOURCES}
-                                ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    add_library(${PROJ_NAME} ${HEADERS}
+                             ${SOURCES}
+                             ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+else ()
+    add_library(${PROJ_NAME} SHARED ${HEADERS}
+                                    ${SOURCES}
+                                    ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+endif()
 
 target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 

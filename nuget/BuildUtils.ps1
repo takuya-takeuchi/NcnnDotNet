@@ -412,6 +412,42 @@ class Config
       return $this._OSXArchitectures
    }
 
+   [string] GetIOSSDK([string]$osxArchitectures, [string]$developerDir)
+   {      
+      switch ($osxArchitectures)
+      {
+         "arm64e"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "arm64"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "arm"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "armv7"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "armv7s"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "i386"
+         {
+            return "${developerDir}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+         }
+         "x86_64"
+         {
+            return "${developerDir}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+         }
+      }
+      return $this._OSXArchitectures
+   }
+
 }
 
 function CallVisualStudioDeveloperConsole()
@@ -818,7 +854,7 @@ class ThirdPartyBuilder
                $developerDir = $this._Config.GetDeveloperDir()
                $osxArchitectures = $this._Config.GetOSXArchitectures()
 
-               $OSX_SYSROOT = "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+               $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
 
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D CMAKE_SYSTEM_NAME=iOS `
@@ -1109,7 +1145,48 @@ class ThirdPartyBuilder
                $developerDir = $this._Config.GetDeveloperDir()
                $osxArchitectures = $this._Config.GetOSXArchitectures()
 
-               $OSX_SYSROOT = "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+               $vulkanOnOff = "ON"
+               $targetPlatform = ""
+               switch ($osxArchitectures)
+               {
+                  "arm64e"
+                  {
+                     $vulkanOnOff = "ON"
+                     $targetPlatform = "ios-arm64"
+                  }
+                  "arm64"
+                  {
+                     $vulkanOnOff = "ON"
+                     $targetPlatform = "ios-arm64"
+                  }
+                  "arm"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "armv7"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "armv7s"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "i386"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "x86_64"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+               }
+
+               $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
 
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D CMAKE_SYSTEM_NAME=iOS `
@@ -1121,7 +1198,7 @@ class ThirdPartyBuilder
          -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
          -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
-         -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/static/libMoltenVK.a`" `
+         -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1134,7 +1211,7 @@ class ThirdPartyBuilder
                      -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
                      -D NCNN_DISABLE_RTTI:BOOL=OFF `
                      -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
-                     -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/static/libMoltenVK.a" `
+                     -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
                      -D OpenCV_DIR="${installOpenCVDir}" `
                      $ncnnDir
 
@@ -1460,28 +1537,46 @@ function ConfigIOS([Config]$Config)
    {
       $Builder = [ThirdPartyBuilder]::new($Config)
 
+      $osxArchitectures = $Config.GetOSXArchitectures()
+
       $vulkanOnOff = "ON"
-      switch ($Platform)
+      $targetPlatform = ""
+      switch ($osxArchitectures)
       {
+         "arm64e"
+         {
+            $vulkanOnOff = "ON"
+            $targetPlatform = "ios-arm64"
+         }
+         "arm64"
+         {
+            $vulkanOnOff = "ON"
+            $targetPlatform = "ios-arm64"
+         }
          "arm"
          {
             $vulkanOnOff = "OFF"
+            $targetPlatform = ""
          }
          "armv7"
          {
             $vulkanOnOff = "OFF"
+            $targetPlatform = ""
          }
          "armv7s"
          {
             $vulkanOnOff = "OFF"
+            $targetPlatform = ""
          }
          "i386"
          {
             $vulkanOnOff = "OFF"
+            $targetPlatform = ""
          }
          "x86_64"
          {
             $vulkanOnOff = "OFF"
+            $targetPlatform = ""
          }
       }
 
@@ -1501,12 +1596,12 @@ function ConfigIOS([Config]$Config)
       $developerDir = $Config.GetDeveloperDir()
       $osxArchitectures = $Config.GetOSXArchitectures()
 
-      $OSX_SYSROOT = "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+      $OSX_SYSROOT = $Config.GetIOSSDK($osxArchitectures, $developerDir)
             
       $env:OpenCV_DIR = "${installOpenCVDir}/share/OpenCV"
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
-      Write-Host "   cmake -D CMAKE_BUILD_TYPE=${Configuration} `
+      Write-Host "   cmake `
          -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
@@ -1516,10 +1611,9 @@ function ConfigIOS([Config]$Config)
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
-         -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/static/libMoltenVK.a`" `
+         -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
          .." -ForegroundColor Yellow
-      cmake -D CMAKE_BUILD_TYPE=${Configuration} `
-            -D CMAKE_SYSTEM_NAME=iOS `
+      cmake -D CMAKE_SYSTEM_NAME=iOS `
             -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
             -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
             -D CMAKE_TOOLCHAIN_FILE="${toolchainDir}/${osxArchitectures}-ios.cmake" `
@@ -1529,7 +1623,7 @@ function ConfigIOS([Config]$Config)
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
             -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
-            -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/static/libMoltenVK.a" `
+            -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
             ..
    }
    else
