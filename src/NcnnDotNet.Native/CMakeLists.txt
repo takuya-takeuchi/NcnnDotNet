@@ -98,10 +98,24 @@ if (MSVC OR MSYS OR MINGW)
     include_directories("${ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
-else()
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "$ENV{VULKAN_SDK}/MoltenVK/include")
+elseif(APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "$ENV{VULKAN_SDK}/macOS/include")
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     include_directories("${ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
+elseif(UNIX AND NOT APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "$ENV{VULKAN_SDK}/include")
+else()
+    message(FATAL_ERROR "Failed to include directories")
 endif()
 
 # Set /bigobj for MSVC
@@ -214,7 +228,7 @@ if (NCNN_VULKAN)
         )
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
         list(APPEND STATIC_LIBRARIES
-            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            $ENV{VULKAN_SDK}/MoltenVK/iOS/static/libMoltenVK.a
             glslang
             GenericCodeGen
             MachineIndependent
@@ -224,7 +238,7 @@ if (NCNN_VULKAN)
         )   
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
-            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            $ENV{VULKAN_SDK}/macOS/lib/libvulkan.dylib
             glslang
             GenericCodeGen
             MachineIndependent

@@ -16,7 +16,7 @@ $NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
 
 $BuildSourceHash = [Config]::GetBinaryLibraryOSXHash()
 
-$VulkanSDKDir = $env:VULKAN_SDK
+$VulkanSDKDir = ${env:VULKAN_SDK}
 if ([string]::IsNullOrEmpty($VulkanSDKDir))
 {
    Write-Host "Environmental Value 'VULKAN_SDK' is not defined." -ForegroundColor Yellow
@@ -27,25 +27,13 @@ if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
    Write-Host "Environmental Value 'VULKAN_SDK' does not exist." -ForegroundColor Yellow
 }
 
-# OS - to build for iOS (armv7, armv7s, arm64) DEPRECATED in favour of OS64
-# OS64 - to build for iOS (arm64 only)
-# OS64COMBINED - to build for iOS & iOS Simulator (FAT lib) (arm64, x86_64)
-# SIMULATOR - to build for iOS simulator 32 bit (i386) DEPRECATED
-# SIMULATOR64 - to build for iOS simulator 64 bit (x86_64)
-# SIMULATORARM64 - to build for iOS simulator 64 bit (arm64)
-# TVOS - to build for tvOS (arm64)
-# TVOSCOMBINED - to build for tvOS & tvOS Simulator (arm64, x86_64)
-# SIMULATOR_TVOS - to build for tvOS Simulator (x86_64)
-# WATCHOS - to build for watchOS (armv7k, arm64_32)
-# WATCHOSCOMBINED - to build for watchOS & Simulator (armv7k, arm64_32, i386)
-# SIMULATOR_WATCHOS - to build for watchOS Simulator (i386)
-# MAC - to build for macOS (x86_64)
-# MAC_ARM64 - to build for macOS on Apple Silicon (arm64)
-# MAC_CATALYST - to build iOS for Mac (Catalyst, x86_64)
-# MAC_CATALYST_ARM64 - to build iOS for Mac on Apple Silicon (Catalyst, arm64)
 $BuildTargets = @()
-# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 64; RID = "$OperatingSystem-x64"; }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";  Architecture = 64; Option = "os64" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan";  Architecture = 64; Option = "arm64"  }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan";  Architecture = 64; Option = "arm64e" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 32; Option = "armv7s" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 32; Option = "armv7"  }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 64; Option = "x86_64" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 32; Option = "i386"   }
 
 foreach($BuildTarget in $BuildTargets)
 {
