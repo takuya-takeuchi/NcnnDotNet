@@ -47,7 +47,7 @@ class Config
 
    static $BuildLibraryIOSHash =
    @{
-      "NcnnDotNet.Native"     = "libNcnnDotNetNative.a";
+      "NcnnDotNet.Native"     = "libNcnnDotNetNative_merged.a";
    }
 
    [string]   $_Root
@@ -1695,6 +1695,62 @@ function Build([Config]$Config)
    $cofiguration = $Config.GetConfigurationName()
    Write-Host "cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
    cmake --build . --config ${cofiguration}
+
+   $Platform = $Config.GetPlatform()
+
+   # Post build 
+   switch ($Platform)
+   {
+      "ios"
+      {
+         $BuildTargets = @()
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64e";  Vulkan = $True; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64";   Vulkan = $True; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm";     Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7";   Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7s";  Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "i386";    Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "x86_64";  Vulkan = $False; }
+
+         foreach($BuildTarget in $BuildTargets)
+         {
+            $platform = $BuildTarget.Platform
+            $vulkan = $BuildTarget.Vulkan
+
+            if (Test-Path "libNcnnDotNetNative_merged.a")
+            {
+               Remove-Item "libNcnnDotNetNative_merged.a"
+            }
+
+            if ($vulkan)
+            {
+               libtool -o "libNcnnDotNetNative_merged.a" `
+                           "libNcnnDotNetNative.a" `
+                           "opencv/install/lib/libopencv_world.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                           "ncnn/install/lib/libMachineIndependent.a" `
+                           "ncnn/install/lib/libOGLCompiler.a" `
+                           "ncnn/install/lib/libncnn.a" `
+                           "ncnn/install/lib/libOSDependent.a" `
+                           "ncnn/install/lib/libGenericCodeGen.a" `
+                           "ncnn/install/lib/libSPIRV.a" `
+                           "ncnn/install/lib/libglslang.a"
+            }
+            else
+            {
+               libtool -o "libNcnnDotNetNative_merged.a" `
+                           "libNcnnDotNetNative.a" `
+                           "opencv/install/lib/libopencv_world.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                           "ncnn/install/lib/libncnn.a"
+            }
+         }
+      }
+   }
 
    # Move to Root directory
    Set-Location -Path $Current
