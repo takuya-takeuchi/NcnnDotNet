@@ -27,13 +27,24 @@ if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
    Write-Host "Environmental Value 'VULKAN_SDK' does not exist." -ForegroundColor Yellow
 }
 
+$DeveloperDir = ${env:DEVELOPER_DIR}
+if ([string]::IsNullOrEmpty($DeveloperDir))
+{
+   Write-Host "Environmental Value 'DEVELOPER_DIR' is not defined." -ForegroundColor Yellow
+}
+
+if ($DeveloperDir -And !(Test-Path $DeveloperDir))
+{
+   Write-Host "Environmental Value 'DEVELOPER_DIR' does not exist." -ForegroundColor Yellow
+}
+
 $BuildTargets = @()
 $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64"  }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64e" }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7s" }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7"  }
+# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64e" }
+# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7s" }
+# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7"  }
 $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 64; Option = "x86_64" }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 32; Option = "i386"   }
+# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 32; Option = "i386"   }
 
 foreach($BuildTarget in $BuildTargets)
 {
