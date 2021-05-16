@@ -87,5 +87,19 @@ foreach($BuildTarget in $BuildTargets)
    }
 }
 
+# create fat binary
+Set-Location $ScriptPath
+foreach ($key in $BuildSourceHash.keys)
+{
+   libtool -static `
+           "artifacts/ios/runtimes/arm64/native/${key}" `
+         #   "artifacts/ios/runtimes/arm64e/native/${key}" `
+         #   "artifacts/ios/runtimes/armv7/native/${key}" `
+         #   "artifacts/ios/runtimes/armv7s/native/${key}" `
+         #   "artifacts/ios/runtimes/i386/native/${key}" `
+           "artifacts/ios/runtimes/x86_64/native/${key}" `
+           -o "artifacts/ios/runtimes/fat/native/${key}"
+}
+
 # Move to Root directory 
 Set-Location -Path $Current
