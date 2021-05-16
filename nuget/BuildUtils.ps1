@@ -262,7 +262,14 @@ class Config
       }
       elseif ($global:IsMacOS)
       {
-         $os = "osx"
+         if (![string]::IsNullOrEmpty($this._OSXArchitectures))
+         {
+            $os = "ios"
+         }
+         else
+         {
+            $os = "osx"
+         }
       }
       elseif ($global:IsLinux)
       {

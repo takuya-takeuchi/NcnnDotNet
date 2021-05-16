@@ -14,7 +14,7 @@ $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
 
-$BuildSourceHash = [Config]::GetBinaryLibraryOSXHash()
+$BuildSourceHash = [Config]::GetBinaryLibraryIOSHash()
 
 $VulkanSDKDir = ${env:VULKAN_SDK}
 if ([string]::IsNullOrEmpty($VulkanSDKDir))
