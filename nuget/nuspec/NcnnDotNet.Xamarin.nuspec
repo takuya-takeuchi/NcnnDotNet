@@ -10,7 +10,7 @@
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/takuya-takeuchi/NcnnDotNet</projectUrl>
     <icon>images/nn128.png</icon>
-    <description>ncnn wrapper library written in C++ and C# for Xamarin.Android</description>
+    <description>ncnn wrapper library written in C++ and C# for Xamarin.Android and Xamarin.iOS</description>
     <releaseNotes></releaseNotes>
     <copyright>© Takuya Takeuchi 2019-2021</copyright>
     <tags>ncnn .net neural-network</tags>
@@ -30,6 +30,11 @@
     <file src="../artifacts/android/runtimes/arm64-v8a/native/libNcnnDotNetNative.so" target="native/android/arm64-v8a" />
     <file src="../artifacts/android/runtimes/x86/native/libNcnnDotNetNative.so" target="native/android/x86" />
     <file src="../artifacts/android/runtimes/x86_64/native/libNcnnDotNetNative.so" target="native/android/x86_64" />
+
+    <!-- iOS -->
+    <file src="build/NcnnDotNet.iOS.targets" target="build/XamariniOS/NcnnDotNet.Xamarin.targets"/>
+    <file src="../../src/NcnnDotNet/bin/Release/netstandard2.0/NcnnDotNet.dll" target="lib/XamariniOS" />
+    <file src="../artifacts/ios/runtimes/fat/native/libNcnnDotNetNative.a" target="native/ios" />
 
     <!-- license -->
     <file src="../../LICENSE.txt" target="" />
