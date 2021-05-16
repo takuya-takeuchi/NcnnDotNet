@@ -33,7 +33,7 @@
 
     <!-- iOS -->
     <file src="build/NcnnDotNet.iOS.targets" target="build/XamariniOS/NcnnDotNet.Xamarin.targets"/>
-    <file src="../../src/NcnnDotNet/bin/Release/netstandard2.0/NcnnDotNet.dll" target="lib/XamariniOS" />
+    <file src="../../src/NcnnDotNet/bin/Release_Static/netstandard2.0/NcnnDotNet.dll" target="lib/XamariniOS" />
     <file src="../artifacts/ios/runtimes/fat/native/libNcnnDotNetNative.a" target="native/ios" />
 
     <!-- license -->
