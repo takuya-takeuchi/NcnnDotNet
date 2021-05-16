@@ -91,14 +91,15 @@ foreach($BuildTarget in $BuildTargets)
 Set-Location $ScriptPath
 foreach ($key in $BuildSourceHash.keys)
 {
-         #   "artifacts/ios/runtimes/arm64e/native/${key}" `
-         #   "artifacts/ios/runtimes/armv7/native/${key}" `
-         #   "artifacts/ios/runtimes/armv7s/native/${key}" `
-         #   "artifacts/ios/runtimes/i386/native/${key}" `
+   $dll = $BuildSourceHash[$key]
+         #   "artifacts/ios/runtimes/arm64e/native/${dll}" `
+         #   "artifacts/ios/runtimes/armv7/native/${dll}" `
+         #   "artifacts/ios/runtimes/armv7s/native/${dll}" `
+         #   "artifacts/ios/runtimes/i386/native/${dll}" `
    libtool -static `
-           "artifacts/ios/runtimes/arm64/native/${key}" `
-           "artifacts/ios/runtimes/x86_64/native/${key}" `
-           -o "artifacts/ios/runtimes/fat/native/${key}"
+           "artifacts/ios/runtimes/arm64/native/${dll}" `
+           "artifacts/ios/runtimes/x86_64/native/${dll}" `
+           -o "artifacts/ios/runtimes/fat/native/${dll}"
 }
 
 # Move to Root directory 
