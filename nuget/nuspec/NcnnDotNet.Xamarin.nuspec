@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NcnnDotNet.Xamarin</id>
-    <version>0.0.0.20210417</version>
+    <version>0.0.0.20210518</version>
     <title>NcnnDotNet for Xamarin</title>
     <authors>Takuya Takeuchi</authors>
     <owners>Takuya Takeuchi</owners>
@@ -34,7 +34,7 @@
     <!-- iOS -->
     <file src="build/NcnnDotNet.iOS.targets" target="build/XamariniOS/NcnnDotNet.Xamarin.targets"/>
     <file src="../../src/NcnnDotNet/bin/Release_Static/netstandard2.0/NcnnDotNet.dll" target="lib/XamariniOS" />
-    <file src="../artifacts/ios/runtimes/fat/native/libNcnnDotNetNative.a" target="native/ios" />
+    <file src="../artifacts/ios/runtimes/fat/native/libNcnnDotNetNative_merged.a" target="native/ios" />
 
     <!-- license -->
     <file src="../../LICENSE.txt" target="" />

@@ -18,9 +18,9 @@ $dest = Join-Path $source bin | `
         Join-Path -ChildPath Release_Static
 if (Test-path($dest))
 {
-   Remove-Item -Path "$dest" -Recurse -Force > $null
+   Remove-Item -Path "${dest}" -Recurse -Force > $null
 }
-Copy-Item -Recurse "${output}/*" $dest
+Move-Item "${output}" "${dest}"
 # build for general
 dotnet build -c Release ${source}
 
