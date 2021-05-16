@@ -28,18 +28,19 @@ if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
 }
 
 $BuildTargets = @()
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan";  Architecture = 64; Option = "arm64"  }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan";  Architecture = 64; Option = "arm64e" }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 32; Option = "armv7s" }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 32; Option = "armv7"  }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 64; Option = "x86_64" }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";     Architecture = 32; Option = "i386"   }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64"  }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64e" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7s" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7"  }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 64; Option = "x86_64" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 32; Option = "i386"   }
 
 foreach($BuildTarget in $BuildTargets)
 {
    $platform = $BuildTarget.Platform
    $target = $BuildTarget.Target
    $architecture = $BuildTarget.Architecture
+   $device = $BuildTarget.Device
    $option = $BuildTarget.Option
 
    $Config = [Config]::new($NcnnDotNetRoot, "Release", $target, $architecture, $platform, $option)
@@ -71,7 +72,7 @@ foreach($BuildTarget in $BuildTargets)
       $dll = $BuildSourceHash[$key]
       $dstDir = Join-Path $Current $libraryDir
 
-      CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $target
+      CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $option
    }
 }
 
