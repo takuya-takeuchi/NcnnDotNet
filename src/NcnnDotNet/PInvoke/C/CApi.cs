@@ -219,6 +219,7 @@ namespace NcnnDotNet
         public static extern void c_ncnn_paramdict_set_array(ncnn_paramdict_t pd, int id, ncnn_mat_t v);
 
         #endregion
+
         #region datareader
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
@@ -242,7 +243,7 @@ namespace NcnnDotNet
         public static extern ncnn_modelbin_t c_ncnn_modelbin_create_from_datareader(ncnn_datareader_t dr);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ncnn_modelbin_t c_ncnn_modelbin_create_from_mat_array(ncnn_mat_t* weights, int n);
+        public static extern ncnn_modelbin_t c_ncnn_modelbin_create_from_mat_array(IntPtr[] weights, int n);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void c_ncnn_modelbin_destroy(ncnn_modelbin_t mb);
