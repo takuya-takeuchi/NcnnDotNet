@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace NcnnDotNet.C
@@ -282,6 +283,43 @@ namespace NcnnDotNet.C
                 throw new ArgumentNullException(nameof(mat));
 
             return NativeMethods.c_ncnn_mat_get_channel_data(mat.NativePtr, channel);
+        }
+
+        #endregion
+
+        #region Blob
+
+        public static string BlobGetName(Blob blob)
+        {
+            if (blob == null)
+                throw new ArgumentNullException(nameof(blob));
+
+            var ret = NativeMethods.c_ncnn_blob_get_name(blob.NativePtr);
+            return Marshal.PtrToStringAnsi(ret);
+        }
+
+        public static int BlobGetProducer(Blob blob)
+        {
+            if (blob == null)
+                throw new ArgumentNullException(nameof(blob));
+
+            return NativeMethods.c_ncnn_blob_get_producer(blob.NativePtr);
+        }
+
+        public static int BlobGetConsumer(Blob blob)
+        {
+            if (blob == null)
+                throw new ArgumentNullException(nameof(blob));
+
+            return NativeMethods.c_ncnn_blob_get_consumer(blob.NativePtr);
+        }
+
+        public static void BlobGetShape(Blob blob, out int dims, out int width, out int height, out int channel)
+        {
+            if (blob == null)
+                throw new ArgumentNullException(nameof(blob));
+
+            NativeMethods.c_ncnn_blob_get_shape(blob.NativePtr, out dims, out width, out height, out channel);
         }
 
         #endregion
