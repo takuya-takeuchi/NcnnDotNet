@@ -230,8 +230,8 @@ namespace NcnnDotNet
         // [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         // public static extern ncnn_datareader_t c_ncnn_datareader_create_from_stdio(FILE* fp);
 
-        // [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        // public static extern ncnn_datareader_t c_ncnn_datareader_create_from_memory(unsigned char** mem);
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ncnn_datareader_t c_ncnn_datareader_create_from_memory(byte[] mem);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void c_ncnn_datareader_destroy(ncnn_datareader_t dr);

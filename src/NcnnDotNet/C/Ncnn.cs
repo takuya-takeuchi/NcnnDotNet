@@ -497,6 +497,37 @@ namespace NcnnDotNet.C
 
         #endregion
 
+        #region DataReader
+
+        public static DataReader DataReaderCreate()
+        {
+            var paramDict = NativeMethods.c_ncnn_datareader_create();
+            return new DataReader(paramDict);
+        }
+
+        public static void DataReaderDestroy(DataReader dataReader)
+        {
+            if (dataReader == null)
+                throw new ArgumentNullException(nameof(dataReader));
+
+            NativeMethods.c_ncnn_datareader_destroy(dataReader.NativePtr);
+        }
+
+        // ToDo
+        // [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        // public static extern ncnn_datareader_t c_ncnn_datareader_create_from_stdio(FILE* fp);
+
+        public static DataReader DataReaderCreateFromMemory(byte[] memory)
+        {
+            if (memory == null) 
+                throw new ArgumentNullException(nameof(memory));
+
+            var paramDict = NativeMethods.c_ncnn_datareader_create_from_memory(memory);
+            return new DataReader(paramDict);
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties

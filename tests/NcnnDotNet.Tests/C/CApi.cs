@@ -13,7 +13,7 @@ namespace NcnnDotNet.Tests.C
         #region Allocator
 
         [Fact]
-        public void AllocatorCreatePoolAllocator()
+        public void AllocatorCreatePoolAllocatorDestroy()
         {
             var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
             Assert.NotNull(allocator);
@@ -22,18 +22,9 @@ namespace NcnnDotNet.Tests.C
         }
 
         [Fact]
-        public void AllocatorCreateUnlockedPoolAllocator()
+        public void AllocatorCreateUnlockedPoolAllocatorDestroy()
         {
             var allocator = NcnnDotNet.C.Ncnn.AllocatorCreateUnlockedPoolAllocator();
-            Assert.NotNull(allocator);
-
-            NcnnDotNet.C.Ncnn.AllocatorDestroy(allocator);
-        }
-
-        [Fact]
-        public void AllocatorDestroy()
-        {
-            var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
             Assert.NotNull(allocator);
 
             NcnnDotNet.C.Ncnn.AllocatorDestroy(allocator);
@@ -58,16 +49,7 @@ namespace NcnnDotNet.Tests.C
         #region Option
 
         [Fact]
-        public void OptionCreate()
-        {
-            var ret = NcnnDotNet.C.Ncnn.OptionCreate();
-            Assert.NotNull(ret);
-
-            NcnnDotNet.C.Ncnn.OptionDestroy(ret);
-        }
-
-        [Fact]
-        public void OptionDestroy()
+        public void OptionCreateDestroy()
         {
             var ret = NcnnDotNet.C.Ncnn.OptionCreate();
             Assert.NotNull(ret);
@@ -442,13 +424,6 @@ namespace NcnnDotNet.Tests.C
             var mat = NcnnDotNet.C.Ncnn.MatCreateExternal3DElem(100 / 4, 100 / 4, 3, data, 4, 1);
 
             Marshal.FreeCoTaskMem(data);
-            NcnnDotNet.C.Ncnn.MatDestroy(mat);
-        }
-
-        [Fact]
-        public void MatDestroy()
-        {
-            var mat = NcnnDotNet.C.Ncnn.MatCreate1D(100);
             NcnnDotNet.C.Ncnn.MatDestroy(mat);
         }
 
@@ -940,7 +915,7 @@ namespace NcnnDotNet.Tests.C
                 NcnnDotNet.C.Ncnn.MatDestroy(mat);
             }
         }
-        
+
         [Fact]
         public void MatFromPixelsException()
         {
@@ -1480,16 +1455,7 @@ namespace NcnnDotNet.Tests.C
         #region ParamDict
 
         [Fact]
-        public void ParamDictCreate()
-        {
-            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
-            Assert.NotNull(paramDict);
-
-            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
-        }
-
-        [Fact]
-        public void ParamDictDestroy()
+        public void ParamDictCreateDestroy()
         {
             var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
             Assert.NotNull(paramDict);
@@ -1715,6 +1681,42 @@ namespace NcnnDotNet.Tests.C
             {
                 NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
             }
+        }
+
+        #endregion
+
+        #region DataReader
+
+        [Fact]
+        public void DataReaderCreateDestroy()
+        {
+            var dataReader = NcnnDotNet.C.Ncnn.DataReaderCreate();
+            Assert.NotNull(dataReader);
+
+            NcnnDotNet.C.Ncnn.DataReaderDestroy(dataReader);
+        }
+
+        [Fact]
+        public void DataReaderDestroyException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.DataReaderDestroy(null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.DataReaderDestroy)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void DataReaderCreateFromMemory()
+        {
+            var dataReader = NcnnDotNet.C.Ncnn.DataReaderCreateFromMemory(new byte[100]);
+            Assert.NotNull(dataReader);
+
+            NcnnDotNet.C.Ncnn.DataReaderDestroy(dataReader);
         }
 
         #endregion
