@@ -418,6 +418,85 @@ namespace NcnnDotNet.C
 
         #endregion
 
+        #region ParamDict
+
+        public static ParamDict ParamDictCreate()
+        {
+            var paramDict = NativeMethods.c_ncnn_paramdict_create();
+            return new ParamDict(paramDict);
+        }
+
+        public static void ParamDictDestroy(ParamDict paramDict)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+
+            NativeMethods.c_ncnn_paramdict_destroy(paramDict.NativePtr);
+        }
+
+        public static ParamDictType ParamDictGetType(ParamDict paramDict, int id)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+
+            return (ParamDictType)NativeMethods.c_ncnn_paramdict_get_type(paramDict.NativePtr, id);
+        }
+
+        public static int ParamDictGetInt(ParamDict paramDict, int id, int defaultValue)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+
+            return NativeMethods.c_ncnn_paramdict_get_int(paramDict.NativePtr, id, defaultValue);
+        }
+
+        public static float ParamDictGetFloat(ParamDict paramDict, int id, float defaultValue)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+
+            return NativeMethods.c_ncnn_paramdict_get_float(paramDict.NativePtr, id, defaultValue);
+        }
+
+        public static Mat ParamDictGetArray(ParamDict paramDict, int id, Mat defaultValue)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+            if (defaultValue == null)
+                throw new ArgumentNullException(nameof(defaultValue));
+
+            var ret = NativeMethods.c_ncnn_paramdict_get_array(paramDict.NativePtr, id, defaultValue.NativePtr);
+            return new Mat(ret);
+        }
+
+        public static void ParamDictSetInt(ParamDict paramDict, int id, int value)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+
+            NativeMethods.c_ncnn_paramdict_set_int(paramDict.NativePtr, id, value);
+        }
+
+        public static void ParamDictSetFloat(ParamDict paramDict, int id, float value)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+
+            NativeMethods.c_ncnn_paramdict_set_float(paramDict.NativePtr, id, value);
+        }
+
+        public static void ParamDictSetArray(ParamDict paramDict, int id, Mat value)
+        {
+            if (paramDict == null)
+                throw new ArgumentNullException(nameof(paramDict));
+            if (value == null)
+                throw new ArgumentNullException(nameof(value));
+
+            NativeMethods.c_ncnn_paramdict_set_array(paramDict.NativePtr, id, value.NativePtr);
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties

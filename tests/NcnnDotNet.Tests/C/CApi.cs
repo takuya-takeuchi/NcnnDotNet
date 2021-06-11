@@ -912,78 +912,6 @@ namespace NcnnDotNet.Tests.C
 
         #endregion
 
-        private sealed class PixelDataPattern
-        {
-
-            public int Width { get; set; }
-            public int Height { get; set; }
-            public int Stride { get; set; }
-            public int Channel { get; set; }
-            public PixelType Type { get; set; }
-            public int TargetWidth { get; set; }
-            public int TargetHeight { get; set; }
-            public int TargetStride { get; set; }
-            public int RoiX { get; set; }
-            public int RoiY { get; set; }
-            public int RoiWidth { get; set; }
-            public int RoiHeight { get; set; }
-
-        }
-
-        private static IEnumerable<PixelDataPattern> CreatePattern()
-        {
-            return new[]
-            {
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Gray },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Gray },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Gray },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Gray },
-            };
-        }
-
-        private static IEnumerable<PixelDataPattern> CreatePattern2()
-        {
-            return new[]
-            {
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
-                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
-            };
-        }
-
         #region Mat Pixel
 
         //[Fact]
@@ -1542,6 +1470,330 @@ namespace NcnnDotNet.Tests.C
         }
 
         #endregion
+
+        #region Blob
+
+
+
+        #endregion
+
+        #region ParamDict
+
+        [Fact]
+        public void ParamDictCreate()
+        {
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+            Assert.NotNull(paramDict);
+
+            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+        }
+
+        [Fact]
+        public void ParamDictDestroy()
+        {
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+            Assert.NotNull(paramDict);
+
+            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+        }
+
+        [Fact]
+        public void ParamDictDestroyException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictDestroy(null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictDestroy)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ParamDictGetType()
+        {
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+            Assert.NotNull(paramDict);
+
+            NcnnDotNet.C.Ncnn.ParamDictSetInt(paramDict, 0, 10);
+            var type = NcnnDotNet.C.Ncnn.ParamDictGetType(paramDict, 0);
+            Assert.Equal(ParamDictType.Int, type);
+
+            NcnnDotNet.C.Ncnn.ParamDictSetFloat(paramDict, 1, 10);
+            var type2 = NcnnDotNet.C.Ncnn.ParamDictGetType(paramDict, 1);
+            Assert.Equal(ParamDictType.Float, type2);
+
+            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+        }
+
+        [Fact]
+        public void ParamDictGetTypeException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictGetType(null, 0);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictGetType)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ParamDictSetGetInt()
+        {
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+            Assert.NotNull(paramDict);
+
+            NcnnDotNet.C.Ncnn.ParamDictSetInt(paramDict, 0, 10);
+            var value = NcnnDotNet.C.Ncnn.ParamDictGetInt(paramDict, 0, 0);
+            Assert.Equal(10, value);
+
+            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+        }
+
+        [Fact]
+        public void ParamDictGetIntException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictGetInt(null, 0, 0);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictGetInt)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ParamDictSetGetFloat()
+        {
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+            Assert.NotNull(paramDict);
+
+            NcnnDotNet.C.Ncnn.ParamDictSetFloat(paramDict, 0, 10);
+            var value = NcnnDotNet.C.Ncnn.ParamDictGetFloat(paramDict, 0, 0);
+            Assert.Equal(10, value);
+
+            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+        }
+
+        [Fact]
+        public void ParamDictGetFloatException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictGetFloat(null, 0, 0);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictGetFloat)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ParamDictSetGetArray()
+        {
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+            Assert.NotNull(paramDict);
+
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 5, 3);
+            var defaultValue = NcnnDotNet.C.Ncnn.MatCreate3D(1, 1, 1);
+
+            NcnnDotNet.C.Ncnn.ParamDictSetArray(paramDict, 0, mat);
+            var value = NcnnDotNet.C.Ncnn.ParamDictGetArray(paramDict, 0, defaultValue);
+            Assert.Equal(10, NcnnDotNet.C.Ncnn.MatGetW(value));
+            Assert.Equal(5, NcnnDotNet.C.Ncnn.MatGetH(value));
+            Assert.Equal(3, NcnnDotNet.C.Ncnn.MatGetC(value));
+
+            NcnnDotNet.C.Ncnn.MatDestroy(value);
+            NcnnDotNet.C.Ncnn.MatDestroy(defaultValue);
+            NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+        }
+
+        [Fact]
+        public void ParamDictGetArrayException()
+        {
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictGetArray(null, 0, mat);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictGetArray)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictGetArray(paramDict, 0, null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictGetArray)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+            }
+        }
+
+        [Fact]
+        public void ParamDictSetIntException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictSetInt(null, 0, 0);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictSetInt)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ParamDictSetFloatException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictSetFloat(null, 0, 0);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictSetFloat)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ParamDictSetArrayException()
+        {
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictSetArray(null, 0, mat);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictSetArray)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+
+            var paramDict = NcnnDotNet.C.Ncnn.ParamDictCreate();
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ParamDictSetArray(paramDict, 0, null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ParamDictSetArray)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.ParamDictDestroy(paramDict);
+            }
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private static IEnumerable<PixelDataPattern> CreatePattern()
+        {
+            return new[]
+            {
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Gray },
+            };
+        }
+
+        private static IEnumerable<PixelDataPattern> CreatePattern2()
+        {
+            return new[]
+            {
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
+            };
+        }
+
+        #endregion
+
+        private sealed class PixelDataPattern
+        {
+
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public int Stride { get; set; }
+            public int Channel { get; set; }
+            public PixelType Type { get; set; }
+            public int TargetWidth { get; set; }
+            public int TargetHeight { get; set; }
+            public int TargetStride { get; set; }
+            public int RoiX { get; set; }
+            public int RoiY { get; set; }
+            public int RoiWidth { get; set; }
+            public int RoiHeight { get; set; }
+
+        }
 
     }
 
