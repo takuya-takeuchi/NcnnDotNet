@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Xunit;
 
@@ -906,6 +907,637 @@ namespace NcnnDotNet.Tests.C
             catch (ArgumentNullException)
             {
                 // Nothing to do
+            }
+        }
+
+        #endregion
+
+        private sealed class PixelDataPattern
+        {
+
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public int Stride { get; set; }
+            public int Channel { get; set; }
+            public PixelType Type { get; set; }
+            public int TargetWidth { get; set; }
+            public int TargetHeight { get; set; }
+            public int TargetStride { get; set; }
+            public int RoiX { get; set; }
+            public int RoiY { get; set; }
+            public int RoiWidth { get; set; }
+            public int RoiHeight { get; set; }
+
+        }
+
+        private static IEnumerable<PixelDataPattern> CreatePattern()
+        {
+            return new[]
+            {
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Gray },
+            };
+        }
+
+        private static IEnumerable<PixelDataPattern> CreatePattern2()
+        {
+            return new[]
+            {
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
+            };
+        }
+
+        #region Mat Pixel
+
+        //[Fact]
+        //public void MatFromPixels()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var pixels = new byte[t.Stride * t.Height];
+        //        var mat = NcnnDotNet.C.Ncnn.MatFromPixels(pixels, t.Type, t.Width, t.Height, t.Stride, allocator);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatFromPixelsNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var pixels = new byte[t.Stride * t.Height];
+                var mat = NcnnDotNet.C.Ncnn.MatFromPixels(pixels, t.Type, t.Width, t.Height, t.Stride);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+        
+        [Fact]
+        public void MatFromPixelsException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatFromPixels(null, PixelType.Bgr, 10, 10, 30);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatFromPixels)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        //[Fact]
+        //public void MatFromPixelsResize()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var pixels = new byte[t.Stride * t.Height];
+        //        var mat = NcnnDotNet.C.Ncnn.MatFromPixelsResize(pixels, t.Type, t.Width, t.Height, t.Stride, t.TargetWidth, t.TargetHeight, allocator);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatFromPixelsResizeNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var pixels = new byte[t.Stride * t.Height];
+                var mat = NcnnDotNet.C.Ncnn.MatFromPixelsResize(pixels, t.Type, t.Width, t.Height, t.Stride, t.TargetWidth, t.TargetHeight);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatFromPixelsResizeException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatFromPixelsResize(null, PixelType.Bgr, 10, 10, 30, 5, 5);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatFromPixelsResize)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        //[Fact]
+        //public void MatFromPixelsRoi()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var pixels = new byte[t.Stride * t.Height];
+        //        var mat = NcnnDotNet.C.Ncnn.MatFromPixelsRoi(pixels, t.Type, t.Width, t.Height, t.Stride, t.RoiX, t.RoiY, t.RoiWidth, t.RoiHeight, allocator);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatFromPixelsRoiNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var pixels = new byte[t.Stride * t.Height];
+                var mat = NcnnDotNet.C.Ncnn.MatFromPixelsRoi(pixels, t.Type, t.Width, t.Height, t.Stride, t.RoiX, t.RoiY, t.RoiWidth, t.RoiHeight);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatFromPixelsRoiException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatFromPixelsRoi(null, PixelType.Bgr, 10, 10, 30, 1, 1, 5, 5);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatFromPixelsRoi)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        //[Fact]
+        //public void MatFromPixelsRoiResize()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var pixels = new byte[t.Stride * t.Height];
+        //        var mat = NcnnDotNet.C.Ncnn.MatFromPixelsRoiResize(pixels, t.Type, t.Width, t.Height, t.Stride, t.RoiX, t.RoiY, t.RoiWidth, t.RoiHeight, t.TargetWidth, t.TargetHeight, allocator);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatFromPixelsRoiResizeNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var pixels = new byte[t.Stride * t.Height];
+                var mat = NcnnDotNet.C.Ncnn.MatFromPixelsRoiResize(pixels, t.Type, t.Width, t.Height, t.Stride, t.RoiX, t.RoiY, t.RoiWidth, t.RoiHeight, t.TargetWidth, t.TargetHeight);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatFromPixelsRoiResizeException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatFromPixelsRoiResize(null, PixelType.Bgr, 10, 10, 30, 1, 1, 5, 5, 5, 5);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatFromPixelsRoiResize)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        //[Fact]
+        //public void MatToPixels()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        var pixels = new byte[t.Stride * t.Height];
+        //        NcnnDotNet.C.Ncnn.MatToPixels(mat, pixels, t.Type, t.Stride);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatToPixelsNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                var pixels = new byte[t.Stride * t.Height];
+                NcnnDotNet.C.Ncnn.MatToPixels(mat, pixels, t.Type, t.Stride);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatToPixelsException()
+        {
+            try
+            {
+                var pixels = new byte[300];
+                NcnnDotNet.C.Ncnn.MatToPixels(null, pixels, PixelType.Bgr, 30);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatToPixels)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatToPixels(mat, null, PixelType.Bgr, 30);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatToPixels)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        //[Fact]
+        //public void MatToPixelsResize()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern2();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        var pixels = new byte[t.Stride * t.Height];
+        //        NcnnDotNet.C.Ncnn.MatToPixelsResize(mat, pixels, t.Type, t.TargetWidth, t.TargetHeight, t.Stride);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatToPixelsResizeNullAllocator()
+        {
+            var targets = CreatePattern2();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                var pixels = new byte[t.TargetStride * t.TargetHeight];
+                NcnnDotNet.C.Ncnn.MatToPixelsResize(mat, pixels, t.Type, t.TargetWidth, t.TargetHeight, t.Stride);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatToPixelsResizeException()
+        {
+            try
+            {
+                var pixels = new byte[15 * 5];
+                NcnnDotNet.C.Ncnn.MatToPixelsResize(null, pixels, PixelType.Bgr, 5, 5, 15);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatToPixelsResize)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatToPixelsResize(mat, null, PixelType.Bgr, 5, 5, 15);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatToPixelsResize)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        //[Fact]
+        //public void MatSubstractMeanNormalize()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        var means = new float[t.Channel];
+        //        var normalize = new float[t.Channel];
+        //        NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, means, normalize);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        //[Fact]
+        //public void MatSubstractMean()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        var means = new float[t.Channel];
+        //        NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, means, null);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        //[Fact]
+        //public void MatSubstractNormalize()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        var normalize = new float[t.Channel];
+        //        NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, null, normalize);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //}
+
+        [Fact]
+        public void MatSubstractMeanNormalizeNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                var means = new float[t.Channel];
+                var normalize = new float[t.Channel];
+                NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, means, normalize);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatSubstractMeanNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                var means = new float[t.Channel];
+                NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, means, null);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatSubstractNormalizeNullAllocator()
+        {
+            var targets = CreatePattern();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                var normalize = new float[t.Channel];
+                NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, null, normalize);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        [Fact]
+        public void MatSubstractMeanNormalizeException()
+        {
+            var means = new float[3];
+            var normalize = new float[3];
+            var normalize2 = new float[2];
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(null, means, normalize);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, null, null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize)} should throw {nameof(ArgumentException)}");
+            }
+            catch (ArgumentException)
+            {
+                // Nothing to do
+            }
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize(mat, means, normalize2);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.MatSubstractMeanNormalize)} should throw {nameof(ArgumentException)}");
+            }
+            catch (ArgumentException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        //[Fact]
+        //public void ConvertPacking()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    var option = NcnnDotNet.C.Ncnn.OptionCreate();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        NcnnDotNet.C.Ncnn.ConvertPacking(mat, out var ret, 1, option);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(ret);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //    NcnnDotNet.C.Ncnn.OptionDestroy(option);
+        //}
+
+        [Fact]
+        public void ConvertPackingNullAllocator()
+        {
+            var targets = CreatePattern();
+            var option = NcnnDotNet.C.Ncnn.OptionCreate();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                NcnnDotNet.C.Ncnn.ConvertPacking(mat, out var ret, 1, option);
+                NcnnDotNet.C.Ncnn.MatDestroy(ret);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+            NcnnDotNet.C.Ncnn.OptionDestroy(option);
+        }
+
+        [Fact]
+        public void ConvertPackingException()
+        {
+            var option = NcnnDotNet.C.Ncnn.OptionCreate();
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ConvertPacking(null, out _, 1, option);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ConvertPacking)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.OptionDestroy(option);
+            }
+
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ConvertPacking(mat, out _, 1, null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ConvertPacking)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+        }
+
+        //[Fact]
+        //public void Flatten()
+        //{
+        //    var allocator = NcnnDotNet.C.Ncnn.AllocatorCreatePoolAllocator();
+        //    Assert.NotNull(allocator);
+
+        //    var targets = CreatePattern();
+        //    var option = NcnnDotNet.C.Ncnn.OptionCreate();
+        //    foreach (var t in targets)
+        //    {
+        //        var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel, allocator);
+        //        NcnnDotNet.C.Ncnn.Flatten(mat, out var ret, option);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(ret);
+        //        NcnnDotNet.C.Ncnn.MatDestroy(mat);
+        //    }
+        //    NcnnDotNet.C.Ncnn.OptionDestroy(option);
+        //}
+
+        [Fact]
+        public void FlattenNullAllocator()
+        {
+            var targets = CreatePattern();
+            var option = NcnnDotNet.C.Ncnn.OptionCreate();
+            foreach (var t in targets)
+            {
+                var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
+                NcnnDotNet.C.Ncnn.Flatten(mat, out var ret, option);
+                NcnnDotNet.C.Ncnn.MatDestroy(ret);
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
+            }
+            NcnnDotNet.C.Ncnn.OptionDestroy(option);
+        }
+
+        [Fact]
+        public void FlattenException()
+        {
+            var option = NcnnDotNet.C.Ncnn.OptionCreate();
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.Flatten(null, out _, option);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.Flatten)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.OptionDestroy(option);
+            }
+
+            var mat = NcnnDotNet.C.Ncnn.MatCreate3D(10, 10, 3);
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.Flatten(mat, out _, null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.Flatten)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                NcnnDotNet.C.Ncnn.MatDestroy(mat);
             }
         }
 

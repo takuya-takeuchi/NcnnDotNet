@@ -146,22 +146,22 @@ namespace NcnnDotNet
         #region mat pixel
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ncnn_mat_t c_ncnn_mat_from_pixels(byte[] pixels, int type, int w, int h, int stride, ncnn_allocator_t allocator);
+        public static extern ncnn_mat_t c_ncnn_mat_from_pixels(byte[] pixels, PixelType type, int w, int h, int stride, ncnn_allocator_t allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ncnn_mat_t c_ncnn_mat_from_pixels_resize(byte[] pixels, int type, int w, int h, int stride, int target_width, int target_height, ncnn_allocator_t allocator);
+        public static extern ncnn_mat_t c_ncnn_mat_from_pixels_resize(byte[] pixels, PixelType type, int w, int h, int stride, int target_width, int target_height, ncnn_allocator_t allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ncnn_mat_t c_ncnn_mat_from_pixels_roi(byte[] pixels, int type, int w, int h, int stride, int roix, int roiy, int roiw, int roih, ncnn_allocator_t allocator);
+        public static extern ncnn_mat_t c_ncnn_mat_from_pixels_roi(byte[] pixels, PixelType type, int w, int h, int stride, int roix, int roiy, int roiw, int roih, ncnn_allocator_t allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ncnn_mat_t c_ncnn_mat_from_pixels_roi_resize(byte[] pixels, int type, int w, int h, int stride, int roix, int roiy, int roiw, int roih, int target_width, int target_height, ncnn_allocator_t allocator);
+        public static extern ncnn_mat_t c_ncnn_mat_from_pixels_roi_resize(byte[] pixels, PixelType type, int w, int h, int stride, int roix, int roiy, int roiw, int roih, int target_width, int target_height, ncnn_allocator_t allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void c_ncnn_mat_to_pixels(ncnn_mat_t mat, byte[] pixels, int type, int stride);
+        public static extern void c_ncnn_mat_to_pixels(ncnn_mat_t mat, byte[] pixels, PixelType type, int stride);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void c_ncnn_mat_to_pixels_resize(ncnn_mat_t mat, byte[] pixels, int type, int target_width, int target_height, int target_stride);
+        public static extern void c_ncnn_mat_to_pixels_resize(ncnn_mat_t mat, byte[] pixels, PixelType type, int target_width, int target_height, int target_stride);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void c_ncnn_mat_substract_mean_normalize(ncnn_mat_t mat, float[] mean_vals, float[] norm_vals);

@@ -287,6 +287,100 @@ namespace NcnnDotNet.C
 
         #endregion
 
+        #region Mat Pixel
+
+        public static Mat MatFromPixels(byte[] pixels, PixelType type, int width, int height, int stride, Allocator allocator = null)
+        {
+            if (pixels == null)
+                throw new ArgumentNullException(nameof(pixels));
+
+            var mat = NativeMethods.c_ncnn_mat_from_pixels(pixels, type, width, height, stride, allocator?.NativePtr ?? IntPtr.Zero);
+            return new Mat(mat);
+        }
+
+        public static Mat MatFromPixelsResize(byte[] pixels, PixelType type, int width, int height, int stride, int targetWidth, int targetHeight, Allocator allocator = null)
+        {
+            if (pixels == null)
+                throw new ArgumentNullException(nameof(pixels));
+
+            var mat = NativeMethods.c_ncnn_mat_from_pixels_resize(pixels, type, width, height, stride, targetWidth, targetHeight, allocator?.NativePtr ?? IntPtr.Zero);
+            return new Mat(mat);
+        }
+
+        public static Mat MatFromPixelsRoi(byte[] pixels, PixelType type, int width, int height, int stride, int roiX, int roiY, int roiWidth, int roiHeight, Allocator allocator = null)
+        {
+            if (pixels == null)
+                throw new ArgumentNullException(nameof(pixels));
+
+            var mat = NativeMethods.c_ncnn_mat_from_pixels_roi(pixels, type, width, height, stride, roiX, roiY, roiWidth, roiHeight, allocator?.NativePtr ?? IntPtr.Zero);
+            return new Mat(mat);
+        }
+
+        public static Mat MatFromPixelsRoiResize(byte[] pixels, PixelType type, int width, int height, int stride, int roiX, int roiY, int roiWidth, int roiHeight, int targetWidth, int targetHeight, Allocator allocator = null)
+        {
+            if (pixels == null)
+                throw new ArgumentNullException(nameof(pixels));
+
+            var mat = NativeMethods.c_ncnn_mat_from_pixels_roi_resize(pixels, type, width, height, stride, roiX, roiY, roiWidth, roiHeight, targetWidth, targetHeight, allocator?.NativePtr ?? IntPtr.Zero);
+            return new Mat(mat);
+        }
+
+        public static void MatToPixels(Mat mat, byte[] pixels, PixelType type, int stride)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+            if (pixels == null)
+                throw new ArgumentNullException(nameof(pixels));
+
+            NativeMethods.c_ncnn_mat_to_pixels(mat.NativePtr, pixels, type, stride);
+        }
+
+        public static void MatToPixelsResize(Mat mat, byte[] pixels, PixelType type, int targetWidth, int targetHeight, int targetStride)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+            if (pixels == null)
+                throw new ArgumentNullException(nameof(pixels));
+
+            NativeMethods.c_ncnn_mat_to_pixels_resize(mat.NativePtr, pixels, type, targetWidth, targetHeight, targetStride);
+        }
+
+        public static void MatSubstractMeanNormalize(Mat mat, float[] means, float[] normalize)
+        {
+            if (mat == null)
+                throw new ArgumentNullException(nameof(mat));
+            if (means == null && normalize == null)
+                throw new ArgumentException($"{nameof(means)} or {nameof(normalize)} is null");
+            if (means != null && normalize != null && means.Length != normalize.Length)
+                throw new ArgumentException($"{nameof(means)}.{nameof(means.Length)} and {nameof(normalize)}.{nameof(normalize.Length)} must be same value");
+
+            NativeMethods.c_ncnn_mat_substract_mean_normalize(mat.NativePtr, means, normalize);
+        }
+
+        public static void ConvertPacking(Mat src, out Mat dst, int elemPack, Option option)
+        {
+            if (src == null)
+                throw new ArgumentNullException(nameof(src));
+            if (option == null)
+                throw new ArgumentNullException(nameof(option));
+
+            NativeMethods.c_ncnn_convert_packing(src.NativePtr, out var ret, elemPack, option.NativePtr);
+            dst = new Mat(ret);
+        }
+
+        public static void Flatten(Mat src, out Mat dst, Option option)
+        {
+            if (src == null)
+                throw new ArgumentNullException(nameof(src));
+            if (option == null)
+                throw new ArgumentNullException(nameof(option));
+
+            NativeMethods.c_ncnn_flatten(src.NativePtr, out var ret, option.NativePtr);
+            dst = new Mat(ret);
+        }
+
+        #endregion
+
         #region Blob
 
         public static string BlobGetName(Blob blob)
