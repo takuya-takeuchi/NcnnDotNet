@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -524,6 +525,45 @@ namespace NcnnDotNet.C
 
             var paramDict = NativeMethods.c_ncnn_datareader_create_from_memory(memory);
             return new DataReader(paramDict);
+        }
+
+        #endregion
+
+        #region ModelBin
+
+        public static ModelBin ModelBinCreateFromDataReader(DataReader dataReader)
+        {
+            if (dataReader == null) 
+                throw new ArgumentNullException(nameof(dataReader));
+
+            var paramDict = NativeMethods.c_ncnn_modelbin_create_from_datareader(dataReader.NativePtr);
+            return new ModelBin(paramDict);
+        }
+
+        public static ModelBin ModelBinCreateFromMatArray(Mat[] weights, int number)
+        {
+            if (weights == null)
+                throw new ArgumentNullException(nameof(weights));
+
+            if (weights.Any(mat => mat == null))
+                throw new ArgumentException($"{nameof(weights)} contains null");
+            if (weights.Any(mat => mat.NativePtr == IntPtr.Zero))
+                throw new ArgumentException($"{nameof(weights)} contains {nameof(IntPtr)}.{nameof(IntPtr.Zero)} element");
+
+            var tmp = weights.Select(mat => mat.NativePtr).ToArray();
+            if (!(tmp.Length >= number))
+                throw new ArgumentException($"{nameof(weights)}.{nameof(weights.Length)} must be more than {number}");
+
+            var paramDict = NativeMethods.c_ncnn_modelbin_create_from_mat_array(tmp, number);
+            return new ModelBin(paramDict);
+        }
+
+        public static void ModelBinDestroy(ModelBin modelBin)
+        {
+            if (modelBin == null)
+                throw new ArgumentNullException(nameof(modelBin));
+
+            NativeMethods.c_ncnn_modelbin_destroy(modelBin.NativePtr);
         }
 
         #endregion
