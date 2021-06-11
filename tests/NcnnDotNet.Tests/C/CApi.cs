@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Xunit;
 
@@ -7,8 +9,14 @@ using Xunit;
 namespace NcnnDotNet.Tests.C
 {
 
-    public class CApi
+    public sealed class CApi
     {
+
+        #region Fields
+
+        private const string TestDataDirectory = "TestData";
+
+        #endregion
 
         #region Allocator
 
@@ -1717,6 +1725,113 @@ namespace NcnnDotNet.Tests.C
             Assert.NotNull(dataReader);
 
             NcnnDotNet.C.Ncnn.DataReaderDestroy(dataReader);
+        }
+
+        #endregion
+
+        #region ModelBin
+
+        [Fact]
+        public void ModelBinCreateFromDataReader()
+        {
+            var weights = Enumerable.Range(0, 10).Select(s => NcnnDotNet.C.Ncnn.MatCreate1D(10)).ToArray();
+
+            var modelBin = NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray(weights, weights.Length);
+            NcnnDotNet.C.Ncnn.ModelBinDestroy(modelBin);
+
+            foreach (var weight in weights)
+                NcnnDotNet.C.Ncnn.MatDestroy(weight);
+        }
+
+        [Fact]
+        public void ModelBinCreateFromDataReaderException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ModelBinCreateFromDataReader(null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ModelBinCreateFromDataReader)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+        }
+
+        [Fact]
+        public void ModelBinCreateFromMatArray()
+        {
+            var path = Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.bin");
+            var memory = File.ReadAllBytes(path);
+
+            var dataReader = NcnnDotNet.C.Ncnn.DataReaderCreateFromMemory(memory);
+            var modelBin = NcnnDotNet.C.Ncnn.ModelBinCreateFromDataReader(dataReader);
+            NcnnDotNet.C.Ncnn.ModelBinDestroy(modelBin);
+            NcnnDotNet.C.Ncnn.DataReaderDestroy(dataReader);
+        }
+
+        [Fact]
+        public void ModelBinCreateFromMatArrayException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray(null, 0);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
+
+            var weights = Enumerable.Range(0, 10).Select(s => NcnnDotNet.C.Ncnn.MatCreate1D(10)).ToArray();
+
+            try
+            {
+                NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray(weights, weights.Length + 1);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray)} should throw {nameof(ArgumentException)}");
+            }
+            catch (ArgumentException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                foreach (var weight in weights)
+                    NcnnDotNet.C.Ncnn.MatDestroy(weight);
+            }
+
+            var weights2 = Enumerable.Range(0, 10).Select(s => NcnnDotNet.C.Ncnn.MatCreate1D(10)).ToArray();
+            weights = weights2;
+
+            try
+            {
+                weights[5] = null;
+                NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray(weights, weights.Length);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ModelBinCreateFromMatArray)} should throw {nameof(ArgumentException)}");
+            }
+            catch (ArgumentException)
+            {
+                // Nothing to do
+            }
+            finally
+            {
+                foreach (var weight in weights2)
+                    if (weight != null)
+                        NcnnDotNet.C.Ncnn.MatDestroy(weight);
+            }
+        }
+
+        [Fact]
+        public void ModelBinDestroyException()
+        {
+            try
+            {
+                NcnnDotNet.C.Ncnn.ModelBinDestroy(null);
+                Assert.False(true, $"{nameof(NcnnDotNet.C.Ncnn.ModelBinDestroy)} should throw {nameof(ArgumentNullException)}");
+            }
+            catch (ArgumentNullException)
+            {
+                // Nothing to do
+            }
         }
 
         #endregion
