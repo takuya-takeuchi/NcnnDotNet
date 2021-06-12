@@ -4,17 +4,17 @@ using Xunit;
 namespace NcnnDotNet.Tests.Layers
 {
 
-    public class Tile
-    {
+    //public class Tile
+    //{
 
-        [Fact]
-        public void CreateAndDispose()
-        {
-            var layer = new NcnnDotNet.Layers.Tile();
-            layer.Dispose();
-            Assert.True(layer.IsDisposed);
-        }
+    //    [Fact]
+    //    public void CreateAndDispose()
+    //    {
+    //        var layer = new NcnnDotNet.Layers.Tile();
+    //        layer.Dispose();
+    //        Assert.True(layer.IsDisposed);
+    //    }
 
-    }
+    //}
 
 }
