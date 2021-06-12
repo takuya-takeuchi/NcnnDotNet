@@ -9,48 +9,13 @@ namespace NcnnDotNet
     internal sealed partial class NativeMethods
     {
 
-        #region stdlib
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void stdlib_free(IntPtr ptr);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr stdlib_malloc(IntPtr size);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void stdlib_srand(uint seed);
-
-        #endregion
-
         #region string
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr string_new();
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr string_new2(StringBuilder c_str, int len);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void string_append(IntPtr str, StringBuilder c_str, int len);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr string_c_str(IntPtr str);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void string_delete(IntPtr str);
-
-        #endregion
-
-        #region ostringstream
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr ostringstream_new();
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr ostringstream_str(IntPtr str);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void ostringstream_delete(IntPtr str);
 
         #endregion
 
