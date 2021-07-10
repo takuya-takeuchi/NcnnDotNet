@@ -11,12 +11,17 @@ RUN apt-get update && apt-get install -y \
 
 # install compiler for arm
 RUN apt-get update && apt-get install -y \
+    qemu-user \
+    qemu-user-static \
     g++-aarch64-linux-gnu \
     gcc-aarch64-linux-gnu 
 
 # set compiler
 ENV CMAKE_C_COMPILER=/usr/bin/aarch64-linux-gnu-gcc
 ENV CMAKE_CXX_COMPILER=/usr/bin/aarch64-linux-gnu-g++
+
+# set emulation config
+ENV QEMU_LD_PREFIX=/usr/aarch64-linux-gnu
 
 # Register Microsoft key and feed
 RUN apt-get update && apt-get install -y \

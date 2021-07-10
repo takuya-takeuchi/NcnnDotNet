@@ -175,6 +175,12 @@ class Config
                Join-Path -ChildPath ncnn
    }
 
+   [string] GetToolchainDir()
+   {
+      return   Join-Path $this.GetRootDir() src |
+               Join-Path -ChildPath toolchains
+   }
+
    [string] GetOpenCVRootDir()
    {
       return   Join-Path $this.GetRootDir() src |
@@ -313,6 +319,30 @@ class Config
       return $this._Platform
    }
 
+   [string] GetRootStoreDriectory()
+   {
+      return $env:CIBuildDir
+   }
+
+   [string] GetStoreDriectory([string]$CMakefileDir)
+   {
+      $DirectoryName = Split-Path $CMakefileDir -leaf
+      $buildDir = $this.GetRootStoreDriectory()
+      if (!(Test-Path($buildDir)))
+      {
+         return $CMakefileDir
+      }
+
+      return Join-Path $buildDir "DlibDotNet" | `
+             Join-Path -ChildPath $DirectoryName
+   }
+
+   [bool] HasStoreDriectory()
+   {
+      $buildDir = $this.GetRootStoreDriectory()
+      return Test-Path($buildDir)
+   }
+
    [string] GetBuildDirectoryName([string]$os="")
    {
       if (![string]::IsNullOrEmpty($os))
@@ -402,54 +432,6 @@ class Config
       return "OFF"
    }
 
-   [string] GetGCC()
-   {
-      switch ($this.GetTarget())
-      {
-         "cpu"
-         {
-            return "/usr/bin/gcc"
-         }
-         "arm"
-         {
-            if ($this.GetArchitecture() -eq 32)
-            {
-               return "/usr/bin/arm-linux-gnueabihf-gcc"
-            }
-            else
-            {
-               return "/usr/bin/aarch64-linux-gnu-gcc"
-            }
-         }
-      }
-
-      return "/usr/bin/gcc"
-   }
-
-   [string] GetGXX()
-   {
-      switch ($this.GetTarget())
-      {
-         "cpu"
-         {
-            return "/usr/bin/g++"
-         }
-         "arm"
-         {
-            if ($this.GetArchitecture() -eq 32)
-            {
-               return "/usr/bin/arm-linux-gnueabihf-g++"
-            }
-            else
-            {
-               return "/usr/bin/aarch64-linux-gnu-g++"
-            }
-         }
-      }
-      
-      return "/usr/bin/g++"
-   }
-
 }
 
 function CallVisualStudioDeveloperConsole()
@@ -512,22 +494,26 @@ class ThirdPartyBuilder
          }
          else
          {
-            $cc = $this._Config.GetGCC()
-            $cxx = $this._Config.GetGXX()
+            $toolchain = Join-Path $this._Config.GetToolchainDir() "empty.cmake"
+            if ($global:IsLinux)
+            {
+               if ($this._Config.GetTarget() -eq "arm")
+               {
+                  $toolchain = Join-Path $this._Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+               }
+            }
 
             Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
-         -D CMAKE_C_COMPILER=`"${cc}`" `
-         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
          -D protobuf_BUILD_TESTS=OFF `
          -D protobuf_MSVC_STATIC_RUNTIME=OFF `
          $protobufDir" -ForegroundColor Yellow
             cmake -D CMAKE_BUILD_TYPE=$Configuration `
                   -D BUILD_SHARED_LIBS=OFF `
                   -D CMAKE_INSTALL_PREFIX="$installDir" `
-                  -D CMAKE_C_COMPILER="${cc}" `
-                  -D CMAKE_CXX_COMPILER="${cxx}" `
+                  -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
                   -D protobuf_BUILD_TESTS=OFF `
                   -D protobuf_MSVC_STATIC_RUNTIME=OFF `
                   $protobufDir
@@ -649,15 +635,26 @@ class ThirdPartyBuilder
                }
                else
                {
-                  $cc = $this._Config.GetGCC()
-                  $cxx = $this._Config.GetGXX()
+                  $toolchain = Join-Path $this._Config.GetToolchainDir() "empty.cmake"
+
+                  if ($global:IsLinux)
+                  {
+                     # https://github.com/opencv/opencv/issues/760＃
+                     if ($this._Config.GetTarget() -eq "arm" -AND  $this._Config.GetArchitecture() -eq 64)
+                     {
+                        # $env:CPPFLAGS = "-DPNG_ARM_NEON_OPT=0"
+                     }
+
+                     if ($this._Config.GetTarget() -eq "arm")
+                     {
+                        $toolchain = Join-Path $this._Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+                     }
+                  }
 
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
-         -D BUILD_WITH_STATIC_CRT=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
-         -D CMAKE_C_COMPILER=`"${cc}`" `
-         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
          -D BUILD_opencv_world=OFF `
          -D BUILD_opencv_java=OFF `
          -D BUILD_opencv_python=OFF `
@@ -697,10 +694,8 @@ class ThirdPartyBuilder
          $opencvDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
-                        -D BUILD_WITH_STATIC_CRT=OFF `
                         -D CMAKE_INSTALL_PREFIX="${installDir}" `
-                        -D CMAKE_C_COMPILER="${cc}" `
-                        -D CMAKE_CXX_COMPILER="${cxx}" `
+                        -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
                         -D BUILD_opencv_world=OFF `
                         -D BUILD_opencv_java=OFF `
                         -D BUILD_opencv_python=OFF `
@@ -944,8 +939,14 @@ class ThirdPartyBuilder
                }
                else
                {
-                  $cc = $this._Config.GetGCC()
-                  $cxx = $this._Config.GetGXX()
+                  $toolchain = Join-Path $this._Config.GetToolchainDir() "empty.cmake"
+                  if ($global:IsLinux)
+                  {
+                     if ($this._Config.GetTarget() -eq "arm")
+                     {
+                        $toolchain = Join-Path $this._Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+                     }
+                  }
 
                   $includeDir = Join-Path $protobufInstallDir include
                   $libraryFile = Join-Path $protobufInstallDir lib | `
@@ -962,25 +963,25 @@ class ThirdPartyBuilder
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
-         -D CMAKE_C_COMPILER=`"${cc}`" `
-         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
          -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
          -D Protobuf_LIBRARIES=`"${libraryFile}`" `
          -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_DISABLE_RTTI:BOOL=OFF `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
                         -D CMAKE_INSTALL_PREFIX="${installDir}" `
-                        -D CMAKE_C_COMPILER="${cc}" `
-                        -D CMAKE_CXX_COMPILER="${cxx}" `
+                        -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
                         -D Protobuf_INCLUDE_DIR="${includeDir}" `
                         -D Protobuf_LIBRARIES="${libraryFile}" `
                         -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
+                        -D NCNN_DISABLE_RTTI:BOOL=OFF `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -1183,7 +1184,7 @@ function ConfigVulkan([Config]$Config)
 
 function ConfigARM([Config]$Config)
 {
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       CallVisualStudioDeveloperConsole
    }
@@ -1227,25 +1228,29 @@ function ConfigARM([Config]$Config)
    }
    else
    {
-      $cc = $this._Config.GetGCC()
-      $cxx = $this._Config.GetGXX()
+      $toolchain = Join-Path $Config.GetToolchainDir() "empty.cmake"
+      if ($global:IsLinux)
+      {
+         if ($Config.GetTarget() -eq "arm")
+         {
+            $toolchain = Join-Path $Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+         }
+      }
 
       $env:OpenCV_DIR = $installOpenCVDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
-         -D CMAKE_C_COMPILER=`"${cc}`" `
-         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
+            -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR="${installOpenCVDir}" `
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
-            -D CMAKE_C_COMPILER="${cc}" `
-            -D CMAKE_CXX_COMPILER="${cxx}" `
             ..
    }
 }
