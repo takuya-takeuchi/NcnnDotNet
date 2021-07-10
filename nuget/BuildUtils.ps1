@@ -432,6 +432,25 @@ class Config
       return "OFF"
    }
 
+   [string] GetToolchainFile()
+   {
+      $architecture = $this._Architecture
+      $toolchain = Join-Path $Config.GetToolchainDir() "empty.cmake"
+
+      if ($global:IsLinux)
+      {
+         if ($Config.GetTarget() -eq "arm")
+         {
+            if ($architecture -eq 64)
+            {
+               $toolchain = Join-Path $Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+            }
+         }
+      }
+
+      return $toolchain
+   }
+
 }
 
 function CallVisualStudioDeveloperConsole()
@@ -494,14 +513,7 @@ class ThirdPartyBuilder
          }
          else
          {
-            $toolchain = Join-Path $this._Config.GetToolchainDir() "empty.cmake"
-            if ($global:IsLinux)
-            {
-               if ($this._Config.GetTarget() -eq "arm")
-               {
-                  $toolchain = Join-Path $this._Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
-               }
-            }
+            $toolchain = Join-Path $this._Config.GetToolchainFile()
 
             Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
@@ -635,21 +647,7 @@ class ThirdPartyBuilder
                }
                else
                {
-                  $toolchain = Join-Path $this._Config.GetToolchainDir() "empty.cmake"
-
-                  if ($global:IsLinux)
-                  {
-                     # https://github.com/opencv/opencv/issues/760＃
-                     if ($this._Config.GetTarget() -eq "arm" -AND  $this._Config.GetArchitecture() -eq 64)
-                     {
-                        # $env:CPPFLAGS = "-DPNG_ARM_NEON_OPT=0"
-                     }
-
-                     if ($this._Config.GetTarget() -eq "arm")
-                     {
-                        $toolchain = Join-Path $this._Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
-                     }
-                  }
+                  $toolchain = Join-Path $this._Config.GetToolchainFile()
 
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
@@ -939,14 +937,7 @@ class ThirdPartyBuilder
                }
                else
                {
-                  $toolchain = Join-Path $this._Config.GetToolchainDir() "empty.cmake"
-                  if ($global:IsLinux)
-                  {
-                     if ($this._Config.GetTarget() -eq "arm")
-                     {
-                        $toolchain = Join-Path $this._Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
-                     }
-                  }
+                  $toolchain = Join-Path $this._Config.GetToolchainFile()
 
                   $includeDir = Join-Path $protobufInstallDir include
                   $libraryFile = Join-Path $protobufInstallDir lib | `
@@ -1228,14 +1219,7 @@ function ConfigARM([Config]$Config)
    }
    else
    {
-      $toolchain = Join-Path $Config.GetToolchainDir() "empty.cmake"
-      if ($global:IsLinux)
-      {
-         if ($Config.GetTarget() -eq "arm")
-         {
-            $toolchain = Join-Path $Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
-         }
-      }
+      $toolchain = Join-Path $this._Config.GetToolchainFile()
 
       $env:OpenCV_DIR = $installOpenCVDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
