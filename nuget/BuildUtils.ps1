@@ -402,6 +402,54 @@ class Config
       return "OFF"
    }
 
+   [string] GetGCC()
+   {
+      switch ($this.GetTarget())
+      {
+         "cpu"
+         {
+            return "/usr/bin/gcc"
+         }
+         "arm"
+         {
+            if ($this.GetArchitecture() -eq 32)
+            {
+               return "/usr/bin/arm-linux-gnueabihf-gcc"
+            }
+            else
+            {
+               return "/usr/bin/aarch64-linux-gnu-gcc"
+            }
+         }
+      }
+
+      return "/usr/bin/gcc"
+   }
+
+   [string] GetGXX()
+   {
+      switch ($this.GetTarget())
+      {
+         "cpu"
+         {
+            return "/usr/bin/g++"
+         }
+         "arm"
+         {
+            if ($this.GetArchitecture() -eq 32)
+            {
+               return "/usr/bin/arm-linux-gnueabihf-g++"
+            }
+            else
+            {
+               return "/usr/bin/aarch64-linux-gnu-g++"
+            }
+         }
+      }
+      
+      return "/usr/bin/g++"
+   }
+
 }
 
 function CallVisualStudioDeveloperConsole()
@@ -464,15 +512,22 @@ class ThirdPartyBuilder
          }
          else
          {
+            $cc = $this._Config.GetGCC()
+            $cxx = $this._Config.GetGXX()
+
             Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
+         -D CMAKE_C_COMPILER=`"${cc}`" `
+         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
          -D protobuf_BUILD_TESTS=OFF `
          -D protobuf_MSVC_STATIC_RUNTIME=OFF `
          $protobufDir" -ForegroundColor Yellow
             cmake -D CMAKE_BUILD_TYPE=$Configuration `
                   -D BUILD_SHARED_LIBS=OFF `
                   -D CMAKE_INSTALL_PREFIX="$installDir" `
+                  -D CMAKE_C_COMPILER="${cc}" `
+                  -D CMAKE_CXX_COMPILER="${cxx}" `
                   -D protobuf_BUILD_TESTS=OFF `
                   -D protobuf_MSVC_STATIC_RUNTIME=OFF `
                   $protobufDir
@@ -594,10 +649,15 @@ class ThirdPartyBuilder
                }
                else
                {
+                  $cc = $this._Config.GetGCC()
+                  $cxx = $this._Config.GetGXX()
+
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D BUILD_WITH_STATIC_CRT=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D CMAKE_C_COMPILER=`"${cc}`" `
+         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
          -D BUILD_opencv_world=OFF `
          -D BUILD_opencv_java=OFF `
          -D BUILD_opencv_python=OFF `
@@ -639,6 +699,8 @@ class ThirdPartyBuilder
                         -D BUILD_SHARED_LIBS=OFF `
                         -D BUILD_WITH_STATIC_CRT=OFF `
                         -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                        -D CMAKE_C_COMPILER="${cc}" `
+                        -D CMAKE_CXX_COMPILER="${cxx}" `
                         -D BUILD_opencv_world=OFF `
                         -D BUILD_opencv_java=OFF `
                         -D BUILD_opencv_python=OFF `
@@ -882,6 +944,9 @@ class ThirdPartyBuilder
                }
                else
                {
+                  $cc = $this._Config.GetGCC()
+                  $cxx = $this._Config.GetGXX()
+
                   $includeDir = Join-Path $protobufInstallDir include
                   $libraryFile = Join-Path $protobufInstallDir lib | `
                                  Join-Path -ChildPath libprotobuf.a
@@ -897,6 +962,8 @@ class ThirdPartyBuilder
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D CMAKE_C_COMPILER=`"${cc}`" `
+         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
          -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
          -D Protobuf_LIBRARIES=`"${libraryFile}`" `
          -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
@@ -907,6 +974,8 @@ class ThirdPartyBuilder
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
                         -D BUILD_SHARED_LIBS=OFF `
                         -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                        -D CMAKE_C_COMPILER="${cc}" `
+                        -D CMAKE_CXX_COMPILER="${cxx}" `
                         -D Protobuf_INCLUDE_DIR="${includeDir}" `
                         -D Protobuf_LIBRARIES="${libraryFile}" `
                         -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
@@ -1158,16 +1227,8 @@ function ConfigARM([Config]$Config)
    }
    else
    {
-      if ($Config.GetArchitecture() -eq 32)
-      {
-         $cc = "/usr/bin/arm-linux-gnueabihf-gcc"
-         $cxx = "/usr/bin/arm-linux-gnueabihf-g++"
-      }
-      else
-      {
-         $cc = "/usr/bin/aarch64-linux-gnu-gcc"
-         $cxx = "/usr/bin/aarch64-linux-gnu-g++"
-      }
+      $cc = $this._Config.GetGCC()
+      $cxx = $this._Config.GetGXX()
 
       $env:OpenCV_DIR = $installOpenCVDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
@@ -1175,6 +1236,8 @@ function ConfigARM([Config]$Config)
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D CMAKE_C_COMPILER=`"${cc}`" `
+         -D CMAKE_CXX_COMPILER=`"${cxx}`" `
          .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
