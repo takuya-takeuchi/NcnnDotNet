@@ -435,15 +435,16 @@ class Config
    [string] GetToolchainFile()
    {
       $architecture = $this._Architecture
-      $toolchain = Join-Path $Config.GetToolchainDir() "empty.cmake"
+      $target = $this._Target
+      $toolchain = Join-Path $this.GetToolchainDir() "empty.cmake"
 
       if ($global:IsLinux)
       {
-         if ($Config.GetTarget() -eq "arm")
+         if ($target -eq "arm")
          {
             if ($architecture -eq 64)
             {
-               $toolchain = Join-Path $Config.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+               $toolchain = Join-Path $this.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
             }
          }
       }
