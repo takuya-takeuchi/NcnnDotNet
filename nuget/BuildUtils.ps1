@@ -1114,20 +1114,75 @@ function ConfigVulkan([Config]$Config)
 
 function ConfigARM([Config]$Config)
 {
-   if ($Config.GetArchitecture() -eq 32)
+   if ($IsWindows)
    {
-      cmake -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF `
-            -D CMAKE_C_COMPILER="/usr/bin/arm-linux-gnueabihf-gcc" `
-            -D CMAKE_CXX_COMPILER="/usr/bin/arm-linux-gnueabihf-g++" `
+      CallVisualStudioDeveloperConsole
+   }
+
+   $Builder = [ThirdPartyBuilder]::new($Config)
+
+   # Build Protobuf
+   $installProtobufDir = $Builder.BuildProtobuf()
+
+   # Build opencv
+   $installOpenCVDir = $Builder.BuildOpenCV()
+
+   # Build ncnn
+   $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
+
+   # To inclue src/layer
+   $ncnnDir = $Config.GetNcnnRootDir()
+
+   # Build NcnnDotNet.Native
+   Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
+   if ($IsWindows)
+   {
+      $vs = $Config.GetVisualStudio()
+      $vsarc = $Config.GetVisualStudioArchitecture()
+
+      $env:OpenCV_DIR = $installOpenCVDir
+      Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+         -D BUILD_SHARED_LIBS=ON `
+         -D NCNN_VULKAN:BOOL=OFF `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         .." -ForegroundColor Yellow
+      cmake -G "$vs" -A $vsarc -T host=x64 `
+            -D BUILD_SHARED_LIBS=ON `
+            -D NCNN_VULKAN:BOOL=OFF `
+            -D OpenCV_DIR="${installOpenCVDir}" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
    else
    {
+      if ($Config.GetArchitecture() -eq 32)
+      {
+         $cc = "/usr/bin/arm-linux-gnueabihf-gcc"
+         $cxx = "/usr/bin/arm-linux-gnueabihf-g++"
+      }
+      else
+      {
+         $cc = "/usr/bin/aarch64-linux-gnu-gcc"
+         $cxx = "/usr/bin/aarch64-linux-gnu-g++"
+      }
+
+      $env:OpenCV_DIR = $installOpenCVDir
+      Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
+         -D NCNN_VULKAN:BOOL=OFF `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         .." -ForegroundColor Yellow
       cmake -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF ``
-            -D CMAKE_C_COMPILER="/usr/bin/aarch64-linux-gnu-gcc" `
-            -D CMAKE_CXX_COMPILER="/usr/bin/aarch64-linux-gnu-g++" `
+            -D NCNN_VULKAN:BOOL=OFF `
+            -D OpenCV_DIR="${installOpenCVDir}" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D CMAKE_C_COMPILER="${cc}" `
+            -D CMAKE_CXX_COMPILER="${cxx}" `
             ..
    }
 }
@@ -1212,7 +1267,6 @@ function ConfigUWP([Config]$Config)
                -D ncnn_SRC_DIR="${ncnnDir}" `
                ..
       }
-
    }
 }
 
