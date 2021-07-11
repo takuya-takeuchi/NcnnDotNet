@@ -436,7 +436,8 @@ class Config
    {
       $architecture = $this._Architecture
       $target = $this._Target
-      $toolchain = Join-Path $this.GetToolchainDir() "empty.cmake"
+      $toolchainDir = $this.GetToolchainDir()
+      $toolchain = Join-Path $toolchainDir "empty.cmake"
 
       if ($global:IsLinux)
       {
@@ -444,7 +445,7 @@ class Config
          {
             if ($architecture -eq 64)
             {
-               $toolchain = Join-Path $this.GetToolchainDir() "aarch64-linux-gnu.toolchain.cmake"
+               $toolchain = Join-Path $toolchainDir "aarch64-linux-gnu.toolchain.cmake"
             }
          }
       }
@@ -514,7 +515,7 @@ class ThirdPartyBuilder
          }
          else
          {
-            $toolchain = Join-Path $this._Config.GetToolchainFile()
+            $toolchain = $this._Config.GetToolchainFile()
 
             Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
@@ -648,7 +649,7 @@ class ThirdPartyBuilder
                }
                else
                {
-                  $toolchain = Join-Path $this._Config.GetToolchainFile()
+                  $toolchain = $this._Config.GetToolchainFile()
 
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
@@ -683,7 +684,7 @@ class ThirdPartyBuilder
          -D BUILD_PNG=ON `
          -D BUILD_JPEG=ON `
          -D WITH_CUDA=OFF `
-         -D WITH_GTK=OFF `
+         -D WITH_GTK=ON `
          -D WITH_GTK_2_X=OFF `
          -D BUILD_PROTOBUF=OFF `
          -D WITH_PROTOBUF=OFF `
@@ -724,7 +725,7 @@ class ThirdPartyBuilder
                         -D BUILD_PNG=ON `
                         -D BUILD_JPEG=ON `
                         -D WITH_CUDA=OFF `
-                        -D WITH_GTK=OFF `
+                        -D WITH_GTK=ON `
                         -D WITH_GTK_2_X=OFF `
                         -D BUILD_PROTOBUF=OFF `
                         -D WITH_PROTOBUF=OFF `
@@ -938,7 +939,7 @@ class ThirdPartyBuilder
                }
                else
                {
-                  $toolchain = Join-Path $this._Config.GetToolchainFile()
+                  $toolchain = $this._Config.GetToolchainFile()
 
                   $includeDir = Join-Path $protobufInstallDir include
                   $libraryFile = Join-Path $protobufInstallDir lib | `
