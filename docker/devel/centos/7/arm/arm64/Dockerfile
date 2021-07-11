@@ -16,7 +16,7 @@ RUN yum groupinstall -y "Development Tools"
 RUN yum update -y && yum install -y \
     qemu-user \
     qemu-user-static \
-    g++-aarch64-linux-gnu \
+    gcc-c++-aarch64-linux-gnu \
     gcc-aarch64-linux-gnu 
 
 # set compiler
