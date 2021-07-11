@@ -22,7 +22,9 @@ Requirements: Visual C++ 2017 Redistributable Package</description>
   <files>
     <file src="..\nn128.png" target="images\" />
 
-    <file src="build\NcnnDotNet.Native.props" target="build\NcnnDotNet.props" />
+    <!-- It prevent from building on arm because platform fixes x64 -->
+    <!-- <file src="build\NcnnDotNet.Native.props" target="build\NcnnDotNet.props" /> -->
+
     <!-- cross-targetting via compile-time references -->
     <file src="ref\**\*" target="ref" />
     <file src="..\artifacts\cpu\runtimes\**\*" target="runtimes" />
@@ -33,6 +35,8 @@ Requirements: Visual C++ 2017 Redistributable Package</description>
     <file src="..\artifacts\cpu\runtimes\linux-x64\native\libNcnnDotNetNative.so" target="runtimes\linux-x64\native\libNcnnDotNetNative.so" />
     <!-- <file src="..\artifacts\cpu\runtimes\centos-x64\native\libNcnnDotNetNative.so" target="runtimes\centos-x64\native\libNcnnDotNetNative.so" /> -->
     <file src="..\artifacts\cpu\runtimes\osx-x64\native\libNcnnDotNetNative.dylib" target="runtimes\osx-x64\native\libNcnnDotNetNative.dylib" />
+
+    <file src="..\artifacts\arm\runtimes\linux-arm64\native\libNcnnDotNetNative.so" target="runtimes\linux-arm64\native\libNcnnDotNetNative.so" />
 
     <!-- license -->
     <file src="..\..\LICENSE.txt" target="" />
