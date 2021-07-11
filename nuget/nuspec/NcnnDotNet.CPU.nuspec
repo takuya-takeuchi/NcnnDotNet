@@ -22,7 +22,9 @@ Requirements: Visual C++ 2017 Redistributable Package</description>
   <files>
     <file src="..\nn128.png" target="images\" />
 
-    <file src="build\NcnnDotNet.Native.props" target="build\NcnnDotNet.props" />
+    <!-- It prevent from building on arm because platform fixes x64 -->
+    <!-- <file src="build\NcnnDotNet.Native.props" target="build\NcnnDotNet.props" /> -->
+
     <!-- cross-targetting via compile-time references -->
     <file src="ref\**\*" target="ref" />
     <file src="..\artifacts\cpu\runtimes\**\*" target="runtimes" />
