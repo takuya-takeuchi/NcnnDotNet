@@ -498,7 +498,7 @@ class ThirdPartyBuilder
 
          if ($global:IsWindows)
          {
-            Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
+            Write-Host "   cmake -G `"NMake Makefiles`" -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
          -D protobuf_BUILD_TESTS=OFF `
@@ -739,6 +739,103 @@ class ThirdPartyBuilder
                         -D WITH_ITT=OFF `
                         $opencvDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
+               }
+            }
+            "uwp"
+            {
+               Write-Host "Start Build OpenCV" -ForegroundColor Green
+
+               $opencvDir = $this._Config.GetOpenCVRootDir()
+               $opencvTarget = Join-Path $current opencv
+               New-Item $opencvTarget -Force -ItemType Directory
+               Set-Location $opencvTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
+
+               if ($global:IsWindows)
+               {
+                  Write-Host "   cmake -G `"NMake Makefiles`" -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D BUILD_WITH_STATIC_CRT=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D BUILD_opencv_world=OFF `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=OFF `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=ON `
+         -D BUILD_opencv_videostab=OFF `
+         -D WITH_CUDA=OFF `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
+         $opencvDir" -ForegroundColor Yellow
+                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
+                                             -D BUILD_SHARED_LIBS=OFF `
+                                             -D BUILD_WITH_STATIC_CRT=OFF `
+                                             -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                                             -D BUILD_opencv_world=OFF `
+                                             -D BUILD_opencv_java=OFF `
+                                             -D BUILD_opencv_python=OFF `
+                                             -D BUILD_opencv_python2=OFF `
+                                             -D BUILD_opencv_python3=OFF `
+                                             -D BUILD_PERF_TESTS=OFF `
+                                             -D BUILD_TESTS=OFF `
+                                             -D BUILD_DOCS=OFF `
+                                             -D BUILD_opencv_core=ON `
+                                             -D BUILD_opencv_highgui=ON `
+                                             -D BUILD_opencv_imgcodecs=ON `
+                                             -D BUILD_opencv_imgproc=ON `
+                                             -D BUILD_opencv_calib3d=OFF `
+                                             -D BUILD_opencv_features2d=OFF `
+                                             -D BUILD_opencv_flann=OFF `
+                                             -D BUILD_opencv_java_bindings_generator=OFF `
+                                             -D BUILD_opencv_ml=OFF `
+                                             -D BUILD_opencv_objdetect=OFF `
+                                             -D BUILD_opencv_photo=OFF `
+                                             -D BUILD_opencv_python_bindings_generator=OFF `
+                                             -D BUILD_opencv_shape=OFF `
+                                             -D BUILD_opencv_stitching=OFF `
+                                             -D BUILD_opencv_superres=OFF `
+                                             -D BUILD_opencv_video=OFF `
+                                             -D BUILD_opencv_videoio=ON `
+                                             -D BUILD_opencv_videostab=OFF `
+                                             -D WITH_CUDA=OFF `
+                                             -D BUILD_PROTOBUF=OFF `
+                                             -D WITH_PROTOBUF=OFF `
+                                             -D WITH_IPP=OFF `
+                                             -D WITH_FFMPEG=OFF `
+                                             -D WITH_ITT=OFF `
+                                             $opencvDir
+                  Write-Host "   cmake build and install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }
             }
@@ -1053,6 +1150,67 @@ class ThirdPartyBuilder
                   }
                }
             }
+            "uwp"
+            {
+               Write-Host "Start Build ncnn" -ForegroundColor Green
+
+               $ncnnDir = $this._Config.GetNcnnRootDir()
+               $ncnnTarget = Join-Path $current ncnn
+               New-Item $ncnnTarget -Force -ItemType Directory
+               Set-Location $ncnnTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+
+               $env:OpenCV_DIR = $installOpenCVDir
+
+               if ($global:IsWindows)
+               {
+                  $includeDir = Join-Path $protobufInstallDir include
+
+                  if ($Configuration -eq "Debug")
+                  {
+                     $libraryFile = Join-Path $protobufInstallDir lib | `
+                                    Join-Path -ChildPath libprotobufd.lib
+                  }
+                  else
+                  {
+                     $libraryFile = Join-Path $protobufInstallDir lib | `
+                                    Join-Path -ChildPath libprotobuf.lib
+                  }
+
+                  $exeDir = Join-Path $protobufInstallDir bin | `
+                            Join-Path -ChildPath protoc.exe
+
+                  $vs = $this._Config.GetVisualStudio()
+                  $vsarc = $this._Config.GetVisualStudioArchitecture()
+
+                  Write-Host "   cmake -G `"$vs`" -A $vsarc -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
+         -D Protobuf_LIBRARIES=`"${libraryFile}`" `
+         -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_BUILD_TOOLS=OFF `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         $ncnnDir" -ForegroundColor Yellow
+                  cmake -G "$vs" -A $vsarc -T host=x64 `
+                                             -D BUILD_SHARED_LIBS=OFF `
+                                             -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                                             -D Protobuf_INCLUDE_DIR="${includeDir}" `
+                                             -D Protobuf_LIBRARIES="${libraryFile}" `
+                                             -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
+                                             -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                                             -D NCNN_OPENCV:BOOL=OFF `
+                                             -D NCNN_BUILD_TOOLS=OFF `
+                                             -D OpenCV_DIR="${installOpenCVDir}" `
+                                             $ncnnDir
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
+               }
+            }
             "android"
             {
                Write-Host "Start Build ncnn" -ForegroundColor Green
@@ -1340,6 +1498,8 @@ function ConfigUWP([Config]$Config)
 {
    if ($global:IsWindows)
    {
+      CallVisualStudioDeveloperConsole
+
       $Builder = [ThirdPartyBuilder]::new($Config)
    
       # Build Protobuf
