@@ -1316,7 +1316,7 @@ function ConfigARM([Config]$Config)
    }
    else
    {
-      $toolchain = Join-Path $Config.GetToolchainFile()
+      $toolchain = $Config.GetToolchainFile()
 
       $env:OpenCV_DIR = $installOpenCVDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
