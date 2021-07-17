@@ -75,6 +75,7 @@ if ($Config.HasStoreDriectory())
               -e "LOCAL_UID=$(id -u $env:USER)" `
               -e "LOCAL_GID=$(id -g $env:USER)" `
               -e "CIBuildDir=/opt/data/builds" `
+              -w "/opt/data/NcnnDotNet" `
               -it "$dockername"
 }
 else
@@ -85,5 +86,6 @@ else
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
               -e "LOCAL_UID=$(id -u $env:USER)" `
               -e "LOCAL_GID=$(id -g $env:USER)" `
+              -w "/opt/data/NcnnDotNet" `
               -it "$dockername"
 }
