@@ -1067,7 +1067,6 @@ class ThirdPartyBuilder
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
-               $ret = $installDir
                if ($skipBuild)
                {
                   Write-Host "Skip Build OpenCV" -ForegroundColor Green
