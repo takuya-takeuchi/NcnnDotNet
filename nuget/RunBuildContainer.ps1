@@ -64,6 +64,12 @@ else
    $dockername = "ncnndotnet/build/$Distribution/$DistributionVersion/$Target/$cudaVersion"
 }
 
+if ($target -eq "arm")
+{
+   Write-Host "Start 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'" -ForegroundColor Green
+   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+}
+
 Write-Host "Start 'docker run --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t $dockername'" -ForegroundColor Green
 if ($Config.HasStoreDriectory())
 {
