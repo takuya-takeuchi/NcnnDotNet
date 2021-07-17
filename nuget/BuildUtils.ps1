@@ -449,8 +449,66 @@ class Config
             }
          }
       }
+      else
+      {
+         $Platform = $this._Platform
+         switch ($Platform)
+         {
+            "ios"
+            {
+               $osxArchitectures = $Config.GetOSXArchitectures()
+               $toolchain = Join-Path $toolchainDir "${osxArchitectures}-ios.cmake"
+            }
+         }
+      }
 
       return $toolchain
+   }
+
+   [string] GetDeveloperDir()
+   {
+      return $env:DEVELOPER_DIR
+   }
+
+   [string] GetOSXArchitectures()
+   {
+      return $this._OSXArchitectures
+   }
+
+   [string] GetIOSSDK([string]$osxArchitectures, [string]$developerDir)
+   {      
+      switch ($osxArchitectures)
+      {
+         "arm64e"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "arm64"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "arm"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "armv7"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "armv7s"
+         {
+            return "${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk"
+         }
+         "i386"
+         {
+            return "${developerDir}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+         }
+         "x86_64"
+         {
+            return "${developerDir}/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk"
+         }
+      }
+      return $this._OSXArchitectures
    }
 
 }
@@ -981,6 +1039,132 @@ class ThirdPartyBuilder
                make -j4
                Write-Host "   make install" -ForegroundColor Yellow
                make install
+            }            
+            "ios"
+            {
+               Write-Host "Start Build OpenCV" -ForegroundColor Green
+
+               $opencvDir = $this._Config.GetOpenCVRootDir()
+               $opencvTarget = Join-Path $current opencv
+               New-Item $opencvTarget -Force -ItemType Directory
+               Set-Location $opencvTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+
+               $developerDir = $this._Config.GetDeveloperDir()
+               $osxArchitectures = $this._Config.GetOSXArchitectures()
+               $toolchain = $this._Config.GetToolchainFile()
+
+               $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
+
+               # use libc++ rather than libstdc++
+               Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D CMAKE_SYSTEM_NAME=iOS `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
+         -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D BUILD_opencv_world=ON `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_apps=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=ON `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=OFF `
+         -D BUILD_opencv_videostab=OFF `
+         -D BUILD_PNG=ON `
+         -D BUILD_JPEG=ON `
+         -D BUILD_ZLIB=ON `
+         -D BUILD_WEBP=OFF `
+         -D WITH_PNG=ON `
+         -D WITH_JPEG=ON `
+         -D WITH_ZLIB=ON `
+         -D WITH_WEBP=OFF `
+         -D WITH_CUDA=OFF `
+         -D WITH_GTK=OFF `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
+         $opencvDir" -ForegroundColor Yellow
+               cmake -D CMAKE_BUILD_TYPE=$Configuration `
+                     -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+                     -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+                     -D CMAKE_SYSTEM_NAME=iOS `
+                     -D BUILD_SHARED_LIBS=OFF `
+                     -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
+                     -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
+                     -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
+                     -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                     -D BUILD_opencv_world=ON `
+                     -D BUILD_opencv_java=OFF `
+                     -D BUILD_opencv_python=OFF `
+                     -D BUILD_opencv_python2=OFF `
+                     -D BUILD_opencv_python3=OFF `
+                     -D BUILD_PERF_TESTS=OFF `
+                     -D BUILD_TESTS=OFF `
+                     -D BUILD_DOCS=OFF `
+                     -D BUILD_opencv_apps=OFF `
+                     -D BUILD_opencv_core=ON `
+                     -D BUILD_opencv_highgui=ON `
+                     -D BUILD_opencv_imgcodecs=ON `
+                     -D BUILD_opencv_imgproc=ON `
+                     -D BUILD_opencv_calib3d=OFF `
+                     -D BUILD_opencv_features2d=OFF `
+                     -D BUILD_opencv_flann=OFF `
+                     -D BUILD_opencv_java_bindings_generator=OFF `
+                     -D BUILD_opencv_ml=OFF `
+                     -D BUILD_opencv_objdetect=OFF `
+                     -D BUILD_opencv_photo=OFF `
+                     -D BUILD_opencv_python_bindings_generator=OFF `
+                     -D BUILD_opencv_shape=OFF `
+                     -D BUILD_opencv_stitching=OFF `
+                     -D BUILD_opencv_superres=OFF `
+                     -D BUILD_opencv_video=OFF `
+                     -D BUILD_opencv_videoio=OFF `
+                     -D BUILD_opencv_videostab=OFF `
+                     -D BUILD_PNG=ON `
+                     -D BUILD_JPEG=ON `
+                     -D BUILD_ZLIB=ON `
+                     -D BUILD_WEBP=OFF `
+                     -D WITH_PNG=ON `
+                     -D WITH_JPEG=ON `
+                     -D WITH_ZLIB=ON `
+                     -D WITH_WEBP=OFF `
+                     -D WITH_CUDA=OFF `
+                     -D WITH_GTK=OFF `
+                     -D BUILD_PROTOBUF=OFF `
+                     -D WITH_PROTOBUF=OFF `
+                     -D WITH_IPP=OFF `
+                     -D WITH_FFMPEG=OFF `
+                     -D WITH_ITT=OFF `
+                     $opencvDir
+               Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+               cmake --build . --config $Configuration --target install
             }
          }
 
@@ -1191,6 +1375,110 @@ class ThirdPartyBuilder
                      Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
                   }
                }
+            }            
+            "ios"
+            {
+               Write-Host "Start Build ncnn" -ForegroundColor Green
+
+               $env:OpenCV_DIR = "$installOpenCVDir/share/OpenCV"
+
+               $ncnnDir = $this._Config.GetNcnnRootDir()
+               $ncnnTarget = Join-Path $current ncnn
+               New-Item $ncnnTarget -Force -ItemType Directory
+               Set-Location $ncnnTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+
+               $developerDir = $this._Config.GetDeveloperDir()
+               $osxArchitectures = $this._Config.GetOSXArchitectures()
+               $toolchain = $this._Config.GetToolchainFile()
+
+               $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
+
+               $vulkanOnOff = "ON"
+               $targetPlatform = ""
+               switch ($osxArchitectures)
+               {
+                  "arm64e"
+                  {
+                     $vulkanOnOff = "ON"
+                     $targetPlatform = "ios-arm64"
+                  }
+                  "arm64"
+                  {
+                     $vulkanOnOff = "ON"
+                     $targetPlatform = "ios-arm64"
+                  }
+                  "arm"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "armv7"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "armv7s"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "i386"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+                  "x86_64"
+                  {
+                     $vulkanOnOff = "OFF"
+                     $targetPlatform = ""
+                  }
+               }
+
+               # build vulkan variables
+               $Vulkan_INCLUDE_DIR = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                     Join-Path -Childpath include
+               $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                 Join-Path -Childpath MoltenVK.xcframework | `
+                                 Join-Path -Childpath ${targetPlatform} | `
+                                 Join-Path -Childpath libMoltenVK.a
+
+               # use libc++ rather than libstdc++
+               Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D CMAKE_SYSTEM_NAME=iOS `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
+         -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
+         -D NCNN_DISABLE_RTTI:BOOL=OFF `
+         -D Vulkan_INCLUDE_DIR=`"${Vulkan_INCLUDE_DIR}`" `
+         -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         $ncnnDir" -ForegroundColor Yellow
+               cmake -D CMAKE_BUILD_TYPE=$Configuration `
+                     -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+                     -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+                     -D CMAKE_SYSTEM_NAME=iOS `
+                     -D BUILD_SHARED_LIBS=OFF `
+                     -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
+                     -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
+                     -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
+                     -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                     -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
+                     -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                     -D Vulkan_INCLUDE_DIR="${Vulkan_INCLUDE_DIR}" `
+                     -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
+                     -D OpenCV_DIR="${installOpenCVDir}" `
+                     $ncnnDir
+
+               Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+               cmake --build . --config $Configuration --target install
             }
             "uwp"
             {
@@ -1683,13 +1971,102 @@ function ConfigANDROID([Config]$Config)
 
 function ConfigIOS([Config]$Config)
 {
-   if ($global:IsMacOS)
+   if ($IsMacOS)
    {
-      cmake -G Xcode `
-            -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
-            -D PLATFORM=OS64COMBINED `
-            -D BUILD_SHARED_LIBS=ON `
-            -D USE_NCNN_VULKAN=OFF `
+      $Builder = [ThirdPartyBuilder]::new($Config)
+
+      $osxArchitectures = $Config.GetOSXArchitectures()
+
+      $vulkanOnOff = "ON"
+      $targetPlatform = ""
+      switch ($osxArchitectures)
+      {
+         "arm64e"
+         {
+            $vulkanOnOff = "ON"
+            $targetPlatform = "ios-arm64"
+         }
+         "arm64"
+         {
+            $vulkanOnOff = "ON"
+            $targetPlatform = "ios-arm64"
+         }
+         "arm"
+         {
+            $vulkanOnOff = "OFF"
+            $targetPlatform = ""
+         }
+         "armv7"
+         {
+            $vulkanOnOff = "OFF"
+            $targetPlatform = ""
+         }
+         "armv7s"
+         {
+            $vulkanOnOff = "OFF"
+            $targetPlatform = ""
+         }
+         "i386"
+         {
+            $vulkanOnOff = "OFF"
+            $targetPlatform = ""
+         }
+         "x86_64"
+         {
+            $vulkanOnOff = "OFF"
+            $targetPlatform = ""
+         }
+      }
+
+      # Build opencv
+      $installOpenCVDir = $Builder.BuildOpenCV()
+
+      # Build ncnn
+      $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, $vulkanOnOff)
+
+      # To inclue src/layer
+      $ncnnDir = $Config.GetNcnnRootDir()
+
+      # # Build NcnnDotNet.Native
+      Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
+
+      $toolchainDir = $Config.GetIOSCmakeRootDir()
+      $developerDir = $Config.GetDeveloperDir()
+      $osxArchitectures = $Config.GetOSXArchitectures()
+
+      $OSX_SYSROOT = $Config.GetIOSSDK($osxArchitectures, $developerDir)
+            
+      $env:OpenCV_DIR = "${installOpenCVDir}/share/OpenCV"
+      $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
+
+      # use libc++ rather than libstdc++
+      Write-Host "   cmake `
+         -D CMAKE_SYSTEM_NAME=iOS `
+         -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
+         -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchainDir}/${osxArchitectures}-ios.cmake`" `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D NCNN_VULKAN:BOOL=${vulkanOnOff} `
+         -D OpenCV_DIR=`"${installOpenCVDir}/share/OpenCV`" `
+         -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
+         -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
+         .." -ForegroundColor Yellow
+      cmake -D CMAKE_SYSTEM_NAME=iOS `
+            -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
+            -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
+            -D CMAKE_TOOLCHAIN_FILE="${toolchainDir}/${osxArchitectures}-ios.cmake" `
+            -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+            -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+            -D BUILD_SHARED_LIBS=OFF `
+            -D NCNN_VULKAN:BOOL=${vulkanOnOff} `
+            -D OpenCV_DIR="${installOpenCVDir}/share/OpenCV" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
+            -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
             ..
    }
    else
