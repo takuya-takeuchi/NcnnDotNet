@@ -2048,9 +2048,9 @@ function ConfigIOS([Config]$Config)
       # # Build NcnnDotNet.Native
       Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
 
-      $toolchainDir = $Config.GetIOSCmakeRootDir()
       $developerDir = $Config.GetDeveloperDir()
       $osxArchitectures = $Config.GetOSXArchitectures()
+      $toolchain = $this._Config.GetToolchainFile()
 
       $OSX_SYSROOT = $Config.GetIOSSDK($osxArchitectures, $developerDir)
 
@@ -2062,7 +2062,7 @@ function ConfigIOS([Config]$Config)
          -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
-         -D CMAKE_TOOLCHAIN_FILE=`"${toolchainDir}/${osxArchitectures}-ios.cmake`" `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
          -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
          -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
          -D NCNN_VULKAN:BOOL=${vulkanOnOff} `
@@ -2076,7 +2076,7 @@ function ConfigIOS([Config]$Config)
       cmake -D CMAKE_SYSTEM_NAME=iOS `
             -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
             -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
-            -D CMAKE_TOOLCHAIN_FILE="${toolchainDir}/${osxArchitectures}-ios.cmake" `
+            -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
             -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++ -static" `
             -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++ -static" `
             -D BUILD_SHARED_LIBS=OFF `
