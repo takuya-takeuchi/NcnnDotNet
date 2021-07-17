@@ -1116,6 +1116,12 @@ class ThirdPartyBuilder
                   $exeDir = Join-Path $protobufInstallDir bin | `
                             Join-Path -ChildPath protoc
 
+                  # do not expose arm82 features for gcc < 4.7
+                  # by https://github.com/Tencent/ncnn/commit/ce9ae96bde967a84341911834b96530d9568f6f9
+                  # But arm says
+                  # https://community.arm.com/developer/tools-software/tools/b/tools-software-ides-blog/posts/making-the-most-of-the-arm-architecture-in-gcc-10
+                  $NCNN_ARM82 = "OFF"
+
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
@@ -1126,6 +1132,7 @@ class ThirdPartyBuilder
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
+         -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1138,6 +1145,7 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                        -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -1474,7 +1482,7 @@ function ConfigARM([Config]$Config)
    }
    else
    {
-      $toolchain = Join-Path $Config.GetToolchainFile()
+      $toolchain = $Config.GetToolchainFile()
 
       $env:OpenCV_DIR = $installOpenCVDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
