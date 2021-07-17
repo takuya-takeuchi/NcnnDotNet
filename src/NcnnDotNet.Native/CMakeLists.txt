@@ -9,7 +9,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(${PROJ_NAME} VERSION 0.0.0.20200106)
 
 # definitions
-option(NCNN_VULKAN "vulkan compute support" OFF)
+option(NCNN_VULKAN    "vulkan compute support" OFF)
+option(NO_GUI_SUPPORT "disable gui support" OFF)
+
+if (NO_GUI_SUPPORT)
+    add_compile_definitions(NO_GUI_SUPPORT)
+endif()
 
 # OS info
 message("-------------------------------------------------------")
@@ -147,12 +152,20 @@ endif()
 
 # STATIC_LIBRARIES
 if (MSVC OR MSYS OR MINGW)
-    set(STATIC_LIBRARIES
-        ncnn
-        opencv_highgui
-        opencv_imgcodecs
-        opencv_imgproc
-    )
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+        set(STATIC_LIBRARIES
+            ncnn
+            opencv_imgcodecs
+            opencv_imgproc
+        )
+    else()
+        set(STATIC_LIBRARIES
+            ncnn
+            opencv_highgui
+            opencv_imgcodecs
+            opencv_imgproc
+        )
+    endif()
 elseif(APPLE)
     set(STATIC_LIBRARIES
         ncnn

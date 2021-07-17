@@ -761,6 +761,9 @@ class ThirdPartyBuilder
 
                if ($global:IsWindows)
                {
+                  # NOTE
+                  # libtiff looks like to depends on win32 functions like __imp_MessageBoxA and __imp_GetFocus.
+                  # So disable TIFF
                   Write-Host "   cmake -G `"NMake Makefiles`" -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D BUILD_WITH_STATIC_CRT=OFF `
@@ -797,6 +800,7 @@ class ThirdPartyBuilder
          -D WITH_IPP=OFF `
          -D WITH_FFMPEG=OFF `
          -D WITH_ITT=OFF `
+         -D WITH_TIFF=OFF `
          $opencvDir" -ForegroundColor Yellow
                   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
                                              -D BUILD_SHARED_LIBS=OFF `
@@ -834,6 +838,7 @@ class ThirdPartyBuilder
                                              -D WITH_IPP=OFF `
                                              -D WITH_FFMPEG=OFF `
                                              -D WITH_ITT=OFF `
+                                             -D WITH_TIFF=OFF `
                                              $opencvDir
                   Write-Host "   cmake build and install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
@@ -1549,6 +1554,7 @@ function ConfigUWP([Config]$Config)
       -D OpenCV_DIR=`"${installOpenCVDir}`" `
       -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
       -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+      -D NO_GUI_SUPPORT:BOOL=ON `
       .." -ForegroundColor Yellow
          cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
@@ -1561,6 +1567,7 @@ function ConfigUWP([Config]$Config)
                -D OpenCV_DIR="${installOpenCVDir}" `
                -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
                -D ncnn_SRC_DIR="${ncnnDir}" `
+               -D NO_GUI_SUPPORT:BOOL=ON `
                ..
       }
       else
@@ -1577,6 +1584,7 @@ function ConfigUWP([Config]$Config)
       -D OpenCV_DIR=`"${installOpenCVDir}`" `
       -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
       -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+      -D NO_GUI_SUPPORT:BOOL=ON `
       .." -ForegroundColor Yellow
          cmake -G "$vs" -A $vsarc -T host=x64 `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
@@ -1589,6 +1597,7 @@ function ConfigUWP([Config]$Config)
                -D OpenCV_DIR="${installOpenCVDir}" `
                -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
                -D ncnn_SRC_DIR="${ncnnDir}" `
+               -D NO_GUI_SUPPORT:BOOL=ON `
                ..
       }
    }
