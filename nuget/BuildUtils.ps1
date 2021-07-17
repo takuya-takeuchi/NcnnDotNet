@@ -947,6 +947,62 @@ class ThirdPartyBuilder
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
                }
+               elseif ($global:IsMacOS)
+               {
+                  $toolchain = $this._Config.GetToolchainFile()
+
+                  $includeDir = Join-Path $protobufInstallDir include
+                  $libraryFile = Join-Path $protobufInstallDir lib | `
+                                 Join-Path -ChildPath libprotobuf.a
+
+                  $exeDir = Join-Path $protobufInstallDir bin | `
+                            Join-Path -ChildPath protoc
+
+                  # build vulkan variables
+                  $Vulkan_INCLUDE_DIR = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                        Join-Path -Childpath include
+                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                    Join-Path -Childpath dylib | `
+                                    Join-Path -Childpath macOS | `
+                                    Join-Path -Childpath libMoltenVK.dylib
+
+                  Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
+         -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
+         -D Protobuf_LIBRARIES=`"${libraryFile}`" `
+         -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D Vulkan_INCLUDE_DIR=`"${Vulkan_INCLUDE_DIR}`" `
+         -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
+         -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_DISABLE_RTTI:BOOL=OFF `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         $ncnnDir" -ForegroundColor Yellow
+                  cmake -D CMAKE_BUILD_TYPE=$Configuration `
+                        -D BUILD_SHARED_LIBS=OFF `
+                        -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                        -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
+                        -D Protobuf_INCLUDE_DIR="${includeDir}" `
+                        -D Protobuf_LIBRARIES="${libraryFile}" `
+                        -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
+                        -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                        -D Vulkan_INCLUDE_DIR="${Vulkan_INCLUDE_DIR}" `
+                        -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
+                        -D NCNN_OPENCV:BOOL=OFF `
+                        -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                        -D OpenCV_DIR="${installOpenCVDir}" `
+                        $ncnnDir
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
+
+                  # centos generates some libraries into lib64
+                  if (Test-Path "${installDir}/lib64")
+                  {
+                     Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
+                  }
+               }
                else
                {
                   $toolchain = $this._Config.GetToolchainFile()
