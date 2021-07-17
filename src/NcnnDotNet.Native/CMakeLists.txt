@@ -206,7 +206,7 @@ if (NCNN_VULKAN)
         )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
-            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            ${Vulkan_LIBRARY}
             glslang
             GenericCodeGen
             MachineIndependent
