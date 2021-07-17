@@ -2037,7 +2037,7 @@ function ConfigIOS([Config]$Config)
       }
 
       # Build opencv
-      $installOpenCVDir = $Builder.BuildOpenCV()
+      $installOpenCVDir = $Builder.BuildOpenCV($True)
 
       # Build ncnn
       $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, $vulkanOnOff)
