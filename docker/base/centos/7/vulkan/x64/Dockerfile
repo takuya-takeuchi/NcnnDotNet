@@ -6,7 +6,7 @@ RUN yum update -y && yum install -y \
     wget
 
 # install vulkan sdk
-ENV VULKAN_SDK_VERSION 1.1.92.1
+ENV VULKAN_SDK_VERSION 1.2.162.0
 WORKDIR /usr/share/vulkan
 RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
@@ -20,7 +20,7 @@ RUN yum update -y && yum install -y \
  && yum clean all
 
 # install vulkan sdk
-ENV VULKAN_SDK_VERSION 1.1.114.0
+ENV VULKAN_SDK_VERSION 1.2.162.0
 WORKDIR /usr/share/vulkan
 RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
