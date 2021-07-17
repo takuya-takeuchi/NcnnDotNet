@@ -188,6 +188,7 @@ elseif(UNIX AND NOT APPLE)
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
+        pthread
     )
 else()
     message(FATAL_ERROR "Failed to link library")

@@ -1023,7 +1023,9 @@ class ThirdPartyBuilder
                   # by https://github.com/Tencent/ncnn/commit/ce9ae96bde967a84341911834b96530d9568f6f9
                   # But arm says
                   # https://community.arm.com/developer/tools-software/tools/b/tools-software-ides-blog/posts/making-the-most-of-the-arm-architecture-in-gcc-10
-                  $NCNN_ARM82 = "OFF"
+                  $NCNN_ARM82="OFF"
+                  $NCNN_COMPILER_SUPPORT_ARM82_FP16="OFF"
+                  $NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD="OFF"
 
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
@@ -1036,6 +1038,8 @@ class ThirdPartyBuilder
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
          -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
+         -D NCNN_COMPILER_SUPPORT_ARM82_FP16:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16} `
+         -D NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1049,6 +1053,9 @@ class ThirdPartyBuilder
                         -D NCNN_OPENCV:BOOL=OFF `
                         -D NCNN_DISABLE_RTTI:BOOL=OFF `
                         -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
+                        -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
+                        -D NCNN_COMPILER_SUPPORT_ARM82_FP16:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16} `
+                        -D NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
