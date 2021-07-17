@@ -75,6 +75,7 @@ if ($Config.HasStoreDriectory())
 {
    $storeDirecotry = $Config.GetRootStoreDriectory()
    docker run --rm `
+              --privileged `
               --entrypoint="/bin/bash" `
               -v "$($storeDirecotry):/opt/data/builds" `
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
@@ -88,6 +89,7 @@ else
 {
    Write-Host "CIBuildDir is not set" -ForegroundColor Yellow
    docker run --rm `
+              --privileged `
               --entrypoint="/bin/bash" `
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
               -e "LOCAL_UID=$(id -u $env:USER)" `

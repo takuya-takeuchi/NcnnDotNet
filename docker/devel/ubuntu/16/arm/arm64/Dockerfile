@@ -10,6 +10,10 @@ RUN apt-get update && apt-get install -y \
     cmake
 
 # install compiler for arm
+# At fist, install binfmt-support before install qemu-user-static
+RUN apt-get update && apt-get install -y \
+    binfmt-support 
+    
 RUN apt-get update && apt-get install -y \
     qemu-user \
     qemu-user-static \

@@ -31,6 +31,9 @@ set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 set(VERSION_DATE 20210417)
 
+# Binary is not be able to be executed in host, set 0 (success) forcibly
+set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
+
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set(CMAKE_C_FLAGS "-fPIC")
