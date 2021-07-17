@@ -1117,7 +1117,7 @@ function ConfigCPU([Config]$Config)
    $installProtobufDir = $Builder.BuildProtobuf()
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($True)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
@@ -1190,7 +1190,7 @@ function ConfigVulkan([Config]$Config)
    $installProtobufDir = $Builder.BuildProtobuf()
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($True)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
@@ -1254,7 +1254,7 @@ function ConfigARM([Config]$Config)
    $installProtobufDir = $Builder.BuildProtobuf()
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($True)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
@@ -1317,7 +1317,7 @@ function ConfigUWP([Config]$Config)
       $installProtobufDir = $Builder.BuildProtobuf()
    
       # Build opencv
-      $installOpenCVDir = $Builder.BuildOpenCV()
+      $installOpenCVDir = $Builder.BuildOpenCV($True)
    
       # Build ncnn
       $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
@@ -1407,7 +1407,7 @@ function ConfigANDROID([Config]$Config)
    $Builder = [ThirdPartyBuilder]::new($Config)
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($True)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
