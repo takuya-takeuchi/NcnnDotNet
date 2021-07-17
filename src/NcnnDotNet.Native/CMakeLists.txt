@@ -106,10 +106,24 @@ if (MSVC OR MSYS OR MINGW)
     include_directories("${ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
-else()
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "${Vulkan_INCLUDE_DIR}")
+elseif(APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "${Vulkan_INCLUDE_DIR}")
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     include_directories("${ncnn_SRC_DIR}/src"
                         "${OpenCV_INCLUDE_DIRS}"
                         "$ENV{VULKAN_SDK}/include")
+elseif(UNIX AND NOT APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}"
+                        "$ENV{VULKAN_SDK}/include")
+else()
+    message(FATAL_ERROR "Failed to include directories")
 endif()
 
 # Set /bigobj for MSVC
@@ -166,6 +180,14 @@ if (MSVC OR MSYS OR MINGW)
             opencv_imgproc
         )
     endif()
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    set(STATIC_LIBRARIES
+        ncnn
+        zlib
+        libjpeg
+        libpng
+        opencv_world
+    )
 elseif(APPLE)
     set(STATIC_LIBRARIES
         ncnn
@@ -221,6 +243,16 @@ if (NCNN_VULKAN)
             OSDependent
             SPIRV
         )
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        list(APPEND STATIC_LIBRARIES
+            ${Vulkan_LIBRARY}
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
+        )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             ${Vulkan_LIBRARY}
@@ -254,9 +286,15 @@ if (NCNN_VULKAN)
     endif()
 endif()
 
-add_library(${PROJ_NAME} SHARED ${HEADERS}
-                                ${SOURCES}
-                                ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    add_library(${PROJ_NAME} ${HEADERS}
+                             ${SOURCES}
+                             ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+else ()
+    add_library(${PROJ_NAME} SHARED ${HEADERS}
+                                    ${SOURCES}
+                                    ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+endif()
 
 target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 

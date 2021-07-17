@@ -47,7 +47,7 @@ class Config
 
    static $BuildLibraryIOSHash =
    @{
-      "NcnnDotNet.Native"     = "libNcnnDotNetNative.a";
+      "NcnnDotNet.Native"     = "libNcnnDotNetNative_merged.a";
    }
 
    [string]   $_Root
@@ -59,6 +59,7 @@ class Config
    [int]      $_CudaVersion
    [string]   $_AndroidABI
    [string]   $_AndroidNativeAPILevel
+   [string]   $_OSXArchitectures
 
    #***************************************
    # Arguments
@@ -128,6 +129,10 @@ class Config
             $setting = ConvertFrom-Json $decoded
             $this._AndroidABI            = $setting.ANDROID_ABI
             $this._AndroidNativeAPILevel = $setting.ANDROID_NATIVE_API_LEVEL
+         }
+         "ios"
+         {
+            $this._OSXArchitectures = $Option
          }
       }
    }
@@ -257,7 +262,14 @@ class Config
       }
       elseif ($global:IsMacOS)
       {
-         $os = "osx"
+         if (![string]::IsNullOrEmpty($this._OSXArchitectures))
+         {
+            $os = "ios"
+         }
+         else
+         {
+            $os = "osx"
+         }
       }
       elseif ($global:IsLinux)
       {
@@ -368,6 +380,10 @@ class Config
          {
             $architecture = $this._AndroidABI
          }
+         "ios"
+         {
+            $architecture = $this._OSXArchitectures
+         }
       }
 
       if ($this._Configuration -eq "Debug")
@@ -476,7 +492,7 @@ class Config
    }
 
    [string] GetIOSSDK([string]$osxArchitectures, [string]$developerDir)
-   {      
+   {
       switch ($osxArchitectures)
       {
          "arm64e"
@@ -1039,7 +1055,7 @@ class ThirdPartyBuilder
                make -j4
                Write-Host "   make install" -ForegroundColor Yellow
                make install
-            }            
+            }
             "ios"
             {
                Write-Host "Start Build OpenCV" -ForegroundColor Green
@@ -1375,7 +1391,7 @@ class ThirdPartyBuilder
                      Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
                   }
                }
-            }            
+            }
             "ios"
             {
                Write-Host "Start Build ncnn" -ForegroundColor Green
@@ -1827,19 +1843,19 @@ function ConfigUWP([Config]$Config)
       CallVisualStudioDeveloperConsole
 
       $Builder = [ThirdPartyBuilder]::new($Config)
-   
+
       # Build Protobuf
       $installProtobufDir = $Builder.BuildProtobuf()
-   
+
       # Build opencv
       $installOpenCVDir = $Builder.BuildOpenCV($False)
-   
+
       # Build ncnn
       $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
-   
+
       # To inclue src/layer
       $ncnnDir = $Config.GetNcnnRootDir()
-   
+
       # Build NcnnDotNet.Native
       Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
 
@@ -1955,6 +1971,7 @@ function ConfigANDROID([Config]$Config)
    -D NCNN_VULKAN:BOOL=ON `
    -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
    -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+   -D NO_GUI_SUPPORT:BOOL=ON `
    .." -ForegroundColor Yellow
       cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
             -D ANDROID_ABI=$abi `
@@ -1966,6 +1983,7 @@ function ConfigANDROID([Config]$Config)
             -D NCNN_VULKAN:BOOL=ON `
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D NO_GUI_SUPPORT:BOOL=ON `
             ..
 }
 
@@ -2035,7 +2053,7 @@ function ConfigIOS([Config]$Config)
       $osxArchitectures = $Config.GetOSXArchitectures()
 
       $OSX_SYSROOT = $Config.GetIOSSDK($osxArchitectures, $developerDir)
-            
+
       $env:OpenCV_DIR = "${installOpenCVDir}/share/OpenCV"
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
@@ -2053,6 +2071,7 @@ function ConfigIOS([Config]$Config)
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
          -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
+         -D NO_GUI_SUPPORT:BOOL=ON `
          .." -ForegroundColor Yellow
       cmake -D CMAKE_SYSTEM_NAME=iOS `
             -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
@@ -2067,6 +2086,7 @@ function ConfigIOS([Config]$Config)
             -D ncnn_SRC_DIR="${ncnnDir}" `
             -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
             -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
+            -D NO_GUI_SUPPORT:BOOL=ON `
             ..
    }
    else
@@ -2131,6 +2151,62 @@ function Build([Config]$Config)
    $cofiguration = $Config.GetConfigurationName()
    Write-Host "cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
    cmake --build . --config ${cofiguration}
+
+   $Platform = $Config.GetPlatform()
+
+   # Post build 
+   switch ($Platform)
+   {
+      "ios"
+      {
+         $BuildTargets = @()
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64e";  Vulkan = $True; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64";   Vulkan = $True; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm";     Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7";   Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7s";  Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "i386";    Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "x86_64";  Vulkan = $False; }
+
+         foreach($BuildTarget in $BuildTargets)
+         {
+            $platform = $BuildTarget.Platform
+            $vulkan = $BuildTarget.Vulkan
+
+            if (Test-Path "libNcnnDotNetNative_merged.a")
+            {
+               Remove-Item "libNcnnDotNetNative_merged.a"
+            }
+
+            if ($vulkan)
+            {
+               libtool -o "libNcnnDotNetNative_merged.a" `
+                           "libNcnnDotNetNative.a" `
+                           "opencv/install/lib/libopencv_world.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                           "ncnn/install/lib/libMachineIndependent.a" `
+                           "ncnn/install/lib/libOGLCompiler.a" `
+                           "ncnn/install/lib/libncnn.a" `
+                           "ncnn/install/lib/libOSDependent.a" `
+                           "ncnn/install/lib/libGenericCodeGen.a" `
+                           "ncnn/install/lib/libSPIRV.a" `
+                           "ncnn/install/lib/libglslang.a"
+            }
+            else
+            {
+               libtool -o "libNcnnDotNetNative_merged.a" `
+                           "libNcnnDotNetNative.a" `
+                           "opencv/install/lib/libopencv_world.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                           "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                           "ncnn/install/lib/libncnn.a"
+            }
+         }
+      }
+   }
 
    # Move to Root directory
    Set-Location -Path $Current
