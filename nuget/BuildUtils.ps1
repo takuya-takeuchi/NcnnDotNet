@@ -1106,7 +1106,7 @@ class ThirdPartyBuilder
 
 function ConfigCPU([Config]$Config)
 {
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       CallVisualStudioDeveloperConsole
    }
@@ -1127,7 +1127,7 @@ function ConfigCPU([Config]$Config)
 
    # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       $vs = $Config.GetVisualStudio()
       $vsarc = $Config.GetVisualStudioArchitecture()
@@ -1179,7 +1179,7 @@ function ConfigVulkan([Config]$Config)
       exit -1
    }
 
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       CallVisualStudioDeveloperConsole
    }
@@ -1200,7 +1200,7 @@ function ConfigVulkan([Config]$Config)
 
    # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       $vs = $Config.GetVisualStudio()
       $vsarc = $Config.GetVisualStudioArchitecture()
@@ -1222,7 +1222,7 @@ function ConfigVulkan([Config]$Config)
             -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
-   elseif ($global::IsMacOS)
+   elseif ($global:IsMacOS)
    {
       # build vulkan variables
       $Vulkan_INCLUDE_DIR = Join-Path $env:VULKAN_SDK MoltenVK | `
@@ -1338,7 +1338,7 @@ function ConfigARM([Config]$Config)
 
 function ConfigUWP([Config]$Config)
 {
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       $Builder = [ThirdPartyBuilder]::new($Config)
    
@@ -1480,7 +1480,7 @@ function ConfigANDROID([Config]$Config)
 
 function ConfigIOS([Config]$Config)
 {
-   if ($IsMacOS)
+   if ($global:IsMacOS)
    {
       cmake -G Xcode `
             -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `
