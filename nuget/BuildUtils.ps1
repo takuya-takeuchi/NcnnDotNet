@@ -1067,6 +1067,12 @@ class ThirdPartyBuilder
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
+               $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
 
                $developerDir = $this._Config.GetDeveloperDir()
                $osxArchitectures = $this._Config.GetOSXArchitectures()
@@ -2037,7 +2043,7 @@ function ConfigIOS([Config]$Config)
       }
 
       # Build opencv
-      $installOpenCVDir = $Builder.BuildOpenCV($True)
+      $installOpenCVDir = $Builder.BuildOpenCV($False)
 
       # Build ncnn
       $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, $vulkanOnOff)
@@ -2050,7 +2056,7 @@ function ConfigIOS([Config]$Config)
 
       $developerDir = $Config.GetDeveloperDir()
       $osxArchitectures = $Config.GetOSXArchitectures()
-      $toolchain = $this._Config.GetToolchainFile()
+      $toolchain = $Config.GetToolchainFile()
 
       $OSX_SYSROOT = $Config.GetIOSSDK($osxArchitectures, $developerDir)
 
