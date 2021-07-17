@@ -39,12 +39,12 @@ if ($DeveloperDir -And !(Test-Path $DeveloperDir))
 }
 
 $BuildTargets = @()
-$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64"  }
+# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64"  }
 # $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "vulkan"; Device = "ios";           Architecture = 64; Option = "arm64e" }
-# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7s" }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7s" }
 # $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios";           Architecture = 32; Option = "armv7"  }
 $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 64; Option = "x86_64" }
-# $BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 32; Option = "i386"   }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "ios"; Target = "cpu";    Device = "ios-simulator"; Architecture = 32; Option = "i386"   }
 
 foreach($BuildTarget in $BuildTargets)
 {

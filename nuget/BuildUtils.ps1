@@ -1079,12 +1079,17 @@ class ThirdPartyBuilder
 
                $OSX_SYSROOT = $this._Config.GetIOSSDK($osxArchitectures, $developerDir)
 
+               $CMAKE_IOS_INSTALL_COMBINED="NO"
+               $CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH="NO"
+
                # use libc++ rather than libstdc++
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
-         -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
-         -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
+         -D CMAKE_CXX_FLAGS=`"-std=c++11`" `
+         -D CMAKE_EXE_LINKER_FLAGS=`"-stdlib=libc++ -lc++abi`" `
          -D CMAKE_SYSTEM_NAME=iOS `
          -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=$CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH `
+         -D CMAKE_IOS_INSTALL_COMBINED=$CMAKE_IOS_INSTALL_COMBINED `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
          -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
@@ -1133,10 +1138,12 @@ class ThirdPartyBuilder
          -D WITH_ITT=OFF `
          $opencvDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
-                     -D CMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++ -static" `
-                     -D CMAKE_EXE_LINKER_FLAGS="-std=c++11 -stdlib=libc++ -static" `
+                     -D CMAKE_CXX_FLAGS="-std=c++11" `
+                     -D CMAKE_EXE_LINKER_FLAGS="-stdlib=libc++ -lc++abi" `
                      -D CMAKE_SYSTEM_NAME=iOS `
                      -D BUILD_SHARED_LIBS=OFF `
+                     -D CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=$CMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH `
+                     -D CMAKE_IOS_INSTALL_COMBINED=$CMAKE_IOS_INSTALL_COMBINED `
                      -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
                      -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
                      -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
