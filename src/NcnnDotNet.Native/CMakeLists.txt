@@ -104,26 +104,35 @@ endif()
 
 if (MSVC OR MSYS OR MINGW)
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
+                        "${OpenCV_INCLUDE_DIRS}")
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "${Vulkan_INCLUDE_DIR}")
+                        "${OpenCV_INCLUDE_DIRS}")
 elseif(APPLE)
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "${Vulkan_INCLUDE_DIR}")
+                        "${OpenCV_INCLUDE_DIRS}")
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
+                        "${OpenCV_INCLUDE_DIRS}")
 elseif(UNIX AND NOT APPLE)
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
+                        "${OpenCV_INCLUDE_DIRS}")
 else()
     message(FATAL_ERROR "Failed to include directories")
+endif()
+
+if (NCNN_VULKAN)
+    if (MSVC OR MSYS OR MINGW)
+        include_directories("$ENV{VULKAN_SDK}/include")
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        include_directories("${Vulkan_INCLUDE_DIR}")
+    elseif(APPLE)
+        include_directories("${Vulkan_INCLUDE_DIR}")
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+        include_directories("$ENV{VULKAN_SDK}/include")
+    elseif(UNIX AND NOT APPLE)
+        include_directories("$ENV{VULKAN_SDK}/include")
+    endif()
 endif()
 
 # Set /bigobj for MSVC
