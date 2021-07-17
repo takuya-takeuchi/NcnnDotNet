@@ -2064,8 +2064,7 @@ function ConfigIOS([Config]$Config)
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
       # use libc++ rather than libstdc++
-      Write-Host "   cmake `
-         -D CMAKE_SYSTEM_NAME=iOS `
+      Write-Host "   cmake -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
          -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
