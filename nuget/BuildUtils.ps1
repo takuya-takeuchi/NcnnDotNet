@@ -1222,6 +1222,35 @@ function ConfigVulkan([Config]$Config)
             -D ncnn_SRC_DIR="${ncnnDir}" `
             ..
    }
+   elseif ($global::IsMacOS)
+   {
+      # build vulkan variables
+      $Vulkan_INCLUDE_DIR = Join-Path $env:VULKAN_SDK MoltenVK | `
+                              Join-Path -Childpath include
+      $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                        Join-Path -Childpath dylib | `
+                        Join-Path -Childpath macOS | `
+                        Join-Path -Childpath libMoltenVK.dylib
+
+      $env:OpenCV_DIR = $installOpenCVDir
+      $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
+      Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
+         -D NCNN_VULKAN:BOOL=ON `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D Vulkan_INCLUDE_DIR=`"${Vulkan_INCLUDE_DIR}`" `
+         -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
+         .." -ForegroundColor Yellow
+      cmake -D BUILD_SHARED_LIBS=ON `
+            -D NCNN_VULKAN:BOOL=ON `
+            -D OpenCV_DIR="${installOpenCVDir}" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D Vulkan_INCLUDE_DIR="${Vulkan_INCLUDE_DIR}" `
+            -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
+            ..
+   }
    else
    {
       $env:OpenCV_DIR = $installOpenCVDir
