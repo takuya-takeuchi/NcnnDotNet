@@ -9,7 +9,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(${PROJ_NAME} VERSION 0.0.0.20200106)
 
 # definitions
-option(NCNN_VULKAN "vulkan compute support" OFF)
+option(NCNN_VULKAN    "vulkan compute support" OFF)
+option(NO_GUI_SUPPORT "disable gui support" OFF)
+
+if (NO_GUI_SUPPORT)
+    add_compile_definitions(NO_GUI_SUPPORT)
+endif()
 
 # OS info
 message("-------------------------------------------------------")
@@ -30,6 +35,9 @@ set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
 set(VERSION_DATE 20210417)
+
+# Binary is not be able to be executed in host, set 0 (success) forcibly
+set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
@@ -144,12 +152,20 @@ endif()
 
 # STATIC_LIBRARIES
 if (MSVC OR MSYS OR MINGW)
-    set(STATIC_LIBRARIES
-        ncnn
-        opencv_highgui
-        opencv_imgcodecs
-        opencv_imgproc
-    )
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+        set(STATIC_LIBRARIES
+            ncnn
+            opencv_imgcodecs
+            opencv_imgproc
+        )
+    else()
+        set(STATIC_LIBRARIES
+            ncnn
+            opencv_highgui
+            opencv_imgcodecs
+            opencv_imgproc
+        )
+    endif()
 elseif(APPLE)
     set(STATIC_LIBRARIES
         ncnn
@@ -188,6 +204,7 @@ elseif(UNIX AND NOT APPLE)
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
+        pthread
     )
 else()
     message(FATAL_ERROR "Failed to link library")
@@ -206,7 +223,7 @@ if (NCNN_VULKAN)
         )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
-            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            ${Vulkan_LIBRARY}
             glslang
             GenericCodeGen
             MachineIndependent

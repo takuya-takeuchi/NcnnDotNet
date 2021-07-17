@@ -5,7 +5,9 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>
+#ifndef NO_GUI_SUPPORT
 #include <opencv2/highgui.hpp>
+#endif
 #include "../shared.h"
 
 #pragma region template
@@ -139,9 +141,11 @@ DLLEXPORT int32_t opencv_imread(const char* filename, const int32_t filename_len
 
 DLLEXPORT void opencv_imshow(const char *winname, const int32_t winname_len, cv::Mat *mat)
 {
+#ifndef NO_GUI_SUPPORT
     std::string win(winname, winname_len);
     const auto& m = *mat;
     cv::imshow(win, m);
+#endif
 }
 
 DLLEXPORT int32_t opencv_imwrite(const char* filename, const int32_t filename_len, cv::Mat* mat)
@@ -159,7 +163,9 @@ DLLEXPORT int32_t opencv_waitKey(const int32_t delay, int32_t* returnValue)
 {
     int32_t error = ERR_OK;
 
+#ifndef NO_GUI_SUPPORT
     *returnValue = cv::waitKey(delay);
+#endif
 
     return error;
 }

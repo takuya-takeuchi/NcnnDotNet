@@ -4,7 +4,7 @@ LABEL maintainer "Takuya Takeuchi <takuya.takeuchi.dev@gmail.com>"
 # install vulkan sdk
 RUN apt-get update && apt install -y wget apt-transport-https
 
-ENV VULKAN_SDK_VERSION 1.1.92.1
+ENV VULKAN_SDK_VERSION 1.2.162.0
 WORKDIR /usr/share/vulkan
 RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # install vulkan sdk
-ENV VULKAN_SDK_VERSION 1.1.114.0
+ENV VULKAN_SDK_VERSION 1.2.162.0
 WORKDIR /usr/share/vulkan
 RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz

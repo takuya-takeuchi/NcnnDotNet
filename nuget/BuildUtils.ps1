@@ -457,7 +457,30 @@ class Config
 
 function CallVisualStudioDeveloperConsole()
 {
-   cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat`" && set > %temp%\vcvars.txt"
+   $target = $this._Target
+
+   if ($target -eq "arm")
+   {
+      if ($architecture -eq 32)
+      {
+         cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsamd64_arm.bat`" && set > %temp%\vcvars.txt"
+      }
+      elseif ($architecture -eq 64)
+      {
+         cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsamd64_arm64.bat`" && set > %temp%\vcvars.txt"
+      }
+   }
+   else
+   {
+      if ($architecture -eq 32)
+      {
+         cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsamd64_x86.bat`" && set > %temp%\vcvars.txt"
+      }
+      elseif ($architecture -eq 64)
+      {
+         cmd.exe /c "call `"C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat`" && set > %temp%\vcvars.txt"
+      }
+   }
 
    Get-Content "${env:temp}\vcvars.txt" | Foreach-Object {
       if ($_ -match "^(.*?)=(.*)$") {
@@ -498,7 +521,7 @@ class ThirdPartyBuilder
 
          if ($global:IsWindows)
          {
-            Write-Host "   cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
+            Write-Host "   cmake -G `"NMake Makefiles`" -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX="$installDir" `
          -D protobuf_BUILD_TESTS=OFF `
@@ -544,7 +567,7 @@ class ThirdPartyBuilder
       return $ret
    }
 
-   [string] BuildOpenCV()
+   [string] BuildOpenCV([bool]$skipBuild = $False)
    {
       $ret = ""
       $current = Get-Location
@@ -567,6 +590,11 @@ class ThirdPartyBuilder
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
 
                if ($global:IsWindows)
                {
@@ -737,6 +765,109 @@ class ThirdPartyBuilder
                   cmake --build . --config $Configuration --target install
                }
             }
+            "uwp"
+            {
+               Write-Host "Start Build OpenCV" -ForegroundColor Green
+
+               $opencvDir = $this._Config.GetOpenCVRootDir()
+               $opencvTarget = Join-Path $current opencv
+               New-Item $opencvTarget -Force -ItemType Directory
+               Set-Location $opencvTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
+
+               if ($global:IsWindows)
+               {
+                  # NOTE
+                  # libtiff looks like to depends on win32 functions like __imp_MessageBoxA and __imp_GetFocus.
+                  # So disable TIFF
+                  Write-Host "   cmake -G `"NMake Makefiles`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D BUILD_WITH_STATIC_CRT=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D BUILD_opencv_world=OFF `
+         -D BUILD_opencv_java=OFF `
+         -D BUILD_opencv_python=OFF `
+         -D BUILD_opencv_python2=OFF `
+         -D BUILD_opencv_python3=OFF `
+         -D BUILD_PERF_TESTS=OFF `
+         -D BUILD_TESTS=OFF `
+         -D BUILD_DOCS=OFF `
+         -D BUILD_opencv_core=ON `
+         -D BUILD_opencv_highgui=OFF `
+         -D BUILD_opencv_imgcodecs=ON `
+         -D BUILD_opencv_imgproc=ON `
+         -D BUILD_opencv_calib3d=OFF `
+         -D BUILD_opencv_features2d=OFF `
+         -D BUILD_opencv_flann=OFF `
+         -D BUILD_opencv_java_bindings_generator=OFF `
+         -D BUILD_opencv_ml=OFF `
+         -D BUILD_opencv_objdetect=OFF `
+         -D BUILD_opencv_photo=OFF `
+         -D BUILD_opencv_python_bindings_generator=OFF `
+         -D BUILD_opencv_shape=OFF `
+         -D BUILD_opencv_stitching=OFF `
+         -D BUILD_opencv_superres=OFF `
+         -D BUILD_opencv_video=OFF `
+         -D BUILD_opencv_videoio=ON `
+         -D BUILD_opencv_videostab=OFF `
+         -D WITH_CUDA=OFF `
+         -D BUILD_PROTOBUF=OFF `
+         -D WITH_PROTOBUF=OFF `
+         -D WITH_IPP=OFF `
+         -D WITH_FFMPEG=OFF `
+         -D WITH_ITT=OFF `
+         -D WITH_TIFF=OFF `
+         $opencvDir" -ForegroundColor Yellow
+                  cmake -G "NMake Makefiles" -D CMAKE_BUILD_TYPE=$Configuration `
+                                             -D BUILD_SHARED_LIBS=OFF `
+                                             -D BUILD_WITH_STATIC_CRT=OFF `
+                                             -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                                             -D BUILD_opencv_world=OFF `
+                                             -D BUILD_opencv_java=OFF `
+                                             -D BUILD_opencv_python=OFF `
+                                             -D BUILD_opencv_python2=OFF `
+                                             -D BUILD_opencv_python3=OFF `
+                                             -D BUILD_PERF_TESTS=OFF `
+                                             -D BUILD_TESTS=OFF `
+                                             -D BUILD_DOCS=OFF `
+                                             -D BUILD_opencv_core=ON `
+                                             -D BUILD_opencv_highgui=ON `
+                                             -D BUILD_opencv_imgcodecs=ON `
+                                             -D BUILD_opencv_imgproc=ON `
+                                             -D BUILD_opencv_calib3d=OFF `
+                                             -D BUILD_opencv_features2d=OFF `
+                                             -D BUILD_opencv_flann=OFF `
+                                             -D BUILD_opencv_java_bindings_generator=OFF `
+                                             -D BUILD_opencv_ml=OFF `
+                                             -D BUILD_opencv_objdetect=OFF `
+                                             -D BUILD_opencv_photo=OFF `
+                                             -D BUILD_opencv_python_bindings_generator=OFF `
+                                             -D BUILD_opencv_shape=OFF `
+                                             -D BUILD_opencv_stitching=OFF `
+                                             -D BUILD_opencv_superres=OFF `
+                                             -D BUILD_opencv_video=OFF `
+                                             -D BUILD_opencv_videoio=ON `
+                                             -D BUILD_opencv_videostab=OFF `
+                                             -D WITH_CUDA=OFF `
+                                             -D BUILD_PROTOBUF=OFF `
+                                             -D WITH_PROTOBUF=OFF `
+                                             -D WITH_IPP=OFF `
+                                             -D WITH_FFMPEG=OFF `
+                                             -D WITH_ITT=OFF `
+                                             -D WITH_TIFF=OFF `
+                                             $opencvDir
+                  Write-Host "   cmake build and install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
+               }
+            }
             "android"
             {
                Write-Host "Start Build OpenCV" -ForegroundColor Green
@@ -748,6 +879,11 @@ class ThirdPartyBuilder
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
 
                $level = $this._Config.GetAndroidNativeAPILevel()
                $abi = $this._Config.GetAndroidABI()
@@ -869,8 +1005,8 @@ class ThirdPartyBuilder
          $Platform = $this._Config.GetPlatform()
          $Configuration = $this._Config.GetConfigurationName()
 
-         # Build opencv
-         $installOpenCVDir = $this.BuildOpenCV()
+         # Get install directory by skipping build opencv
+         $installOpenCVDir = $this.BuildOpenCV($True)
          if (!(Test-Path $installOpenCVDir))
          {
             Write-Host "OpenCV could fail to build" -ForegroundColor Red
@@ -911,10 +1047,8 @@ class ThirdPartyBuilder
                   $exeDir = Join-Path $protobufInstallDir bin | `
                             Join-Path -ChildPath protoc.exe
 
-                  $vs = $this._Config.GetVisualStudio()
-                  $vsarc = $this._Config.GetVisualStudioArchitecture()
-
-                  Write-Host "   cmake -G `"$vs`" -A $vsarc -D CMAKE_BUILD_TYPE=$Configuration `
+                  Write-Host "   cmake -G `"NMake Makefiles`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
          -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
@@ -924,18 +1058,74 @@ class ThirdPartyBuilder
          -D NCNN_OPENCV:BOOL=OFF `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
-                  cmake -G "$vs" -A $vsarc -T host=x64 `
-                                             -D BUILD_SHARED_LIBS=OFF `
-                                             -D CMAKE_INSTALL_PREFIX="${installDir}" `
-                                             -D Protobuf_INCLUDE_DIR="${includeDir}" `
-                                             -D Protobuf_LIBRARIES="${libraryFile}" `
-                                             -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
-                                             -D NCNN_VULKAN:BOOL=$vulkanOnOff `
-                                             -D NCNN_OPENCV:BOOL=OFF `
-                                             -D OpenCV_DIR="${installOpenCVDir}" `
-                                             $ncnnDir
+                  cmake -G "NMake Makefiles" `
+                        -D BUILD_SHARED_LIBS=OFF `
+                        -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                        -D Protobuf_INCLUDE_DIR="${includeDir}" `
+                        -D Protobuf_LIBRARIES="${libraryFile}" `
+                        -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
+                        -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                        -D NCNN_OPENCV:BOOL=OFF `
+                        -D OpenCV_DIR="${installOpenCVDir}" `
+                        $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
                   cmake --build . --config $Configuration --target install
+               }
+               elseif ($global:IsMacOS)
+               {
+                  $toolchain = $this._Config.GetToolchainFile()
+
+                  $includeDir = Join-Path $protobufInstallDir include
+                  $libraryFile = Join-Path $protobufInstallDir lib | `
+                                 Join-Path -ChildPath libprotobuf.a
+
+                  $exeDir = Join-Path $protobufInstallDir bin | `
+                            Join-Path -ChildPath protoc
+
+                  # build vulkan variables
+                  $Vulkan_INCLUDE_DIR = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                        Join-Path -Childpath include
+                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                    Join-Path -Childpath dylib | `
+                                    Join-Path -Childpath macOS | `
+                                    Join-Path -Childpath libMoltenVK.dylib
+
+                  Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
+         -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
+         -D Protobuf_LIBRARIES=`"${libraryFile}`" `
+         -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D Vulkan_INCLUDE_DIR=`"${Vulkan_INCLUDE_DIR}`" `
+         -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
+         -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_DISABLE_RTTI:BOOL=OFF `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         $ncnnDir" -ForegroundColor Yellow
+                  cmake -D CMAKE_BUILD_TYPE=$Configuration `
+                        -D BUILD_SHARED_LIBS=OFF `
+                        -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                        -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
+                        -D Protobuf_INCLUDE_DIR="${includeDir}" `
+                        -D Protobuf_LIBRARIES="${libraryFile}" `
+                        -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
+                        -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                        -D Vulkan_INCLUDE_DIR="${Vulkan_INCLUDE_DIR}" `
+                        -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
+                        -D NCNN_OPENCV:BOOL=OFF `
+                        -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                        -D OpenCV_DIR="${installOpenCVDir}" `
+                        $ncnnDir
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
+
+                  # centos generates some libraries into lib64
+                  if (Test-Path "${installDir}/lib64")
+                  {
+                     Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
+                  }
                }
                else
                {
@@ -953,6 +1143,14 @@ class ThirdPartyBuilder
                   $exeDir = Join-Path $protobufInstallDir bin | `
                             Join-Path -ChildPath protoc
 
+                  # do not expose arm82 features for gcc < 4.7
+                  # by https://github.com/Tencent/ncnn/commit/ce9ae96bde967a84341911834b96530d9568f6f9
+                  # But arm says
+                  # https://community.arm.com/developer/tools-software/tools/b/tools-software-ides-blog/posts/making-the-most-of-the-arm-architecture-in-gcc-10
+                  $NCNN_ARM82="OFF"
+                  $NCNN_COMPILER_SUPPORT_ARM82_FP16="OFF"
+                  $NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD="OFF"
+
                   Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=OFF `
          -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
@@ -963,6 +1161,9 @@ class ThirdPartyBuilder
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
+         -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
+         -D NCNN_COMPILER_SUPPORT_ARM82_FP16:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16} `
+         -D NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -975,6 +1176,10 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                        -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
+                        -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
+                        -D NCNN_COMPILER_SUPPORT_ARM82_FP16:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16} `
+                        -D NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -985,6 +1190,66 @@ class ThirdPartyBuilder
                   {
                      Copy-Item -Recurse -Force "${installDir}/lib64/*" "${installDir}/lib"
                   }
+               }
+            }
+            "uwp"
+            {
+               Write-Host "Start Build ncnn" -ForegroundColor Green
+
+               $ncnnDir = $this._Config.GetNcnnRootDir()
+               $ncnnTarget = Join-Path $current ncnn
+               New-Item $ncnnTarget -Force -ItemType Directory
+               Set-Location $ncnnTarget
+               $current2 = Get-Location
+               $installDir = Join-Path $current2 install
+               $ret = $installDir
+
+               $env:OpenCV_DIR = $installOpenCVDir
+
+               if ($global:IsWindows)
+               {
+                  $includeDir = Join-Path $protobufInstallDir include
+
+                  if ($Configuration -eq "Debug")
+                  {
+                     $libraryFile = Join-Path $protobufInstallDir lib | `
+                                    Join-Path -ChildPath libprotobufd.lib
+                  }
+                  else
+                  {
+                     $libraryFile = Join-Path $protobufInstallDir lib | `
+                                    Join-Path -ChildPath libprotobuf.lib
+                  }
+
+                  $exeDir = Join-Path $protobufInstallDir bin | `
+                            Join-Path -ChildPath protoc.exe
+
+                  Write-Host "   cmake -G `"NMake Makefiles`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
+         -D BUILD_SHARED_LIBS=OFF `
+         -D CMAKE_INSTALL_PREFIX=`"${installDir}`" `
+         -D Protobuf_INCLUDE_DIR=`"${includeDir}`" `
+         -D Protobuf_LIBRARIES=`"${libraryFile}`" `
+         -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
+         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+         -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_BUILD_TOOLS=OFF `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         $ncnnDir" -ForegroundColor Yellow
+                  cmake -G "NMake Makefiles" `
+                        -D CMAKE_BUILD_TYPE=$Configuration `
+                        -D BUILD_SHARED_LIBS=OFF `
+                        -D CMAKE_INSTALL_PREFIX="${installDir}" `
+                        -D Protobuf_INCLUDE_DIR="${includeDir}" `
+                        -D Protobuf_LIBRARIES="${libraryFile}" `
+                        -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
+                        -D NCNN_VULKAN:BOOL=$vulkanOnOff `
+                        -D NCNN_OPENCV:BOOL=OFF `
+                        -D NCNN_BUILD_TOOLS=OFF `
+                        -D OpenCV_DIR="${installOpenCVDir}" `
+                        $ncnnDir
+                  Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
+                  cmake --build . --config $Configuration --target install
                }
             }
             "android"
@@ -1040,7 +1305,7 @@ class ThirdPartyBuilder
 
 function ConfigCPU([Config]$Config)
 {
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       CallVisualStudioDeveloperConsole
    }
@@ -1051,7 +1316,7 @@ function ConfigCPU([Config]$Config)
    $installProtobufDir = $Builder.BuildProtobuf()
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($False)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
@@ -1061,20 +1326,19 @@ function ConfigCPU([Config]$Config)
 
    # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
-      $vs = $Config.GetVisualStudio()
-      $vsarc = $Config.GetVisualStudioArchitecture()
-
       $env:OpenCV_DIR = $installOpenCVDir
-      Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+      Write-Host "   cmake -G `"NMake Makefiles`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
-      cmake -G "$vs" -A $vsarc -T host=x64 `
+      cmake -G "NMake Makefiles" `
+            -D CMAKE_BUILD_TYPE=$Configuration `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR="${installOpenCVDir}" `
@@ -1113,7 +1377,7 @@ function ConfigVulkan([Config]$Config)
       exit -1
    }
 
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
       CallVisualStudioDeveloperConsole
    }
@@ -1124,7 +1388,7 @@ function ConfigVulkan([Config]$Config)
    $installProtobufDir = $Builder.BuildProtobuf()
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($False)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
@@ -1134,26 +1398,54 @@ function ConfigVulkan([Config]$Config)
 
    # Build NcnnDotNet.Native
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
-      $vs = $Config.GetVisualStudio()
-      $vsarc = $Config.GetVisualStudioArchitecture()
-
       $env:OpenCV_DIR = $installOpenCVDir
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
-      Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+      Write-Host "   cmake -G `"NMake Makefiles`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=ON `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
-      cmake -G $vs -A $vsarc -T host=x64 `
+      cmake -G "NMake Makefiles" `
+            -D CMAKE_BUILD_TYPE=$Configuration `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=ON `
             -D OpenCV_DIR="${installOpenCVDir}" `
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
+            ..
+   }
+   elseif ($global:IsMacOS)
+   {
+      # build vulkan variables
+      $Vulkan_INCLUDE_DIR = Join-Path $env:VULKAN_SDK MoltenVK | `
+                              Join-Path -Childpath include
+      $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                        Join-Path -Childpath dylib | `
+                        Join-Path -Childpath macOS | `
+                        Join-Path -Childpath libMoltenVK.dylib
+
+      $env:OpenCV_DIR = $installOpenCVDir
+      $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
+      Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
+         -D NCNN_VULKAN:BOOL=ON `
+         -D OpenCV_DIR=`"${installOpenCVDir}`" `
+         -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
+         -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D Vulkan_INCLUDE_DIR=`"${Vulkan_INCLUDE_DIR}`" `
+         -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
+         .." -ForegroundColor Yellow
+      cmake -D BUILD_SHARED_LIBS=ON `
+            -D NCNN_VULKAN:BOOL=ON `
+            -D OpenCV_DIR="${installOpenCVDir}" `
+            -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
+            -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D Vulkan_INCLUDE_DIR="${Vulkan_INCLUDE_DIR}" `
+            -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
             ..
    }
    else
@@ -1188,7 +1480,7 @@ function ConfigARM([Config]$Config)
    $installProtobufDir = $Builder.BuildProtobuf()
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($False)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
@@ -1200,18 +1492,17 @@ function ConfigARM([Config]$Config)
    Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
    if ($IsWindows)
    {
-      $vs = $Config.GetVisualStudio()
-      $vsarc = $Config.GetVisualStudioArchitecture()
-
       $env:OpenCV_DIR = $installOpenCVDir
-      Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+      Write-Host "   cmake -G `"NMake Makefiles`" `
+         -D CMAKE_BUILD_TYPE=$Configuration `
          -D BUILD_SHARED_LIBS=ON `
          -D NCNN_VULKAN:BOOL=OFF `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
          .." -ForegroundColor Yellow
-      cmake -G "$vs" -A $vsarc -T host=x64 `
+      cmake -G "NMake Makefiles" `
+            -D CMAKE_BUILD_TYPE=$Configuration `
             -D BUILD_SHARED_LIBS=ON `
             -D NCNN_VULKAN:BOOL=OFF `
             -D OpenCV_DIR="${installOpenCVDir}" `
@@ -1221,7 +1512,7 @@ function ConfigARM([Config]$Config)
    }
    else
    {
-      $toolchain = Join-Path $Config.GetToolchainFile()
+      $toolchain = $Config.GetToolchainFile()
 
       $env:OpenCV_DIR = $installOpenCVDir
       Write-Host "   cmake -D BUILD_SHARED_LIBS=ON `
@@ -1243,15 +1534,17 @@ function ConfigARM([Config]$Config)
 
 function ConfigUWP([Config]$Config)
 {
-   if ($IsWindows)
+   if ($global:IsWindows)
    {
+      CallVisualStudioDeveloperConsole
+
       $Builder = [ThirdPartyBuilder]::new($Config)
    
       # Build Protobuf
       $installProtobufDir = $Builder.BuildProtobuf()
    
       # Build opencv
-      $installOpenCVDir = $Builder.BuildOpenCV()
+      $installOpenCVDir = $Builder.BuildOpenCV($False)
    
       # Build ncnn
       $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "OFF")
@@ -1262,13 +1555,11 @@ function ConfigUWP([Config]$Config)
       # Build NcnnDotNet.Native
       Write-Host "Start Build NcnnDotNet.Native" -ForegroundColor Green
 
-      $vs = $Config.GetVisualStudio()
-      $vsarc = $Config.GetVisualStudioArchitecture()
-
       if ($Config.GetTarget() -eq "arm")
       {
          $env:OpenCV_DIR = $installOpenCVDir
-         Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+         Write-Host "   cmake -G `"NMake Makefiles`" `
+      -D CMAKE_BUILD_TYPE=$Configuration `
       -D CMAKE_SYSTEM_NAME=WindowsStore `
       -D CMAKE_SYSTEM_VERSION=10.0 `
       -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
@@ -1279,8 +1570,10 @@ function ConfigUWP([Config]$Config)
       -D OpenCV_DIR=`"${installOpenCVDir}`" `
       -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
       -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+      -D NO_GUI_SUPPORT:BOOL=ON `
       .." -ForegroundColor Yellow
-         cmake -G "$vs" -A $vsarc -T host=x64 `
+         cmake -G "NMake Makefiles" `
+               -D CMAKE_BUILD_TYPE=$Configuration `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
                -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
@@ -1291,12 +1584,14 @@ function ConfigUWP([Config]$Config)
                -D OpenCV_DIR="${installOpenCVDir}" `
                -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
                -D ncnn_SRC_DIR="${ncnnDir}" `
+               -D NO_GUI_SUPPORT:BOOL=ON `
                ..
       }
       else
       {
          $env:OpenCV_DIR = $installOpenCVDir
-         Write-Host "   cmake -G `"$vs`" -A $vsarc -T host=x64 `
+         Write-Host "   cmake -G `"NMake Makefiles`" `
+      -D CMAKE_BUILD_TYPE=$Configuration `
       -D CMAKE_SYSTEM_NAME=WindowsStore `
       -D CMAKE_SYSTEM_VERSION=10.0 `
       -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
@@ -1307,8 +1602,10 @@ function ConfigUWP([Config]$Config)
       -D OpenCV_DIR=`"${installOpenCVDir}`" `
       -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
       -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+      -D NO_GUI_SUPPORT:BOOL=ON `
       .." -ForegroundColor Yellow
-         cmake -G "$vs" -A $vsarc -T host=x64 `
+         cmake -G "NMake Makefiles" `
+               -D CMAKE_BUILD_TYPE=$Configuration `
                -D CMAKE_SYSTEM_NAME=WindowsStore `
                -D CMAKE_SYSTEM_VERSION=10.0 `
                -D WINAPI_FAMILY=WINAPI_FAMILY_APP `
@@ -1319,6 +1616,7 @@ function ConfigUWP([Config]$Config)
                -D OpenCV_DIR="${installOpenCVDir}" `
                -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
                -D ncnn_SRC_DIR="${ncnnDir}" `
+               -D NO_GUI_SUPPORT:BOOL=ON `
                ..
       }
    }
@@ -1341,7 +1639,7 @@ function ConfigANDROID([Config]$Config)
    $Builder = [ThirdPartyBuilder]::new($Config)
 
    # Build opencv
-   $installOpenCVDir = $Builder.BuildOpenCV()
+   $installOpenCVDir = $Builder.BuildOpenCV($False)
 
    # Build ncnn
    $installNcnnDir = $Builder.BuildNcnn($installProtobufDir, "ON")
@@ -1385,7 +1683,7 @@ function ConfigANDROID([Config]$Config)
 
 function ConfigIOS([Config]$Config)
 {
-   if ($IsMacOS)
+   if ($global:IsMacOS)
    {
       cmake -G Xcode `
             -D CMAKE_TOOLCHAIN_FILE=../../ios-cmake/ios.toolchain.cmake `

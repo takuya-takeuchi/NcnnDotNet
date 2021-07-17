@@ -77,6 +77,7 @@ if ($cuda -ne 0)
                  -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                  -e "LOCAL_UID=$(id -u $env:USER)" `
                  -e "LOCAL_GID=$(id -g $env:USER)" `
+                 -w "/opt/data/NcnnDotNet" `
                  -it "$dockername"
    }
    else
@@ -86,6 +87,7 @@ if ($cuda -ne 0)
                  -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                  -e "LOCAL_UID=$(id -u $env:USER)" `
                  -e "LOCAL_GID=$(id -g $env:USER)" `
+                 -w "/opt/data/NcnnDotNet" `
                  -it "$dockername"
    }
 }
@@ -96,5 +98,6 @@ else
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
               -e "LOCAL_UID=$(id -u $env:USER)" `
               -e "LOCAL_GID=$(id -g $env:USER)" `
+              -w "/opt/data/NcnnDotNet" `
               -it "$dockername"
 }
