@@ -456,7 +456,7 @@ class Config
          {
             "ios"
             {
-               $osxArchitectures = $Config.GetOSXArchitectures()
+               $osxArchitectures = $this.GetOSXArchitectures()
                $toolchain = Join-Path $toolchainDir "${osxArchitectures}-ios.cmake"
             }
          }
