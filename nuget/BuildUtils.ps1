@@ -544,7 +544,7 @@ class ThirdPartyBuilder
       return $ret
    }
 
-   [string] BuildOpenCV()
+   [string] BuildOpenCV([bool]$skipBuild = $False)
    {
       $ret = ""
       $current = Get-Location
@@ -567,6 +567,11 @@ class ThirdPartyBuilder
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
 
                if ($global:IsWindows)
                {
@@ -748,6 +753,11 @@ class ThirdPartyBuilder
                $current2 = Get-Location
                $installDir = Join-Path $current2 install
                $ret = $installDir
+               if ($skipBuild)
+               {
+                  Write-Host "Skip Build OpenCV" -ForegroundColor Green
+                  return $ret
+               }
 
                $level = $this._Config.GetAndroidNativeAPILevel()
                $abi = $this._Config.GetAndroidABI()
@@ -869,8 +879,8 @@ class ThirdPartyBuilder
          $Platform = $this._Config.GetPlatform()
          $Configuration = $this._Config.GetConfigurationName()
 
-         # Build opencv
-         $installOpenCVDir = $this.BuildOpenCV()
+         # Get install directory by skipping build opencv
+         $installOpenCVDir = $this.BuildOpenCV($True)
          if (!(Test-Path $installOpenCVDir))
          {
             Write-Host "OpenCV could fail to build" -ForegroundColor Red
