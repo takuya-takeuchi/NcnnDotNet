@@ -11,26 +11,24 @@ namespace YoloV3.ViewModels
 
         public DetectBoxViewModel(float scale, Models.Object obj)
         {
-            this.X = (int)obj.Rect.X;
-            this.Y = (int)obj.Rect.Y;
-            this.Width = (int)obj.Rect.Width;
-            this.Height = (int)obj.Rect.Height;
+            // this.X = (int)obj.Rect.X;
+            // this.Y = (int)obj.Rect.Y;
+            // this.Width = (int)obj.Rect.Width;
+            // this.Height = (int)obj.Rect.Height;
             this.Label = "test";
             this.Prob = obj.Prob;
 
-            this.Bounds = new Rectangle(obj.Rect.X * scale, obj.Rect.Y * scale, obj.Rect.Width * scale, obj.Rect.Height * scale);
+            // this.Bounds = new Rectangle(obj.Rect.X * scale, obj.Rect.Y * scale, obj.Rect.Width * scale, obj.Rect.Height * scale);
         }
 
         #endregion
 
         #region Properties
-        
-        
+                
         public Rectangle Bounds
         {
             get;
         }
-
 
         public int Height
         {
