@@ -10,10 +10,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\NcnnDotNet\NcnnDotNet.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="dog.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
