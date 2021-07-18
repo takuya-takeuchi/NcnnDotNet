@@ -65,7 +65,7 @@
       <Version>0.0.0.20210417</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.7.0.1260" />
-    <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.5.2" />
+    <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.6.1" />
     <PackageReference Include="Prism.Unity.Forms" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
