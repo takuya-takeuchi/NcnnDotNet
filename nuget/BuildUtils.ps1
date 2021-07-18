@@ -1460,8 +1460,8 @@ class ThirdPartyBuilder
                   }
                   "x86_64"
                   {
-                     $vulkanOnOff = "OFF"
-                     $targetPlatform = ""
+                     $vulkanOnOff = "ON"
+                     $targetPlatform = "ios-arm64_x86_64-simulator"
                   }
                }
 
@@ -2043,7 +2043,7 @@ function ConfigIOS([Config]$Config)
          }
          "x86_64"
          {
-            $vulkanOnOff = "OFF"
+            $vulkanOnOff = "ON"
             $targetPlatform = ""
          }
       }
@@ -2171,13 +2171,13 @@ function Build([Config]$Config)
       "ios"
       {
          $BuildTargets = @()
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64e";  Vulkan = $True; }
+         # $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64e";  Vulkan = $True; }
          $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64";   Vulkan = $True; }
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm";     Vulkan = $False; }
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7";   Vulkan = $False; }
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7s";  Vulkan = $False; }
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "i386";    Vulkan = $False; }
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "x86_64";  Vulkan = $False; }
+         # $BuildTargets += New-Object PSObject -Property @{ Platform = "arm";     Vulkan = $False; }
+         # $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7";   Vulkan = $False; }
+         # $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7s";  Vulkan = $False; }
+         # $BuildTargets += New-Object PSObject -Property @{ Platform = "i386";    Vulkan = $False; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "x86_64";  Vulkan = $True; }
 
          foreach($BuildTarget in $BuildTargets)
          {
