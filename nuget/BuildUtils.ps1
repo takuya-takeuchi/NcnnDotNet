@@ -2226,84 +2226,84 @@ function Build([Config]$Config)
             $vulkan = $BuildTarget.Vulkan
             $osxArchitectures = $Config.GetOSXArchitectures()
 
-            if ($osxArchitectures -ne $platform )
-            {
-               continue
-            }
-            
-            switch ($platform)
-            {
-               "arm64e"
+            if ($osxArchitectures -eq $platform )
+            {           
+               Write-Host "Invoke libtool for ${platform}" -ForegroundColor Yellow
+               
+               switch ($platform)
                {
-                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
-                                    Join-Path -Childpath MoltenVK.xcframework | `
-                                    Join-Path -Childpath "ios-arm64" | `
-                                    Join-Path -Childpath libMoltenVK.a
+                  "arm64e"
+                  {
+                     $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                       Join-Path -Childpath MoltenVK.xcframework | `
+                                       Join-Path -Childpath "ios-arm64" | `
+                                       Join-Path -Childpath libMoltenVK.a
+                  }
+                  "arm64"
+                  {
+                     $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                       Join-Path -Childpath MoltenVK.xcframework | `
+                                       Join-Path -Childpath "ios-arm64" | `
+                                       Join-Path -Childpath libMoltenVK.a
+                  }
+                  "arm"
+                  {
+                     $targetPlatform = ""
+                  }
+                  "armv7"
+                  {
+                     $targetPlatform = ""
+                  }
+                  "armv7s"
+                  {
+                     $targetPlatform = ""
+                  }
+                  "i386"
+                  {
+                     $targetPlatform = ""
+                  }
+                  "x86_64"
+                  {
+                     $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                       Join-Path -Childpath MoltenVK.xcframework | `
+                                       Join-Path -Childpath "ios-arm64_x86_64-simulator" | `
+                                       Join-Path -Childpath libMoltenVK.a
+                  }
                }
-               "arm64"
-               {
-                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
-                                    Join-Path -Childpath MoltenVK.xcframework | `
-                                    Join-Path -Childpath "ios-arm64" | `
-                                    Join-Path -Childpath libMoltenVK.a
-               }
-               "arm"
-               {
-                  $targetPlatform = ""
-               }
-               "armv7"
-               {
-                  $targetPlatform = ""
-               }
-               "armv7s"
-               {
-                  $targetPlatform = ""
-               }
-               "i386"
-               {
-                  $targetPlatform = ""
-               }
-               "x86_64"
-               {
-                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
-                                    Join-Path -Childpath MoltenVK.xcframework | `
-                                    Join-Path -Childpath "ios-arm64_x86_64-simulator" | `
-                                    Join-Path -Childpath libMoltenVK.a
-               }
-            }
 
-            if (Test-Path "libNcnnDotNetNative_merged.a")
-            {
-               Remove-Item "libNcnnDotNetNative_merged.a"
-            }
+               if (Test-Path "libNcnnDotNetNative_merged.a")
+               {
+                  Remove-Item "libNcnnDotNetNative_merged.a"
+               }
 
-            # https://github.com/abseil/abseil-cpp/issues/604
-            if ($vulkan -eq $True)
-            {
-               libtool -o "libNcnnDotNetNative_merged.a" `
-                          "libNcnnDotNetNative.a" `
-                          "opencv/install/lib/libopencv_world.a" `
-                          "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
-                          "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
-                          "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
-                          "ncnn/install/lib/libMachineIndependent.a" `
-                          "ncnn/install/lib/libOGLCompiler.a" `
-                          "ncnn/install/lib/libncnn.a" `
-                          "ncnn/install/lib/libOSDependent.a" `
-                          "ncnn/install/lib/libGenericCodeGen.a" `
-                          "ncnn/install/lib/libSPIRV.a" `
-                          "ncnn/install/lib/libglslang.a" `
-                          "${Vulkan_LIBRARY}"
-            }
-            else
-            {
-               libtool -o "libNcnnDotNetNative_merged.a" `
-                          "libNcnnDotNetNative.a" `
-                          "opencv/install/lib/libopencv_world.a" `
-                          "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
-                          "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
-                          "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
-                          "ncnn/install/lib/libncnn.a"
+               # https://github.com/abseil/abseil-cpp/issues/604
+               if ($vulkan -eq $True)
+               {
+                  libtool -o "libNcnnDotNetNative_merged.a" `
+                             "libNcnnDotNetNative.a" `
+                             "opencv/install/lib/libopencv_world.a" `
+                             "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                             "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                             "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                             "ncnn/install/lib/libMachineIndependent.a" `
+                             "ncnn/install/lib/libOGLCompiler.a" `
+                             "ncnn/install/lib/libncnn.a" `
+                             "ncnn/install/lib/libOSDependent.a" `
+                             "ncnn/install/lib/libGenericCodeGen.a" `
+                             "ncnn/install/lib/libSPIRV.a" `
+                             "ncnn/install/lib/libglslang.a" `
+                             "${Vulkan_LIBRARY}"
+               }
+               else
+               {
+                  libtool -o "libNcnnDotNetNative_merged.a" `
+                             "libNcnnDotNetNative.a" `
+                             "opencv/install/lib/libopencv_world.a" `
+                             "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                             "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                             "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                             "ncnn/install/lib/libncnn.a"
+               }
             }
          }
       }
