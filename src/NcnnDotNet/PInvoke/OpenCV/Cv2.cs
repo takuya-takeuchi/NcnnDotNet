@@ -22,6 +22,9 @@ namespace NcnnDotNet
         public static extern ErrorType opencv_imread(byte[] filename, int filenameLength, int flags, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_imdecode(byte[] buf, int buf_len, int flags, out IntPtr returnValue);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType opencv_imwrite(byte[] filename, int filenameLength, IntPtr mat);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

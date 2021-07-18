@@ -149,6 +149,18 @@ namespace NcnnDotNet.OpenCV
             return new Size<int>(ret);
         }
 
+        public static Mat ImDecode(byte[] buffer, CvLoadImage flags = CvLoadImage.Color)
+        {
+            if (buffer == null)
+                throw new ArgumentNullException(nameof(buffer));
+
+            var error = NativeMethods.opencv_imdecode(buffer, buffer.Length, (int)flags, out var ret);
+            if (error != NativeMethods.ErrorType.OK)
+                throw new NcnnException("Unknown Exception");
+
+            return new Mat(ret);
+        }
+
         public static Mat ImRead(string fileName, CvLoadImage flags = CvLoadImage.Color)
         {
             if (string.IsNullOrEmpty(fileName))

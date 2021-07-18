@@ -1,13 +1,13 @@
 using Prism;
 using Prism.Ioc;
-using YoloV3.ViewModels;
-using YoloV3.Views;
-using Xamarin.Essentials.Interfaces;
 using Xamarin.Essentials.Implementation;
+using Xamarin.Essentials.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using YoloV3.Services;
 using YoloV3.Services.Interfaces;
+using YoloV3.ViewModels;
+using YoloV3.Views;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace YoloV3

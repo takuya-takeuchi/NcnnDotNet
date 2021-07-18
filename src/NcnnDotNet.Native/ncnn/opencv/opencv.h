@@ -139,6 +139,17 @@ DLLEXPORT int32_t opencv_imread(const char* filename, const int32_t filename_len
     return error;
 }
 
+DLLEXPORT int32_t opencv_imdecode(const uint8_t* buf, const int32_t buf_len, int32_t flags, cv::Mat** returnValue)
+{
+    int32_t error = ERR_OK;
+
+    std::vector<uint8_t> img(buf, buf + buf_len);
+    const auto ret = cv::imdecode(img, flags);
+    *returnValue = new cv::Mat(ret);
+
+    return error;
+}
+
 DLLEXPORT void opencv_imshow(const char *winname, const int32_t winname_len, cv::Mat *mat)
 {
 #ifndef NO_GUI_SUPPORT

@@ -1,19 +1,7 @@
 ﻿using Prism;
 using Prism.Ioc;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Navigation;
+using YoloV3.Services;
+using FileAccessService = YoloV3.UWP.Services.FileAccessService;
 
 namespace YoloV3.UWP
 {
@@ -32,6 +20,7 @@ namespace YoloV3.UWP
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // Register any platform specific implementations
+            containerRegistry.RegisterSingleton<IFileAccessService, FileAccessService>();
         }
     }
 }

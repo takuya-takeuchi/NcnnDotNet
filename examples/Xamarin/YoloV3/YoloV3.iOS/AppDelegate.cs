@@ -2,6 +2,7 @@
 using Prism;
 using Prism.Ioc;
 using UIKit;
+using YoloV3.Services;
 
 namespace YoloV3.iOS
 {
@@ -32,6 +33,7 @@ namespace YoloV3.iOS
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // Services
+            containerRegistry.RegisterSingleton<IFileAccessService, FileAccessService>();
         }
     }
 }

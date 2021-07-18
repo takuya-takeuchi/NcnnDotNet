@@ -26,4 +26,5 @@ And extract them and copy to examples/Xamarin/YoloV3/YoloV3/data.
 You can build and run from `Visual Studio for Mac`
 You can choose a image file to detect objects.
 
-<img src="images/android.webp" width="300" />
+<img src="images/android.webp" width="300" /> <img src="images/ios.webp" width="300" />
+<img src="images/uwp.webp" width="600" />
