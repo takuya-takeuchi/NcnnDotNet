@@ -10,9 +10,11 @@
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.6.1" />
     <PackageReference Include="Prism.Unity.Forms" Version="7.2.0.1422" />
     <PackageReference Include="SkiaSharp" Version="2.80.3" />
+    <PackageReference Include="NcnnDotNet.Xamarin" Version="0.0.0.20210717" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="SkiaSharp" />
+    <None Remove="NcnnDotNet.Xamarin" />
   </ItemGroup>
 </Project>
