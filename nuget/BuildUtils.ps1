@@ -2189,31 +2189,31 @@ function Build([Config]$Config)
                Remove-Item "libNcnnDotNetNative_merged.a"
             }
 
-            if ($vulkan)
+            if ($vulkan -eq $True)
             {
                libtool -o "libNcnnDotNetNative_merged.a" `
-                           "libNcnnDotNetNative.a" `
-                           "opencv/install/lib/libopencv_world.a" `
-                           "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
-                           "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
-                           "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
-                           "ncnn/install/lib/libMachineIndependent.a" `
-                           "ncnn/install/lib/libOGLCompiler.a" `
-                           "ncnn/install/lib/libncnn.a" `
-                           "ncnn/install/lib/libOSDependent.a" `
-                           "ncnn/install/lib/libGenericCodeGen.a" `
-                           "ncnn/install/lib/libSPIRV.a" `
-                           "ncnn/install/lib/libglslang.a"
+                          "libNcnnDotNetNative.a" `
+                          "opencv/install/lib/libopencv_world.a" `
+                          "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                          "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                          "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                          "ncnn/install/lib/libMachineIndependent.a" `
+                          "ncnn/install/lib/libOGLCompiler.a" `
+                          "ncnn/install/lib/libncnn.a" `
+                          "ncnn/install/lib/libOSDependent.a" `
+                          "ncnn/install/lib/libGenericCodeGen.a" `
+                          "ncnn/install/lib/libSPIRV.a" `
+                          "ncnn/install/lib/libglslang.a"
             }
             else
             {
                libtool -o "libNcnnDotNetNative_merged.a" `
-                           "libNcnnDotNetNative.a" `
-                           "opencv/install/lib/libopencv_world.a" `
-                           "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
-                           "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
-                           "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
-                           "ncnn/install/lib/libncnn.a"
+                          "libNcnnDotNetNative.a" `
+                          "opencv/install/lib/libopencv_world.a" `
+                          "opencv/install/share/OpenCV/3rdparty/lib/liblibpng.a" `
+                          "opencv/install/share/OpenCV/3rdparty/lib/liblibjpeg.a" `
+                          "opencv/install/share/OpenCV/3rdparty/lib/libzlib.a" `
+                          "ncnn/install/lib/libncnn.a"
             }
          }
       }
