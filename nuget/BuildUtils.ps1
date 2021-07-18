@@ -2044,7 +2044,7 @@ function ConfigIOS([Config]$Config)
          "x86_64"
          {
             $vulkanOnOff = "ON"
-            $targetPlatform = ""
+            $targetPlatform = "ios-arm64_x86_64-simulator"
          }
       }
 
@@ -2172,7 +2172,7 @@ function Build([Config]$Config)
       {
          $BuildTargets = @()
          # $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64e";  Vulkan = $True; }
-         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64";   Vulkan = $True; }
+         $BuildTargets += New-Object PSObject -Property @{ Platform = "arm64";   Vulkan = $True;  StaticLib = "" }
          # $BuildTargets += New-Object PSObject -Property @{ Platform = "arm";     Vulkan = $False; }
          # $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7";   Vulkan = $False; }
          # $BuildTargets += New-Object PSObject -Property @{ Platform = "armv7s";  Vulkan = $False; }
@@ -2183,6 +2183,47 @@ function Build([Config]$Config)
          {
             $platform = $BuildTarget.Platform
             $vulkan = $BuildTarget.Vulkan
+            
+            switch ($platform)
+            {
+               "arm64e"
+               {
+                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                    Join-Path -Childpath MoltenVK.xcframework | `
+                                    Join-Path -Childpath "ios-arm64" | `
+                                    Join-Path -Childpath libMoltenVK.a
+               }
+               "arm64"
+               {
+                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                    Join-Path -Childpath MoltenVK.xcframework | `
+                                    Join-Path -Childpath "ios-arm64" | `
+                                    Join-Path -Childpath libMoltenVK.a
+               }
+               "arm"
+               {
+                  $targetPlatform = ""
+               }
+               "armv7"
+               {
+                  $targetPlatform = ""
+               }
+               "armv7s"
+               {
+                  $targetPlatform = ""
+               }
+               "i386"
+               {
+                  $targetPlatform = ""
+               }
+               "x86_64"
+               {
+                  $Vulkan_LIBRARY = Join-Path $env:VULKAN_SDK MoltenVK | `
+                                    Join-Path -Childpath MoltenVK.xcframework | `
+                                    Join-Path -Childpath "ios-arm64_x86_64-simulator" | `
+                                    Join-Path -Childpath libMoltenVK.a
+               }
+            }
 
             if (Test-Path "libNcnnDotNetNative_merged.a")
             {
@@ -2203,7 +2244,8 @@ function Build([Config]$Config)
                           "ncnn/install/lib/libOSDependent.a" `
                           "ncnn/install/lib/libGenericCodeGen.a" `
                           "ncnn/install/lib/libSPIRV.a" `
-                          "ncnn/install/lib/libglslang.a"
+                          "ncnn/install/lib/libglslang.a" `
+                          "${Vulkan_LIBRARY}"
             }
             else
             {
