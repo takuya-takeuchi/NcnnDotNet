@@ -159,7 +159,7 @@ configure_file(
     @ONLY)
 
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/ncnn/*.h)
-FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cpp)
+FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cxx)
 
 if (NCNN_VULKAN)
     configure_file(
