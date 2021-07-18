@@ -1,70 +1,120 @@
-﻿using System.Windows.Input;
+﻿using System;
 using Prism.Commands;
 using Prism.Navigation;
+using SkiaSharp;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 using YoloV3.Services.Interfaces;
 using YoloV3.ViewModels.Interfaces;
 
 namespace YoloV3.ViewModels
 {
 
-    public class MainPageViewModel : ViewModelBase,  IMainPageViewModel
+    public sealed class MainPageViewModel : ViewModelBase, IMainPageViewModel
     {
 
         #region Fields
 
-        private readonly INativeService _NativeService;
+        private readonly IDetectService _DetectService;
 
         #endregion
 
         #region Constructors
 
         public MainPageViewModel(INavigationService navigationService,
-                                 INativeService nativeService)
+                                 IDetectService detectService)
             : base(navigationService)
         {
-            this._NativeService = nativeService;
-            this.Title = "Main Page";
+            this.Title = "Yolo V3";
+
+            this._DetectService = detectService;
+            this._FilePickCommand = new Lazy<DelegateCommand>(this.FilePickCommandFactory);
         }
 
         #endregion
 
         #region Properties
 
-        private string _Title;
+        private readonly Lazy<DelegateCommand> _FilePickCommand;
 
-        public string Title
+        private DelegateCommand FilePickCommandFactory()
         {
-            get => this._Title;
-            private set => this.SetProperty(ref this._Title, value);
-        }
-
-        private int _Max;
-
-        public int Max
-        {
-            get => this._Max;
-            set => this.SetProperty(ref this._Max, value);
-        }
-
-        private int _Count;
-
-        public int Count
-        {
-            get => this._Count;
-            private set => this.SetProperty(ref this._Count, value);
-        }
-
-        private ICommand _CalcCommand;
-
-        public ICommand CalcCommand
-        {
-            get
+            return new DelegateCommand(async () =>
             {
-                return this._CalcCommand ?? (this._CalcCommand = new DelegateCommand(() =>
+                var result = await FilePicker.PickAsync(new PickOptions
                 {
-                    this.Count = this._NativeService.GetPrimeCount(this._Max);
-                }));
+                    PickerTitle = "Please select a image file to detect object",
+                    FileTypes = FilePickerFileType.Images
+                });
 
+                if (result == null) 
+                    return;
+
+                var detectResult = this._DetectService.Detect(result.FullPath);
+                if (detectResult == null) 
+                    return;
+
+                var stream = await result.OpenReadAsync();
+                var surface = SKSurface.Create(new SKImageInfo(detectResult.Width, detectResult.Height, SKColorType.Rgba8888));
+                using var paint = new SKPaint();
+                using var bitmap = SKBitmap.Decode(stream);
+
+                surface.Canvas.DrawBitmap(bitmap, 0, 0, paint);
+                paint.StrokeWidth = 3;
+                paint.TextSize = 48;
+                paint.IsAntialias = true;
+                paint.TextEncoding = SKTextEncoding.Utf8;
+
+                string[] classNames =
+                {
+                    "background",
+                    "aeroplane",
+                    "bicycle",
+                    "bird",
+                    "boat",
+                    "bottle",
+                    "bus",
+                    "car",
+                    "cat",
+                    "chair",
+                    "cow",
+                    "diningtable",
+                    "dog",
+                    "horse",
+                    "motorbike",
+                    "person",
+                    "pottedplant",
+                    "sheep",
+                    "sofa",
+                    "train",
+                    "tvmonitor"
+                };
+
+                foreach (var box in detectResult.Boxes)
+                {
+                    paint.Color = SKColors.Red;
+                    paint.Style = SKPaintStyle.Stroke;
+                    surface.Canvas.DrawRect(box.Rect.X, box.Rect.Y, box.Rect.Width, box.Rect.Height, paint);
+
+                    paint.Color = SKColors.Black;
+                    paint.Style = SKPaintStyle.Fill;
+                    surface.Canvas.DrawText(classNames[box.Label], new SKPoint(box.Rect.X + 5, box.Rect.Y + 5), paint);
+                }
+                this.SelectedImage = ImageSource.FromStream(() => surface.Snapshot().Encode().AsStream());
+            });
+        }
+
+        public DelegateCommand FilePickCommand => this._FilePickCommand.Value;
+
+        private ImageSource _SelectedImage;
+
+        public ImageSource SelectedImage
+        {
+            get => this._SelectedImage;
+            private set
+            {
+                this._SelectedImage = value;
+                this.RaisePropertyChanged();
             }
         }
 

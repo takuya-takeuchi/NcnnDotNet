@@ -34,7 +34,7 @@ namespace YoloV3.iOS
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // Services
-            containerRegistry.RegisterSingleton<INativeService, NativeService>();
+            containerRegistry.RegisterSingleton<IDetectService, DetectService>();
         }
     }
 }

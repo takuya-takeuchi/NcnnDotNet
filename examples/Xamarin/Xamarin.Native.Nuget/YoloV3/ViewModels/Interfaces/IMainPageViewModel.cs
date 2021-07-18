@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using Prism.Commands;
+using Xamarin.Forms;
 
 namespace YoloV3.ViewModels.Interfaces
 {
@@ -6,23 +7,17 @@ namespace YoloV3.ViewModels.Interfaces
     public interface IMainPageViewModel
     {
 
+        DelegateCommand FilePickCommand
+        {
+            get;
+        }
+
+        ImageSource SelectedImage
+        {
+            get;
+        }
+
         string Title
-        {
-            get;
-        }
-
-        int Max
-        {
-            get;
-            set;
-        }
-
-        int Count
-        {
-            get;
-        }
-
-        ICommand CalcCommand
         {
             get;
         }

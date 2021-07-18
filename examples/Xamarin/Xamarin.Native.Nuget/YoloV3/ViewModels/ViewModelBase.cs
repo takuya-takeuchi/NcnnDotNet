@@ -3,31 +3,21 @@ using Prism.Navigation;
 
 namespace YoloV3.ViewModels
 {
-
     public class ViewModelBase : BindableBase, IInitialize, INavigationAware, IDestructible
     {
+        protected INavigationService NavigationService { get; private set; }
 
-        #region Constructors
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set { SetProperty(ref _title, value); }
+        }
 
         public ViewModelBase(INavigationService navigationService)
         {
-            this.NavigationService = navigationService;
+            NavigationService = navigationService;
         }
-
-        #endregion
-
-        #region Properties
-
-        protected INavigationService NavigationService
-        {
-            get;
-        }
-
-        #endregion
-
-        #region Methods
-
-        #region Overrids
 
         public virtual void Initialize(INavigationParameters parameters)
         {
@@ -48,11 +38,5 @@ namespace YoloV3.ViewModels
         {
 
         }
-
-        #endregion
-
-        #endregion
-
     }
-
 }
