@@ -19,11 +19,11 @@ Download test data from the following urls.
 - https://drive.google.com/open?id=1DBcuFCr-856z3FRQznWL_S5h-Aj3RawA
   - mobilenetv2_yolov3.param
 
-And extract them and copy to extracted files to emulator or real device.
-The model file and param file must be with image file.
+And extract them and copy to examples/Xamarin/YoloV3/YoloV3/data.
  
 ## 3. Run 
- 
+
+You can build and run from `Visual Studio for Mac`
 You can choose a image file to detect objects.
 
 <img src="images/android.webp" width="300" />
