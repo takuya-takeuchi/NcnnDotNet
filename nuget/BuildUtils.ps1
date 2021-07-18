@@ -1212,6 +1212,11 @@ class ThirdPartyBuilder
       $ret = ""
       $current = Get-Location
 
+      # enables some layers
+      $WITH_LAYER_argmax="ON"
+      $WITH_LAYER_spp="ON"
+      $WITH_LAYER_tile="ON"
+
       try
       {
          $Platform = $this._Config.GetPlatform()
@@ -1268,6 +1273,9 @@ class ThirdPartyBuilder
          -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
+         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -G "NMake Makefiles" `
@@ -1278,6 +1286,9 @@ class ThirdPartyBuilder
                         -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
+                        -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+                        -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+                        -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -1314,6 +1325,9 @@ class ThirdPartyBuilder
          -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
+         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1328,6 +1342,9 @@ class ThirdPartyBuilder
                         -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
                         -D NCNN_OPENCV:BOOL=OFF `
                         -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                        -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+                        -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+                        -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -1376,6 +1393,9 @@ class ThirdPartyBuilder
          -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
          -D NCNN_COMPILER_SUPPORT_ARM82_FP16:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16} `
          -D NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD} `
+         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1392,6 +1412,9 @@ class ThirdPartyBuilder
                         -D NCNN_ARM82:BOOL=${NCNN_ARM82} `
                         -D NCNN_COMPILER_SUPPORT_ARM82_FP16:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16} `
                         -D NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD:BOOL=${NCNN_COMPILER_SUPPORT_ARM82_FP16_DOTPROD} `
+                        -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+                        -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+                        -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -1487,6 +1510,9 @@ class ThirdPartyBuilder
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
          -D Vulkan_INCLUDE_DIR=`"${Vulkan_INCLUDE_DIR}`" `
          -D Vulkan_LIBRARY=`"${Vulkan_LIBRARY}`" `
+         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1502,6 +1528,9 @@ class ThirdPartyBuilder
                      -D NCNN_DISABLE_RTTI:BOOL=OFF `
                      -D Vulkan_INCLUDE_DIR="${Vulkan_INCLUDE_DIR}" `
                      -D Vulkan_LIBRARY="${Vulkan_LIBRARY}" `
+                     -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+                     -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+                     -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
                      -D OpenCV_DIR="${installOpenCVDir}" `
                      $ncnnDir
 
@@ -1550,6 +1579,9 @@ class ThirdPartyBuilder
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_BUILD_TOOLS=OFF `
+         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                   cmake -G "NMake Makefiles" `
@@ -1562,6 +1594,9 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         -D NCNN_BUILD_TOOLS=OFF `
+                        -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+                        -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+                        -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
                         -D OpenCV_DIR="${installOpenCVDir}" `
                         $ncnnDir
                   Write-Host "   cmake --build . --config ${Configuration} --target install" -ForegroundColor Yellow
@@ -1591,6 +1626,9 @@ class ThirdPartyBuilder
             -D ANDROID_PLATFORM=android-$level `
             -D NCNN_VULKAN:BOOL=$vulkanOnOff `
             -D NCNN_DISABLE_RTTI:BOOL=OFF `
+            -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+            -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+            -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
             -D OpenCV_DIR=`"${installOpenCVDir}`" `
             $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_TOOLCHAIN_FILE="${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake" `
@@ -1599,6 +1637,9 @@ class ThirdPartyBuilder
                      -D ANDROID_PLATFORM=android-$level `
                      -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                      -D NCNN_DISABLE_RTTI:BOOL=OFF `
+                     -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
+                     -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
+                     -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
                      -D OpenCV_DIR="${installOpenCVDir}" `
                      $ncnnDir
 
