@@ -18,6 +18,20 @@ namespace YoloV3.Services
 
         public DetectService()
         {
+            var resourcePrefix = $"YoloV3.data.";
+            // note that the prefix includes the trailing period '.' that is required
+            var files = new [] { "mobilenetv2_yolov3.bin", "mobilenetv2_yolov3.param" };
+            var assembly = System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(DetectService)).Assembly;
+            foreach (var file in files)
+            {
+                var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), file);
+                using (var fs = File.Create(path))
+                using (var stream = assembly.GetManifestResourceStream(resourcePrefix + file))
+                {
+                    stream.Seek(0, SeekOrigin.Begin);
+                    stream.CopyTo(fs);                    
+                }
+            }
         }
 
         #endregion
@@ -33,10 +47,8 @@ namespace YoloV3.Services
             if (Ncnn.IsSupportVulkan)
                 Ncnn.CreateGpuInstance();
 
-            var directory = Path.GetDirectoryName(file);
-
             var objects = new List<Object>();
-            DetectYoloV3(directory, m, objects);
+            DetectYoloV3(m, objects);
 
             if (Ncnn.IsSupportVulkan)
                 Ncnn.DestroyGpuInstance();
@@ -47,10 +59,11 @@ namespace YoloV3.Services
 
         #region Helpers
 
-        private static int DetectYoloV3(string directory, NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
+        private static int DetectYoloV3(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
         {
-            var param = Path.Combine(directory, "mobilenetv2_yolov3.param");
-            var model = Path.Combine(directory, "mobilenetv2_yolov3.bin");
+            var param = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "mobilenetv2_yolov3.param");
+            var model = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "mobilenetv2_yolov3.bin");
+
             if (!File.Exists(param))
                 throw new FileNotFoundException("param file is missing");
             if (!File.Exists(model))

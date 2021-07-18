@@ -3,9 +3,6 @@ using Prism;
 using Prism.Ioc;
 using UIKit;
 
-using YoloV3.Services;
-using YoloV3.Services.Interfaces;
-
 namespace YoloV3.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
@@ -34,8 +31,7 @@ namespace YoloV3.iOS
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            // Register any platform specific implementations
-            containerRegistry.RegisterSingleton<IDetectService, DetectService>();
+            // Services
         }
     }
 }
