@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Xamarin.Native.Nuget.Views.MainPage"
+             Title="{Binding Title}">
+
+    <StackLayout HorizontalOptions="CenterAndExpand"
+                 VerticalOptions="CenterAndExpand">
+        <StackLayout HorizontalOptions="CenterAndExpand" 
+                     VerticalOptions="CenterAndExpand"
+                     Orientation="Horizontal">
+            <Label Text="Max: " />
+            <Entry Text="{Binding Max}"/>
+        </StackLayout>
+
+        <Button Text="Get count of prime numbers" Command="{Binding CalcCommand}"/>
+
+        <StackLayout HorizontalOptions="CenterAndExpand" 
+                     VerticalOptions="CenterAndExpand"
+                     Orientation="Horizontal">
+            <Label Text="Count: " />
+            <Entry Text="{Binding Count}"/>
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>
