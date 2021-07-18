@@ -10,9 +10,9 @@ ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
 |NcnnDotNet (GPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
 ||Linux|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
 ||OSX|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
-|NcnnDotNet (Xamarin)|UWP|-|-|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
+|NcnnDotNet (Xamarin)|UWP|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 ||Android|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
-||iOS|-|-|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
+||iOS|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 
 ## Demo
 
