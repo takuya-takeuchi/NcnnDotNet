@@ -17,7 +17,11 @@ namespace TestUtil
         /// And this file name must not contain period. If it does,
         /// CLR does not add extension (.dll) and CLR fails to load library
         /// </summary>
+#if LIB_STATIC
+        public const string NativeLibrary = "__Internal";
+#else
         public const string NativeLibrary = "NcnnDotNetNative";
+#endif
 
         public const CallingConvention CallingConvention = System.Runtime.InteropServices.CallingConvention.Cdecl;
 

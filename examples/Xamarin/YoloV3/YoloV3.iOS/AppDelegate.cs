@@ -31,7 +31,7 @@ namespace YoloV3.iOS
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            // Register any platform specific implementations
+            // Services
         }
     }
 }

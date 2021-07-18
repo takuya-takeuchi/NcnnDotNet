@@ -24,13 +24,11 @@ namespace YoloV3.ViewModels
         #endregion
 
         #region Properties
-        
-        
+                
         public Rectangle Bounds
         {
             get;
         }
-
 
         public int Height
         {

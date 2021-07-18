@@ -104,12 +104,35 @@ endif()
 
 if (MSVC OR MSYS OR MINGW)
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
-else()
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
     include_directories("${ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif(APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif(UNIX AND NOT APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+else()
+    message(FATAL_ERROR "Failed to include directories")
+endif()
+
+if (NCNN_VULKAN)
+    if (MSVC OR MSYS OR MINGW)
+        include_directories("$ENV{VULKAN_SDK}/include")
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        include_directories("${Vulkan_INCLUDE_DIR}")
+    elseif(APPLE)
+        include_directories("${Vulkan_INCLUDE_DIR}")
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+        include_directories("$ENV{VULKAN_SDK}/include")
+    elseif(UNIX AND NOT APPLE)
+        include_directories("$ENV{VULKAN_SDK}/include")
+    endif()
 endif()
 
 # Set /bigobj for MSVC
@@ -136,7 +159,7 @@ configure_file(
     @ONLY)
 
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/ncnn/*.h)
-FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cpp)
+FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cxx)
 
 if (NCNN_VULKAN)
     configure_file(
@@ -166,6 +189,14 @@ if (MSVC OR MSYS OR MINGW)
             opencv_imgproc
         )
     endif()
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    set(STATIC_LIBRARIES
+        ncnn
+        zlib
+        libjpeg
+        libpng
+        opencv_world
+    )
 elseif(APPLE)
     set(STATIC_LIBRARIES
         ncnn
@@ -221,6 +252,16 @@ if (NCNN_VULKAN)
             OSDependent
             SPIRV
         )
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        list(APPEND STATIC_LIBRARIES
+            ${Vulkan_LIBRARY}
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
+        )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             ${Vulkan_LIBRARY}
@@ -254,9 +295,15 @@ if (NCNN_VULKAN)
     endif()
 endif()
 
-add_library(${PROJ_NAME} SHARED ${HEADERS}
-                                ${SOURCES}
-                                ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    add_library(${PROJ_NAME} ${HEADERS}
+                             ${SOURCES}
+                             ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+else ()
+    add_library(${PROJ_NAME} SHARED ${HEADERS}
+                                    ${SOURCES}
+                                    ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+endif()
 
 target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 
