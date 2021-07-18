@@ -1,6 +1,6 @@
 # ![Alt text](nuget/nn48.png "NcnnDotNet") NcnnDotNet [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
+ncnn wrapper written in C++ and C# for Windows, MacOS, Linux, iOS and Android.
 
 |Package|OS|x86|x64|ARM|ARM64|Nuget|
 |---|---|---|---|---|---|---|
@@ -13,6 +13,11 @@ ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
 |NcnnDotNet (Xamarin)|UWP|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 ||Android|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 ||iOS|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
+
+#### :warning: Important
+
+NcnnDotNet does NOT support .NET Framework by nuget process. 
+However, you can deploy all NcnnDotNet binaries manually and it should work fine.
 
 ## Demo
 
