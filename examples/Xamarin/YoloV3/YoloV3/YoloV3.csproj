@@ -18,12 +18,10 @@
     <None Remove="NcnnDotNet.Xamarin" />
     <None Remove="data\mobilenetv2_yolov3.bin" />
     <None Remove="data\mobilenetv2_yolov3.param" />
-    <None Remove="data\dog.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="data\mobilenetv2_yolov3.bin" />
     <EmbeddedResource Include="data\mobilenetv2_yolov3.param" />
-    <EmbeddedResource Include="data\dog.jpg" />
   </ItemGroup>
 </Project>
