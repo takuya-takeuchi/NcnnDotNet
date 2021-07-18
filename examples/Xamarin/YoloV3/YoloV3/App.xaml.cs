@@ -16,6 +16,8 @@ namespace YoloV3
 
         #region Constructors
 
+        public App() : this(null) { }
+
         public App(IPlatformInitializer initializer)
             : base(initializer)
         {
@@ -40,8 +42,6 @@ namespace YoloV3
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
-
-            containerRegistry.RegisterSingleton<IDetectService, DetectService>();
 
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
