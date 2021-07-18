@@ -34,7 +34,8 @@
     <!-- iOS -->
     <file src="build/NcnnDotNet.iOS.targets" target="build/XamariniOS/NcnnDotNet.Xamarin.targets"/>
     <file src="../../src/NcnnDotNet/bin/Release_Static/netstandard2.0/NcnnDotNet.dll" target="lib/XamariniOS" />
-    <file src="../artifacts/ios/runtimes/fat/native/libNcnnDotNetNative_merged.a" target="native/ios" />
+    <file src="../artifacts/ios/runtimes/arm64/native/libNcnnDotNetNative_merged.a" target="native/ios-device" />
+    <file src="../artifacts/ios/runtimes/x86_64/native/libNcnnDotNetNative_merged.a" target="native/ios-simulator" />
 
     <!-- license -->
     <file src="../../LICENSE.txt" target="" />
