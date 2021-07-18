@@ -307,5 +307,5 @@ __pycache__/
 
 # Custom
 src/NcnnDotNet.Native/build*/
-
+.DS_Store
 work
