@@ -2224,6 +2224,12 @@ function Build([Config]$Config)
          {
             $platform = $BuildTarget.Platform
             $vulkan = $BuildTarget.Vulkan
+            $osxArchitectures = $Config.GetOSXArchitectures()
+
+            if ($osxArchitectures -ne $platform )
+            {
+               continue
+            }
             
             switch ($platform)
             {
