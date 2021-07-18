@@ -3,7 +3,7 @@
   <Identity Name="31e6402e-0407-4419-a6c3-7c6d18576017" Publisher="CN=BLagunas" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="31e6402e-0407-4419-a6c3-7c6d18576017" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>Xamarin.Native.Nuget</DisplayName>
+    <DisplayName>YoloV3</DisplayName>
     <PublisherDisplayName>BLagunas</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>

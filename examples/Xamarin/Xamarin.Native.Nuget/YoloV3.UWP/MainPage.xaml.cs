@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace Xamarin.Native.Nuget.UWP
+namespace YoloV3.UWP
 {
     public sealed partial class MainPage
     {
@@ -23,7 +23,7 @@ namespace Xamarin.Native.Nuget.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new Xamarin.Native.Nuget.App(new UwpInitializer()));
+            LoadApplication(new YoloV3.App(new UwpInitializer()));
         }
     }
 

@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xamarin.Native.Nuget.Droid</RootNamespace>
-    <AssemblyName>Xamarin.Native.Nuget.Android</AssemblyName>
+    <RootNamespace>YoloV3.Droid</RootNamespace>
+    <AssemblyName>YoloV3.Android</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
@@ -92,7 +92,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xamarin.Native.Nuget\Xamarin.Native.Nuget.csproj">
+    <ProjectReference Include="..\YoloV3\YoloV3.csproj">
       <Project>{9EC9A231-3B22-4747-85E6-AB32F66C6D8C}</Project>
       <Name>YoloV3</Name>
     </ProjectReference>

@@ -2,10 +2,10 @@
 using Prism;
 using Prism.Ioc;
 using UIKit;
-using Xamarin.Native.Nuget.iOS.Services;
-using Xamarin.Native.Nuget.Services.Interfaces;
+using YoloV3.iOS.Services;
+using YoloV3.Services.Interfaces;
 
-namespace Xamarin.Native.Nuget.iOS
+namespace YoloV3.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 

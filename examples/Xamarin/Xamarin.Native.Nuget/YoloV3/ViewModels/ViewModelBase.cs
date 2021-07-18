@@ -1,7 +1,7 @@
 ﻿using Prism.Mvvm;
 using Prism.Navigation;
 
-namespace Xamarin.Native.Nuget.ViewModels
+namespace YoloV3.ViewModels
 {
 
     public class ViewModelBase : BindableBase, IInitialize, INavigationAware, IDestructible

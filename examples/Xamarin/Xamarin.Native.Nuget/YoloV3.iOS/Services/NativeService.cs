@@ -1,6 +1,6 @@
-﻿using Xamarin.Native.Nuget.Services.Interfaces;
+﻿using YoloV3.Services.Interfaces;
 
-namespace Xamarin.Native.Nuget.iOS.Services
+namespace YoloV3.iOS.Services
 {
 
     public sealed class NativeService : INativeService

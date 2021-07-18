@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace Xamarin.Native.Nuget.ViewModels.Interfaces
+namespace YoloV3.ViewModels.Interfaces
 {
 
     public interface IMainPageViewModel

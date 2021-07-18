@@ -9,9 +9,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: global::Android.Runtime.ResourceDesignerAttribute("Xamarin.Native.Nuget.Droid.Resource", IsApplication=true)]
+[assembly: global::Android.Runtime.ResourceDesignerAttribute("YoloV3.Droid.Resource", IsApplication=true)]
 
-namespace Xamarin.Native.Nuget.Droid
+namespace YoloV3.Droid
 {
 	
 	
@@ -26,7 +26,7 @@ namespace Xamarin.Native.Nuget.Droid
 		
 		public static void UpdateIdValues()
 		{
-			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Xamarin.Native.Nuget.Droid.Resource.Attribute.actionBarSize;
+			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::YoloV3.Droid.Resource.Attribute.actionBarSize;
 		}
 		
 		public partial class Animation

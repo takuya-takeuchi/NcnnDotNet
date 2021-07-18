@@ -8,9 +8,9 @@
     <ProjectGuid>{E2A584CE-B566-4856-BBEA-B54FABAAA991}</ProjectGuid>
     <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Xamarin.Native.Nuget.iOS</RootNamespace>
+    <RootNamespace>YoloV3.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Xamarin.Native.Nuget.iOS</AssemblyName>
+    <AssemblyName>YoloV3.iOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <ProvisioningType>manual</ProvisioningType>
@@ -217,9 +217,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Xamarin.Native.Nuget\Xamarin.Native.Nuget.csproj">
+    <ProjectReference Include="..\YoloV3\YoloV3.csproj">
       <Project>{9EC9A231-3B22-4747-85E6-AB32F66C6D8C}</Project>
-      <Name>Xamarin.Native.Nuget</Name>
+      <Name>YoloV3</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

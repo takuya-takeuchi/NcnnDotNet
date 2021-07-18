@@ -7,8 +7,8 @@
     <ProjectGuid>{D1A28D9F-C9FD-4568-8882-EB9C4C0DC891}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Xamarin.Native.Nuget.UWP</RootNamespace>
-    <AssemblyName>Xamarin.Native.Nuget.UWP</AssemblyName>
+    <RootNamespace>YoloV3.UWP</RootNamespace>
+    <AssemblyName>YoloV3.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WindowsXamlEnableOverview>true</WindowsXamlEnableOverview>
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
-    <PackageCertificateKeyFile>Xamarin.Native.Nuget.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>YoloV3.UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
 <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -130,13 +130,13 @@
     <PackageReference Include="Prism.Unity.Forms" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Xamarin.Native.Nuget\Xamarin.Native.Nuget.csproj">
+    <ProjectReference Include="..\YoloV3\YoloV3.csproj">
       <Project>{A682884C-CB44-4A89-B752-27BB634E0ABE}</Project>
-      <Name>Xamarin.Native.Nuget</Name>
+      <Name>YoloV3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Xamarin.Native.Nuget.UWP_TemporaryKey.pfx" />
+    <None Include="YoloV3.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

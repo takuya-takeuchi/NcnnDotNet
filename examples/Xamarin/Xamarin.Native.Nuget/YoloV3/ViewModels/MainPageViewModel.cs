@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
 using Prism.Commands;
 using Prism.Navigation;
-using Xamarin.Native.Nuget.Services.Interfaces;
-using Xamarin.Native.Nuget.ViewModels.Interfaces;
+using YoloV3.Services.Interfaces;
+using YoloV3.ViewModels.Interfaces;
 
-namespace Xamarin.Native.Nuget.ViewModels
+namespace YoloV3.ViewModels
 {
 
     public class MainPageViewModel : ViewModelBase,  IMainPageViewModel

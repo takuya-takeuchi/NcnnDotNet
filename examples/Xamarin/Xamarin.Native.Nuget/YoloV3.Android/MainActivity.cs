@@ -4,9 +4,9 @@ using Android.OS;
 using Prism;
 using Prism.Ioc;
 
-namespace Xamarin.Native.Nuget.Droid
+namespace YoloV3.Droid
 {
-    [Activity(Label = "Xamarin.Native.Nuget", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "YoloV3", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

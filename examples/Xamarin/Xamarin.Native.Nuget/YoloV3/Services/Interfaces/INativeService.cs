@@ -1,4 +1,4 @@
-﻿namespace Xamarin.Native.Nuget.Services.Interfaces
+﻿namespace YoloV3.Services.Interfaces
 {
 
     public interface INativeService

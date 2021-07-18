@@ -5,7 +5,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
-namespace Xamarin.Native.Nuget.iOS
+namespace YoloV3.iOS
 {
     public class Application
     {

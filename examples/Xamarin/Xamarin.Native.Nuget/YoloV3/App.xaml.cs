@@ -1,16 +1,16 @@
 using Prism;
 using Prism.Ioc;
-using Xamarin.Native.Nuget.ViewModels;
-using Xamarin.Native.Nuget.Views;
+using YoloV3.ViewModels;
+using YoloV3.Views;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Xamarin.Native.Nuget.Services;
-using Xamarin.Native.Nuget.Services.Interfaces;
+using YoloV3.Services;
+using YoloV3.Services.Interfaces;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
-namespace Xamarin.Native.Nuget
+namespace YoloV3
 {
 
     public partial class App
