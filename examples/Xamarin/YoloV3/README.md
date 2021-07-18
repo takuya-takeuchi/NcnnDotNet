@@ -26,5 +26,4 @@ The model file and param file must be with image file.
  
 You can choose a image file to detect objects.
 
-![YOLOv3](images/android.webp "YOLOv3")
-
+<img src="images/android.webp" width="300" />
