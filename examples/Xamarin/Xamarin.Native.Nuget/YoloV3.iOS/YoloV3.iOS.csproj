@@ -32,7 +32,7 @@
     <LangVersion>8</LangVersion>
     <MtouchFastDev>false</MtouchFastDev>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchExtraArgs>-gcc_flags "-lc++ -framework Metal -framework Foundation"</MtouchExtraArgs>
+    <MtouchExtraArgs>-gcc_flags "-lc++ -framework Metal"</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -114,7 +114,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Services\DetectService.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <LinkDescription Include="LinkerSettings.xml" />

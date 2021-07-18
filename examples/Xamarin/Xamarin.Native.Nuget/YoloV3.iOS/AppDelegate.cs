@@ -2,8 +2,6 @@
 using Prism;
 using Prism.Ioc;
 using UIKit;
-using YoloV3.iOS.Services;
-using YoloV3.Services.Interfaces;
 
 namespace YoloV3.iOS
 {
@@ -34,7 +32,6 @@ namespace YoloV3.iOS
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // Services
-            containerRegistry.RegisterSingleton<IDetectService, DetectService>();
         }
     }
 }

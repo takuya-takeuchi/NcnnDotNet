@@ -8,7 +8,7 @@ using YoloV3.Services.Interfaces;
 using Mat = NcnnDotNet.Mat;
 using Object = YoloV3.Models.Object;
 
-namespace YoloV3.iOS.Services
+namespace YoloV3.Services
 {
 
     public sealed class DetectService : IDetectService
