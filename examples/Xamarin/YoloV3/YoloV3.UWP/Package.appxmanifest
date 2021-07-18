@@ -27,7 +27,7 @@
     </Application>
   </Applications>
   <Capabilities>
-  
-  <uap:Capability Name="picturesLibrary"/></Capabilities>
-  <rescap:Capability Name="broadFileSystemAccess" />
+    <uap:Capability Name="picturesLibrary"/>
+    <rescap:Capability Name="broadFileSystemAccess" />
+  </Capabilities>
 </Package>
