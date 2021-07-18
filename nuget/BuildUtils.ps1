@@ -2271,6 +2271,7 @@ function Build([Config]$Config)
                Remove-Item "libNcnnDotNetNative_merged.a"
             }
 
+            # https://github.com/abseil/abseil-cpp/issues/604
             if ($vulkan -eq $True)
             {
                libtool -o "libNcnnDotNetNative_merged.a" `
