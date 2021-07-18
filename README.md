@@ -16,9 +16,9 @@ ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
 
 ## Demo
 
-#### Xamarin.Android
+#### YoloV3 on Xamarin.Android, iOS and UWP
 
-<img src="examples\Xamarin\YoloV3\images\android.webp" />
+<img src="examples\Xamarin\YoloV3\images\android.webp" width="150" /> <img src="examples\Xamarin\YoloV3\images\ios.webp" width="150" /> <img src="examples\Xamarin\YoloV3\images\uwp.webp" width="300" />
 
 ## Related Projects
 
