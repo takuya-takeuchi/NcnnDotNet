@@ -29,7 +29,7 @@ build:ubuntu:
   script:
     - cd nuget
     - pwsh BuildUbuntu16.ps1
-    - pwsh BuildUAndroid.ps1
+    - pwsh BuildAndroid.ps1
   tags:
     - linux
     - cuda
