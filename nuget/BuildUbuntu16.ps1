@@ -84,6 +84,7 @@ foreach($BuildTarget in $BuildTargets)
                   -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                   -e "LOCAL_UID=$(id -u $env:USER)" `
                   -e "LOCAL_GID=$(id -g $env:USER)" `
+                  -e "CIBuildDir=/opt/data/builds" `
                   -t "$dockername" $key $target $architecture $platform $option
    
       if ($lastexitcode -ne 0)
