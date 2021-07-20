@@ -66,6 +66,8 @@ else
    $dockername = "ncnndotnet/test/$Distribution/$DistributionVersion/$Target/$cudaVersion"
 }
 
+Write-Host "Run $dockername" -ForegroundColor Green
+
 if ($cuda -ne 0)
 {
    $dockerAPIVersion = docker version --format '{{.Server.APIVersion}}'
