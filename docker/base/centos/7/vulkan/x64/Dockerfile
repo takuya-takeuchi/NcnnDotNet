@@ -27,4 +27,6 @@ RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN rm vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
 
+ENV LD_LIBRARY_PATH=$VULKAN_SDK/lib:$LD_LIBRARY_PATH
+
 WORKDIR /
