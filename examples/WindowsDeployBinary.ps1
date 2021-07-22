@@ -19,7 +19,7 @@ Param
 )
 
 # configuration
-$targetDir = "netcoreapp5.0"
+$targetDir = "netcoreapp2.1"
 $examples =
 @(
    "FasterRCNN",

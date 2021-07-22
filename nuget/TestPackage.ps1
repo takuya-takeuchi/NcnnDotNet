@@ -40,13 +40,15 @@ function Clear-PackakgeCache([string]$Package, [string]$Version)
       {
          $path = (dotnet nuget locals global-packages --list).Replace('global-packages: ', '').Trim()
       }
-      $path =  Join-Path $path $Package | `
-               Join-Path -ChildPath $Version
-      if (Test-Path $path)
+      $pathPackage = Join-Path $path $Package | `
+                     Join-Path -ChildPath $Version
+      if (Test-Path ${pathPackage})
       {
-         Write-Host "Remove '$path'" -Foreground Green
-         Remove-Item -Path "$path" -Recurse -Force
+         Write-Host "Remove '${pathPackage}'" -Foreground Green
+         Remove-Item -Path "${pathPackage}" -Recurse -Force
       }
+
+      New-Item "${path}" -ItemType Directory > $null
    }
 }
 
@@ -91,8 +93,12 @@ function RunTest($BuildTargets)
 
       # restore package from local nuget pacakge
       # And drop stdout message
+      Write-Host "dotnet remove reference `"..\..\src\NcnnDotNet\NcnnDotNet.csproj`"" -ForegroundColor Blue
       dotnet remove reference "..\..\src\NcnnDotNet\NcnnDotNet.csproj" > $null
-      dotnet add package $package -v $VERSION --source "$NugetDir" > $null
+      Write-Host "dotnet restore" -ForegroundColor Blue
+      dotnet restore > $null
+      Write-Host "dotnet add package $package -v $VERSION --source ${NugetDir}" -ForegroundColor Blue
+      dotnet add package $package -v $VERSION --source ${NugetDir} > $null
 
       $ErrorActionPreference = "silentlycontinue"
       $env:PlatformTarget = $PlatformTarget

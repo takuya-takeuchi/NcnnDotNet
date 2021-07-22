@@ -20,7 +20,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsof
 RUN dpkg -i packages-microsoft-prod.deb && rm packages-microsoft-prod.deb
 
 # Install the .NET SDK
-ENV DOTNET_SDK_VERSION 5.0
+ENV DOTNET_SDK_VERSION 2.1
 RUN apt-get update && apt-get install -y --no-install-recommends \
     dotnet-sdk-${DOTNET_SDK_VERSION} \
  && apt-get clean && rm -rf /var/lib/apt/lists/*

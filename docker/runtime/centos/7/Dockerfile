@@ -12,7 +12,7 @@ RUN yum update -y && yum install -y \
 RUN rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
 
 # Install the .NET SDK
-ENV DOTNET_SDK_VERSION 5.0
+ENV DOTNET_SDK_VERSION 2.1
 RUN yum update -y && yum install -y \
     dotnet-sdk-${DOTNET_SDK_VERSION} \
  && yum clean all
