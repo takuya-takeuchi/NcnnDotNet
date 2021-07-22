@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Takuya Takeuchi</Authors>
     <Description>Example of NcnnDotNet</Description>
-    <Company />
+    <LangVersion>preview</LangVersion>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
