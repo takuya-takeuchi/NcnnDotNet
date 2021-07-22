@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NcnnDotNet.Xamarin</id>
-    <version>0.0.0.20210720</version>
+    <version>0.0.0.20210723</version>
     <title>NcnnDotNet for Xamarin</title>
     <authors>Takuya Takeuchi</authors>
     <owners>Takuya Takeuchi</owners>
