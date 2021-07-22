@@ -28,7 +28,8 @@ Requirements: Visual C++ 2017 Redistributable Package and Vulkan SDK
     
     <!-- cross-targetting via compile-time references -->
     <file src="ref\**\*" target="ref" />
-    <file src="..\artifacts\vulkan\runtimes\**\*" target="runtimes" />
+    <file src="build/net45/NcnnDotNet.targets" target="build/net45/NcnnDotNet.targets"/>
+    <file src="buildTransitive/net45/NcnnDotNet.targets" target="buildTransitive/net45/NcnnDotNet.targets"/>
 
     <file src="..\..\src\NcnnDotNet\bin\Release\netstandard2.0\NcnnDotNet.dll" target="lib\netstandard2.0" />
 
