@@ -65,7 +65,7 @@ namespace NcnnDotNet.Native.Tests
                 Assert.False(true, $"{VulkanSupportKey} is not found.");
 
             Console.WriteLine($"{VulkanSupportKey}: {values[VulkanSupportKey]}");
-            Assert.AreEqual((string)values[VulkanSupportKey] != "0", NcnnDotNet.Ncnn.IsSupportVulkan);
+            Assert.Equal((string)values[VulkanSupportKey] != "0", NcnnDotNet.Ncnn.IsSupportVulkan);
         }
 
         #region Helpers
