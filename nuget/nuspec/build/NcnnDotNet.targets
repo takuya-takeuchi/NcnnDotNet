@@ -14,7 +14,7 @@
  </Target>
 
   <ImportGroup>
-    <Import Project="$(NuGetPackageRoot)ncnnsotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets"
-            Condition="Exists('$(NuGetPackageRoot)ncnnsotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets')" />
+    <Import Project="$(NuGetPackageRoot)ncnndotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets"
+            Condition="Exists('$(NuGetPackageRoot)ncnndotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets')" />
   </ImportGroup>
 </Project>
