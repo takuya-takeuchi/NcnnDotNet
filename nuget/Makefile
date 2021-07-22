@@ -34,8 +34,8 @@ run-test-centos7-cpu-x64-desktop: ## run build container for centos7 cpu x64 on 
 run-test-centos7-vulkan-x64-desktop: ## run build container for centos7 vulkan x64 on desktop
 	@pwsh RunTestContainer.ps1 vulkan 64 desktop centos 7 "/x64"
 	
-run-test-ubuntu16-cpu-x64-desktop: ## run build container for ubuntu16 cpu x64 on desktop
-	@pwsh RunTestContainer.ps1 cpu 64 desktop ubuntu 16 "/x64"
+run-test-ubuntu18-cpu-x64-desktop: ## run build container for ubuntu18 cpu x64 on desktop
+	@pwsh RunTestContainer.ps1 cpu 64 desktop ubuntu 18 "/x64"
 
-run-test-ubuntu16-vulkan-x64-desktop: ## run build container for ubuntu16 vulkan x64 on desktop
-	@pwsh RunTestContainer.ps1 vulkan 64 desktop ubuntu 16 "/x64"
+run-test-ubuntu18-vulkan-x64-desktop: ## run build container for ubuntu18 vulkan x64 on desktop
+	@pwsh RunTestContainer.ps1 vulkan 64 desktop ubuntu 18 "/x64"
