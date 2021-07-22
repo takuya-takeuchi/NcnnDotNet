@@ -93,11 +93,11 @@ function RunTest($BuildTargets)
 
       # restore package from local nuget pacakge
       # And drop stdout message
-      Write-Host "dotnet remove reference `"..\..\src\NcnnDotNet\NcnnDotNet.csproj`"" -ForegroundColor Blue
+      Write-Host "dotnet remove reference `"..\..\src\NcnnDotNet\NcnnDotNet.csproj`"" -ForegroundColor Yellow
       dotnet remove reference "..\..\src\NcnnDotNet\NcnnDotNet.csproj" > $null
-      Write-Host "dotnet restore" -ForegroundColor Blue
+      Write-Host "dotnet restore" -ForegroundColor Yellow
       dotnet restore > $null
-      Write-Host "dotnet add package $package -v $VERSION --source ${NugetDir}" -ForegroundColor Blue
+      Write-Host "dotnet add package $package -v $VERSION --source ${NugetDir}" -ForegroundColor Yellow
       dotnet add package $package -v $VERSION --source ${NugetDir} > $null
 
       $ErrorActionPreference = "silentlycontinue"
