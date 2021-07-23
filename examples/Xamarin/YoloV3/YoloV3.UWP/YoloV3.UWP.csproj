@@ -127,7 +127,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.10" />
     <PackageReference Include="NcnnDotNet.Xamarin">
-      <Version>0.0.0.20210717</Version>
+      <Version>0.0.0.20210723</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.7.0.1260" />
     <PackageReference Include="Xamarin.Essentials.Interfaces" Version="1.6.1" />

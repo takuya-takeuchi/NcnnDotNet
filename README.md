@@ -5,7 +5,7 @@ ncnn wrapper written in C++ and C# for Windows, MacOS, Linux, iOS and Android.
 |Package|OS|x86|x64|ARM|ARM64|Nuget|
 |---|---|---|---|---|---|---|
 |NcnnDotNet (CPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
-||Linux|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
+||Linux|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 ||OSX|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 |NcnnDotNet (GPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
 ||Linux|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
@@ -13,11 +13,6 @@ ncnn wrapper written in C++ and C# for Windows, MacOS, Linux, iOS and Android.
 |NcnnDotNet (Xamarin)|UWP|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 ||Android|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 ||iOS|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
-
-#### :warning: Important
-
-NcnnDotNet does NOT support .NET Framework by nuget process. 
-However, you can deploy all NcnnDotNet binaries manually and it should work fine.
 
 ## Demo
 

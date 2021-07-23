@@ -10,7 +10,7 @@
     <license type="file">LICENSE.txt</license>
     <projectUrl>https://github.com/takuya-takeuchi/NcnnDotNet</projectUrl>
     <icon>images/nn128.png</icon>
-    <description>ncnn wrapper library written in C++ and C# for Xamarin.Android and Xamarin.iOS</description>
+    <description>ncnn wrapper library written in C++ and C# for Xamarin.UWP, Xamarin.Android and Xamarin.iOS</description>
     <releaseNotes></releaseNotes>
     <copyright>© Takuya Takeuchi 2019-2021</copyright>
     <tags>ncnn .net neural-network</tags>
