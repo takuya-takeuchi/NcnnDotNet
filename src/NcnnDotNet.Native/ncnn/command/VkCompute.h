@@ -2,7 +2,7 @@
 #define _CPP_COMMAND_VKCOMPUTE_H_
 
 #include "../export.h"
-#include <ncnn/command.h>
+#include <command.h>
 #include "../shared.h"
 
 #if NCNN_VULKAN
@@ -21,22 +21,32 @@ DLLEXPORT void command_VkCompute_delete(ncnn::VkCompute * compute)
     if (compute != nullptr) delete compute;
 }
 
-DLLEXPORT int32_t command_VkCompute_record_upload(ncnn::VkCompute* compute, ncnn::VkMat* mat)
+DLLEXPORT int32_t command_VkCompute_record_upload(ncnn::VkCompute* compute,
+                                                  ncnn::Mat* mat,
+                                                  ncnn::VkMat* dst,
+                                                  ncnn::Option* opt)
 {
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
-    compute->record_upload(m);
+    auto& d = *dst;
+    const auto& o = *opt;
+    compute->record_upload(m, d, o);
 
     return error;
 }
 
-DLLEXPORT int32_t command_VkCompute_record_download(ncnn::VkCompute* compute, ncnn::VkMat* mat)
+DLLEXPORT int32_t command_VkCompute_record_download(ncnn::VkCompute* compute,
+                                                    ncnn::VkMat* mat,
+                                                    ncnn::Mat* dst,
+                                                    ncnn::Option* opt)
 {
     int32_t error = ERR_OK;
 
     const auto& m = *mat;
-    compute->record_download(m);
+    auto& d = *dst;
+    const auto& o = *opt;
+    compute->record_download(m, d, o);
 
     return error;
 }

@@ -12,7 +12,10 @@ namespace NcnnDotNet
         public static extern IntPtr allocator_VkAllocator_get_vkdev(IntPtr allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern uint allocator_VkAllocator_get_memory_type_index(IntPtr allocator);
+        public static extern uint allocator_VkAllocator_get_buffer_memory_type_index(IntPtr allocator);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern uint allocator_VkAllocator_get_image_memory_type_index(IntPtr allocator);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         [return: MarshalAs(UnmanagedType.U1)]

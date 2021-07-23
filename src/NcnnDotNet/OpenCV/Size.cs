@@ -106,7 +106,7 @@ namespace NcnnDotNet.OpenCV
 
             public override IntPtr Create(int width, int height)
             {
-                return NativeMethods.opencv_Size_float_int32_t(width, height);
+                return NativeMethods.opencv_Size_int32_t_new(width, height);
             }
 
             public override void Dispose(IntPtr ptr)
@@ -135,7 +135,7 @@ namespace NcnnDotNet.OpenCV
 
             public override IntPtr Create(long width, long height)
             {
-                return NativeMethods.opencv_Size_float_int64_t(width, height);
+                return NativeMethods.opencv_Size_int64_t_new(width, height);
             }
 
             public override void Dispose(IntPtr ptr)

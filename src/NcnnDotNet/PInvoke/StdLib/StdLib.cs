@@ -9,48 +9,13 @@ namespace NcnnDotNet
     internal sealed partial class NativeMethods
     {
 
-        #region stdlib
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void stdlib_free(IntPtr ptr);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr stdlib_malloc(IntPtr size);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void stdlib_srand(uint seed);
-
-        #endregion
-
         #region string
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr string_new();
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr string_new2(StringBuilder c_str, int len);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void string_append(IntPtr str, StringBuilder c_str, int len);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr string_c_str(IntPtr str);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void string_delete(IntPtr str);
-
-        #endregion
-
-        #region ostringstream
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr ostringstream_new();
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr ostringstream_str(IntPtr str);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void ostringstream_delete(IntPtr str);
 
         #endregion
 
@@ -72,9 +37,6 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr stdvector_int32_getPointer(IntPtr vector);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int stdvector_int32_at(IntPtr vector, int index);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void stdvector_int32_delete(IntPtr vector);
@@ -99,9 +61,6 @@ namespace NcnnDotNet
         public static extern IntPtr stdvector_uint32_getPointer(IntPtr vector);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int stdvector_uint32_at(IntPtr vector, int index);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void stdvector_uint32_delete(IntPtr vector);
 
         #endregion
@@ -122,9 +81,6 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr stdvector_float_getPointer(IntPtr vector);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern float stdvector_float_at(IntPtr vector, int index);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void stdvector_float_delete(IntPtr vector);
@@ -149,9 +105,6 @@ namespace NcnnDotNet
         public static extern IntPtr stdvector_double_getPointer(IntPtr vector);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern double stdvector_double_at(IntPtr vector, int index);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void stdvector_double_delete(IntPtr vector);
 
         #endregion
@@ -172,9 +125,6 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr stdvector_Mat_getPointer(IntPtr vector);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr stdvector_Mat_at(IntPtr vector, int index);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void stdvector_Mat_delete(IntPtr vector);
@@ -200,9 +150,6 @@ namespace NcnnDotNet
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr stdvector_VkMat_getPointer(IntPtr vector);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr stdvector_VkMat_at(IntPtr vector, int index);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void stdvector_VkMat_delete(IntPtr vector);

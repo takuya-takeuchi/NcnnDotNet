@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_TILE_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/tile.h>
 #include "../../shared.h"
 

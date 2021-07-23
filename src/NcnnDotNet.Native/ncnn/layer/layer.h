@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYER_H_
 
 #include "../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include "../shared.h"
 
 DLLEXPORT int32_t layer_Layer_new(ncnn::Layer** returnValue)

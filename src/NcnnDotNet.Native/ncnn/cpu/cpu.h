@@ -2,7 +2,7 @@
 #define _CPP_CPU_CPU_H_
 
 #include "../export.h"
-#include <ncnn/cpu.h>
+#include <cpu.h>
 #include "../shared.h"
 
 DLLEXPORT int32_t cpu_get_cpu_count()

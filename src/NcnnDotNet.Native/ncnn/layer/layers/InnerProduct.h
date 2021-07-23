@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_INNERPRODUCT_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/innerproduct.h>
 #include "../../shared.h"
 

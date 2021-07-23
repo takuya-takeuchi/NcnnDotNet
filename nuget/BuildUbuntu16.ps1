@@ -28,8 +28,9 @@ $BuildSourceHash = [Config]::GetBinaryLibraryLinuxHash()
 # https://github.com/dotnet/coreclr/issues/9265
 # linux-x86 does not support
 $BuildTargets = @()
-$BuildTargets += New-Object PSObject -Property @{ Platform = "desktop"; Target = "cpu";     Architecture = 64; Postfix = "/x64"; RID = "$OperatingSystem-x64"; }
-$BuildTargets += New-Object PSObject -Property @{ Platform = "desktop"; Target = "vulkan";  Architecture = 64; Postfix = "/x64"; RID = "$OperatingSystem-x64"; }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "desktop"; Target = "cpu";     Architecture = 64; Postfix = "/x64";   RID = "$OperatingSystem-x64"; }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "desktop"; Target = "vulkan";  Architecture = 64; Postfix = "/x64";   RID = "$OperatingSystem-x64"; }
+$BuildTargets += New-Object PSObject -Property @{ Platform = "desktop"; Target = "arm";     Architecture = 64; Postfix = "/arm64"; RID = "$OperatingSystem-arm64"; }
 
 foreach($BuildTarget in $BuildTargets)
 {
@@ -69,6 +70,12 @@ foreach($BuildTarget in $BuildTargets)
       exit -1
    }
 
+   if ($target -eq "arm")
+   {
+      Write-Host "Start 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'" -ForegroundColor Green
+      docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+   }
+
    # Build binary
    foreach ($key in $BuildSourceHash.keys)
    {
@@ -77,6 +84,7 @@ foreach($BuildTarget in $BuildTargets)
                   -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                   -e "LOCAL_UID=$(id -u $env:USER)" `
                   -e "LOCAL_GID=$(id -g $env:USER)" `
+                  -e "CIBuildDir=/opt/data/builds" `
                   -t "$dockername" $key $target $architecture $platform $option
    
       if ($lastexitcode -ne 0)

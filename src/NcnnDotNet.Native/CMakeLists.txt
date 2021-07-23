@@ -9,7 +9,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(${PROJ_NAME} VERSION 0.0.0.20200106)
 
 # definitions
-option(NCNN_VULKAN "vulkan compute support" OFF)
+option(NCNN_VULKAN    "vulkan compute support" OFF)
+option(NO_GUI_SUPPORT "disable gui support" OFF)
+
+if (NO_GUI_SUPPORT)
+    add_compile_definitions(NO_GUI_SUPPORT)
+endif()
 
 # OS info
 message("-------------------------------------------------------")
@@ -29,18 +34,22 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20210417)
+set(VERSION_DATE 20210723)
+
+# Binary is not be able to be executed in host, set 0 (success) forcibly
+set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	set(CMAKE_C_FLAGS "-fPIC")
-	set(CMAKE_CXX_FLAGS "-fPIC")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 # typeinfo for DataReader_: error: undefined reference to 'typeinfo for ncnn::DataReader'
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
-	set(CMAKE_C_FLAGS "-fPIC")
-	set(CMAKE_CXX_FLAGS "-fPIC -fno-rtti")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+    # use rtti to use dynamic_cast
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 # set architecture
@@ -64,6 +73,7 @@ endif()
 get_filename_component(NCNNDOTNET_ROOT_DIR "../.." ABSOLUTE)
 
 # include 3rdparty libraries
+find_package(ncnn REQUIRED)
 set(OpenCV_STATIC ON)
 find_package(OpenCV REQUIRED)
 
@@ -81,7 +91,7 @@ endif()
 
 # https://github.com/Tencent/ncnn/wiki/FAQ-ncnn-throw-error#undefined-reference-to-__kmpc_xyz_xyz
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
-    FIND_PACKAGE( OpenMP REQUIRED)
+    FIND_PACKAGE(OpenMP REQUIRED)
 
     if(OPENMP_FOUND)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -93,15 +103,36 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
 endif()
 
 if (MSVC OR MSYS OR MINGW)
-    include_directories("$ENV{ncnn_DIR}/include"
-                        "$ENV{ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif(APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
+elseif(UNIX AND NOT APPLE)
+    include_directories("${ncnn_SRC_DIR}/src"
+                        "${OpenCV_INCLUDE_DIRS}")
 else()
-    include_directories("$ENV{ncnn_DIR}/include"
-                        "$ENV{ncnn_SRC_DIR}/src"
-                        "${OpenCV_INCLUDE_DIRS}"
-                        "$ENV{VULKAN_SDK}/include")
+    message(FATAL_ERROR "Failed to include directories")
+endif()
+
+if (NCNN_VULKAN)
+    if (MSVC OR MSYS OR MINGW)
+        include_directories("$ENV{VULKAN_SDK}/include")
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        include_directories("${Vulkan_INCLUDE_DIR}")
+    elseif(APPLE)
+        include_directories("${Vulkan_INCLUDE_DIR}")
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
+        include_directories("$ENV{VULKAN_SDK}/include")
+    elseif(UNIX AND NOT APPLE)
+        include_directories("$ENV{VULKAN_SDK}/include")
+    endif()
 endif()
 
 # Set /bigobj for MSVC
@@ -128,7 +159,7 @@ configure_file(
     @ONLY)
 
 FILE(GLOB_RECURSE HEADERS ${PROJECT_SOURCE_DIR}/ncnn/*.h)
-FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cpp)
+FILE(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/ncnn/*.cxx)
 
 if (NCNN_VULKAN)
     configure_file(
@@ -144,37 +175,69 @@ endif()
 
 # STATIC_LIBRARIES
 if (MSVC OR MSYS OR MINGW)
+    if("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore")
+        set(STATIC_LIBRARIES
+            ncnn
+            opencv_imgcodecs
+            opencv_imgproc
+        )
+    else()
+        set(STATIC_LIBRARIES
+            ncnn
+            opencv_highgui
+            opencv_imgcodecs
+            opencv_imgproc
+        )
+    endif()
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/ncnn.lib
-        opencv_highgui
-        opencv_imgcodecs
-        opencv_imgproc
+        ncnn
+        zlib
+        libjpeg
+        libpng
+        opencv_world
     )
 elseif(APPLE)
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/libncnn.a
+        ncnn
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
     )
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/libncnn.a
-        opencv_highgui
-        opencv_imgcodecs
-        opencv_imgproc
+        ncnn
+        ${OpenCV_INSTALL_DIR}/sdk/native/staticlibs/${ANDROID_ABI}/libopencv_world.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libcpufeatures.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libIlmImf.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibjasper.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibjpeg.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibpng.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibtiff.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/liblibwebp.a
+        ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libtegra_hal.a
+        z
+        log
         android
     )
+    if (${CMAKE_SYSTEM_PROCESSOR} MATCHES "x86_64|i686")
+        list(REMOVE_ITEM STATIC_LIBRARIES
+            ${OpenCV_INSTALL_DIR}/sdk/native/3rdparty/libs/${ANDROID_ABI}/libtegra_hal.a
+        )
+    endif()
 elseif(UNIX AND NOT APPLE)
     # centos7 uses glibc-2.17-292.el7.x86_64 but build dev uses latest GCC
     # Therefore, link libmvec as static
     # https://sourceware.org/glibc/wiki/libmvec
     # But it is not linked. why?
     set(STATIC_LIBRARIES
-        $ENV{ncnn_DIR}/lib/libncnn.a
+        ncnn
         opencv_highgui
         opencv_imgcodecs
         opencv_imgproc
+        pthread
+        gcc_s
+        gcc
     )
 else()
     message(FATAL_ERROR "Failed to link library")
@@ -184,25 +247,65 @@ if (NCNN_VULKAN)
     if (MSVC OR MSYS OR MINGW)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
+        )
+    elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+        list(APPEND STATIC_LIBRARIES
+            ${Vulkan_LIBRARY}
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
-            $ENV{VULKAN_SDK}/lib/libvulkan.dylib
+            ${Vulkan_LIBRARY}
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )   
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
             vulkan
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.so
+            glslang
+            GenericCodeGen
+            MachineIndependent
+            OGLCompiler
+            OSDependent
+            SPIRV
         )
     endif()
 endif()
 
-add_library(${PROJ_NAME} SHARED ${HEADERS}
-                                ${SOURCES}
-                                ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+if ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
+    add_library(${PROJ_NAME} ${HEADERS}
+                             ${SOURCES}
+                             ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+else ()
+    add_library(${PROJ_NAME} SHARED ${HEADERS}
+                                    ${SOURCES}
+                                    ${CMAKE_CURRENT_BINARY_DIR}/version.rc)
+endif()
 
 target_link_libraries(${PROJ_NAME} ${STATIC_LIBRARIES})
 

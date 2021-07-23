@@ -21,4 +21,13 @@
     <ProjectReference Include="..\..\src\NcnnDotNet\NcnnDotNet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestData\mobilenet_ssd_voc_ncnn.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\mobilenet_ssd_voc_ncnn.param">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -6,12 +6,11 @@
     <Description>.NET wrapper for ncnn written in C#</Description>
     <Company />
     <Copyright>© Takuya Takeuchi 2019-2021</Copyright>
-    <Configurations>Debug;Release</Configurations>
+    <Configurations>Debug;Release;Debug_Static;Release_Static</Configurations>
     <Version>2021.04.17.0</Version>
     <RepositoryUrl>https://github.com/takuya-takeuchi/NcnnDotNet</RepositoryUrl>
     <PackageTags>ncnn .net neural-network deep-learning</PackageTags>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
-  
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
@@ -24,11 +23,12 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG;$(CustomDefinition)</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <Optimize>true</Optimize>
+    <DefineConstants>$(DefineConstants);$(CustomDefinition)</DefineConstants>
     <DocumentationFile>docs\NcnnDotNet.xml</DocumentationFile>
   </PropertyGroup>
 

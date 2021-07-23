@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_ROIALIGN_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/roialign.h>
 #include "../../shared.h"
 

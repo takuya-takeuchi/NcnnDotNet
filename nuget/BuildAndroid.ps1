@@ -7,7 +7,7 @@ $NugetPath = Join-Path $NcnnDotNetRoot "nuget" | `
              Join-Path -ChildPath "BuildUtils.ps1"
 import-module $NugetPath -function *
 
-$OperatingSystem="ubuntu"
+$OperatingSystem="linux"
 $Distribution="ubuntu"
 $DistributionVersion="16"
 $AndroidVersion="28.0.3-r20-jdk8"
@@ -17,7 +17,7 @@ $AndroidNativeApiLevel="24"
 $Current = Get-Location
 $NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
 $NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
-$DockerDir = Join-Path $Current docker
+$DockerDir = Join-Path $NcnnDotNetRoot docker
 
 Set-Location -Path $DockerDir
 
@@ -69,12 +69,12 @@ foreach($BuildTarget in $BuildTargets)
       $option = [Config]::Base64Encode((ConvertTo-Json -Compress $setting))
       $Config = [Config]::new($NcnnDotNetRoot, "Release", $target, $architecture, $platform, $option)
       $libraryDir = Join-Path "artifacts" $Config.GetArtifactDirectoryName()
-      $build = $Config.GetBuildDirectoryName($OperatingSystem)
       Write-Host "Start 'docker run --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t $dockername'" -ForegroundColor Green
       docker run --rm `
                   -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                   -e "LOCAL_UID=$(id -u $env:USER)" `
                   -e "LOCAL_GID=$(id -g $env:USER)" `
+                  -e "CIBuildDir=/opt/data/builds" `
                   -t "$dockername" $key $target $architecture $platform $option
    
       if ($lastexitcode -ne 0)
@@ -87,6 +87,7 @@ foreach($BuildTarget in $BuildTargets)
    # Copy output binary
    foreach ($key in $BuildSourceHash.keys)
    {
+      $build = $Config.GetBuildDirectoryName($OperatingSystem)
       $srcDir = Join-Path $NcnnDotNetSourceRoot $key
       $dll = $BuildSourceHash[$key]
       $dstDir = Join-Path $Current $libraryDir

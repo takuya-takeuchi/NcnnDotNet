@@ -66,6 +66,8 @@ else
    $dockername = "ncnndotnet/test/$Distribution/$DistributionVersion/$Target/$cudaVersion"
 }
 
+Write-Host "Run $dockername" -ForegroundColor Green
+
 if ($cuda -ne 0)
 {
    $dockerAPIVersion = docker version --format '{{.Server.APIVersion}}'
@@ -77,6 +79,7 @@ if ($cuda -ne 0)
                  -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                  -e "LOCAL_UID=$(id -u $env:USER)" `
                  -e "LOCAL_GID=$(id -g $env:USER)" `
+                 -w "/opt/data/NcnnDotNet" `
                  -it "$dockername"
    }
    else
@@ -86,6 +89,7 @@ if ($cuda -ne 0)
                  -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
                  -e "LOCAL_UID=$(id -u $env:USER)" `
                  -e "LOCAL_GID=$(id -g $env:USER)" `
+                 -w "/opt/data/NcnnDotNet" `
                  -it "$dockername"
    }
 }
@@ -96,5 +100,6 @@ else
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
               -e "LOCAL_UID=$(id -u $env:USER)" `
               -e "LOCAL_GID=$(id -g $env:USER)" `
+              -w "/opt/data/NcnnDotNet" `
               -it "$dockername"
 }

@@ -1,7 +1,7 @@
 #ifndef _CPP_SHARED_H_
 #define _CPP_SHARED_H_
 
-#include <ncnn/platform.h>
+#include <platform.h>
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -35,10 +35,10 @@ enum struct allocator_type : int
 
 enum struct vkallocator_type : int
 {
-    VkBlobBufferAllocator = 0,
-    VkWeightBufferAllocator,
-    VkStagingBufferAllocator,
-    VkWeightStagingBufferAllocator
+    VkBlobAllocator = 0,
+    VkWeightAllocator,
+    VkStagingAllocator,
+    VkWeightStagingAllocator
 };
 
 #endif

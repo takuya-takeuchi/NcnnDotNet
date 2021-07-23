@@ -1,15 +1,24 @@
 # ![Alt text](nuget/nn48.png "NcnnDotNet") NcnnDotNet [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 
-ncnn wrapper written in C++ and C# for Windows, MacOS and Linux
+ncnn wrapper written in C++ and C# for Windows, MacOS, Linux, iOS and Android.
 
 |Package|OS|x86|x64|ARM|ARM64|Nuget|
 |---|---|---|---|---|---|---|
 |NcnnDotNet (CPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
-||Linux|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
+||Linux|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 ||OSX|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 |NcnnDotNet (GPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
 ||Linux|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
 ||OSX|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|
+|NcnnDotNet (Xamarin)|UWP|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
+||Android|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
+||iOS|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
+
+## Demo
+
+#### YoloV3 on Xamarin.Android, iOS and UWP
+
+<img src="examples\Xamarin\YoloV3\images\android.webp" width="150" /> <img src="examples\Xamarin\YoloV3\images\ios.webp" width="150" /> <img src="examples\Xamarin\YoloV3\images\uwp.webp" width="300" />
 
 ## Related Projects
 

@@ -12,31 +12,16 @@ namespace NcnnDotNet
         public static extern void gpu_GpuInfo_get_support_fp16_packed(IntPtr info, out bool returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void gpu_GpuInfo_set_support_fp16_packed(IntPtr info, bool value);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void gpu_GpuInfo_get_support_fp16_storage(IntPtr info, out bool returnValue);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void gpu_GpuInfo_set_support_fp16_storage(IntPtr info, bool value);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void gpu_GpuInfo_get_support_fp16_arithmetic(IntPtr info, out bool returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void gpu_GpuInfo_set_support_fp16_arithmetic(IntPtr info, bool value);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void gpu_GpuInfo_get_support_int8_storage(IntPtr info, out bool returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void gpu_GpuInfo_set_support_int8_storage(IntPtr info, bool value);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void gpu_GpuInfo_get_support_int8_arithmetic(IntPtr info, out bool returnValue);
-
-        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern void gpu_GpuInfo_set_support_int8_arithmetic(IntPtr info, bool value);
 
     }
 

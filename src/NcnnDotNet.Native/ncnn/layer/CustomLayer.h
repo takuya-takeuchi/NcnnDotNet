@@ -2,7 +2,7 @@
 #define _CPP_LAYER_CUSTOMLAYER_H_
 
 #include "../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include "../shared.h"
 
 class CustomLayer : ncnn::Layer

@@ -64,26 +64,37 @@ else
    $dockername = "ncnndotnet/build/$Distribution/$DistributionVersion/$Target/$cudaVersion"
 }
 
-Write-Host "Start 'docker run --rm -v ""$($NcnnDotNetRoot):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t $dockername'" -ForegroundColor Green
+if ($target -eq "arm")
+{
+   Write-Host "Start 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'" -ForegroundColor Green
+   docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+}
+
+Write-Host "Run $dockername" -ForegroundColor Green
+
 if ($Config.HasStoreDriectory())
 {
    $storeDirecotry = $Config.GetRootStoreDriectory()
    docker run --rm `
+              --privileged `
               --entrypoint="/bin/bash" `
               -v "$($storeDirecotry):/opt/data/builds" `
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
               -e "LOCAL_UID=$(id -u $env:USER)" `
               -e "LOCAL_GID=$(id -g $env:USER)" `
               -e "CIBuildDir=/opt/data/builds" `
+              -w "/opt/data/NcnnDotNet" `
               -it "$dockername"
 }
 else
 {
    Write-Host "CIBuildDir is not set" -ForegroundColor Yellow
    docker run --rm `
+              --privileged `
               --entrypoint="/bin/bash" `
               -v "$($NcnnDotNetRoot):/opt/data/NcnnDotNet" `
               -e "LOCAL_UID=$(id -u $env:USER)" `
               -e "LOCAL_GID=$(id -g $env:USER)" `
+              -w "/opt/data/NcnnDotNet" `
               -it "$dockername"
 }

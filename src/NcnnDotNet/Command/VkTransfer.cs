@@ -4,7 +4,7 @@
 namespace NcnnDotNet
 {
 
-    public sealed class VkTransfer : Command
+    public sealed class VkTransfer : NcnnObject
     {
 
         #region Constructors
@@ -23,49 +23,6 @@ namespace NcnnDotNet
         #endregion
 
         #region Properties
-
-        public VkAllocator StagingVkAllocator
-        {
-            get
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.command_VkTransfer_get_staging_vkallocator(this.NativePtr, out var value);
-
-                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
-                {
-                    return VkAllocator.GetAllocator(value, type);
-                }
-
-                return null;
-            }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.command_VkTransfer_set_staging_vkallocator(this.NativePtr, value.NativePtr);
-            }
-        }
-
-        public VkAllocator WeightVkAllocator
-        {
-            get
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.command_VkTransfer_get_weight_vkallocator(this.NativePtr, out var value);
-
-                if (NativeMethods.allocator_VkAllocator_dynamic_cast(value, out var type))
-                {
-                    return VkAllocator.GetAllocator(value, type);
-                }
-
-                return null;
-            }
-            set
-            {
-                this.ThrowIfDisposed();
-                NativeMethods.command_VkTransfer_set_weight_vkallocator(this.NativePtr, value.NativePtr);
-            }
-        }
-
         #endregion
 
         #region Methods

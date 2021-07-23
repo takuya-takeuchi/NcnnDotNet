@@ -46,10 +46,10 @@ namespace NcnnDotNet
 
         internal enum VkAllocatorType
         {
-            VkBlobBufferAllocator = 0,
-            VkWeightBufferAllocator,
-            VkStagingBufferAllocator,
-            VkWeightStagingBufferAllocator
+            VkBlobAllocator = 0,
+            VkWeightAllocator,
+            VkStagingAllocator,
+            VkWeightStagingAllocator
         };
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

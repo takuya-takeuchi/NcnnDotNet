@@ -2,7 +2,7 @@
 #define _CPP_LAYER_LAYERS_PSROIPOOLING_H_
 
 #include "../../export.h"
-#include <ncnn/layer.h>
+#include <layer.h>
 #include <layer/psroipooling.h>
 #include "../../shared.h"
 

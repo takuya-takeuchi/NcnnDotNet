@@ -66,8 +66,8 @@ namespace BenchCNN
             {
                 g_warmup_loop_count = 10;
                 g_vkdev = Ncnn.GetGpuDevice(gpuDevice);
-                g_blob_vkallocator = new VkBlobBufferAllocator(g_vkdev);
-                g_staging_vkallocator = new VkStagingBufferAllocator(g_vkdev);
+                g_blob_vkallocator = new VkBlobAllocator(g_vkdev);
+                g_staging_vkallocator = new VkStagingAllocator(g_vkdev);
             }
 
             // default option

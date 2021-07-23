@@ -2,21 +2,21 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <Authors>Takuya Takeuchi</Authors>
     <Description>Example of NcnnDotNet</Description>
-    <Company />
+    <LangVersion>preview</LangVersion>
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\NcnnDotNet\NcnnDotNet.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Update="dog.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NcnnDotNet" Version="0.0.0.20210717" />
   </ItemGroup>
 
 </Project>

@@ -2,7 +2,7 @@
 #define _CPP_NET_EXTRACTOR_H_
 
 #include "../export.h"
-#include <ncnn/net.h>
+#include <net.h>
 #include "../shared.h"
 
 DLLEXPORT void net_Extractor_delete(ncnn::Extractor* extractor)

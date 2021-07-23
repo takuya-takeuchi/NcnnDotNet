@@ -2,7 +2,7 @@
 #define _CPP_MODELBIN_MODELBIN_H_
 
 #include "../export.h"
-#include <ncnn/modelbin.h>
+#include <modelbin.h>
 #include "../shared.h"
 
 DLLEXPORT int modelbin_ModelBinFromMatArray_new(std::vector<ncnn::Mat>* weights, ncnn::ModelBinFromMatArray ** returnValue)

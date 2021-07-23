@@ -11,7 +11,7 @@ namespace NcnnDotNet
         #region int32_t
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr opencv_Size_float_int32_t(int width, int height);
+        public static extern IntPtr opencv_Size_int32_t_new(int width, int height);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_Size_int32_t_delete(IntPtr rect);
@@ -27,7 +27,7 @@ namespace NcnnDotNet
         #region int64_t
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern IntPtr opencv_Size_float_int64_t(long width, long height);
+        public static extern IntPtr opencv_Size_int64_t_new(long width, long height);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_Size_int64_t_delete(IntPtr rect);

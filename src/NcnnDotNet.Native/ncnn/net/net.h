@@ -2,7 +2,7 @@
 #define _CPP_NET_NET_H_
 
 #include "../export.h"
-#include <ncnn/net.h>
+#include <net.h>
 #include "../shared.h"
 
 DLLEXPORT int net_Net_new(ncnn::Net** returnValue)
