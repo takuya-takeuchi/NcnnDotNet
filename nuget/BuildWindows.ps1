@@ -3,16 +3,14 @@ Param()
 # import class and function
 $ScriptPath = $PSScriptRoot
 $NcnnDotNetRoot = Split-Path $ScriptPath -Parent
-$NugetPath = Join-Path $NcnnDotNetRoot "nuget" | `
-             Join-Path -ChildPath "BuildUtils.ps1"
-import-module $NugetPath -function *
+$ScriptPath = Join-Path $NcnnDotNetRoot "nuget" | `
+              Join-Path -ChildPath "BuildUtils.ps1"
+import-module $ScriptPath -function *
 
 $OperatingSystem="win"
 
 # Store current directory
 $Current = Get-Location
-$NcnnDotNetRoot = (Split-Path (Get-Location) -Parent)
-$NcnnDotNetSourceRoot = Join-Path $NcnnDotNetRoot src
 
 $BuildSourceHash = [Config]::GetBinaryLibraryWindowsHash()
 
@@ -28,46 +26,18 @@ if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
 }
 
 $BuildTargets = @()
-$BuildTargets += New-Object PSObject -Property @{Target = "cpu";    Architecture = 64; RID = "$OperatingSystem-x64";  }
-$BuildTargets += New-Object PSObject -Property @{Target = "vulkan"; Architecture = 64; RID = "$OperatingSystem-x64";  }
+$BuildTargets += [BuildTarget]::new("desktop", "cpu",    64, "$OperatingSystem-x64", "" )
+$BuildTargets += [BuildTarget]::new("desktop", "vulkan", 64, "$OperatingSystem-x64", "" )
 
 foreach ($BuildTarget in $BuildTargets)
 {
-   $target = $BuildTarget.Target
-   $architecture = $BuildTarget.Architecture
-   $rid = $BuildTarget.RID
-   $option = ""
-
-   $Config = [Config]::new($NcnnDotNetRoot, "Release", $target, $architecture, "desktop", $option)
-   $libraryDir = Join-Path "artifacts" $Config.GetArtifactDirectoryName()
-   $build = $Config.GetBuildDirectoryName($OperatingSystem)
-
-   foreach ($key in $BuildSourceHash.keys)
+   $BuildTarget.OperatingSystem = ${OperatingSystem}
+   
+   $ret = [Config]::Build($NcnnDotNetRoot, $False, $BuildSourceHash, $BuildTarget)
+   if ($ret -eq $False)
    {
-      $srcDir = Join-Path $NcnnDotNetSourceRoot $key
-
-      # Move to build target directory
-      Set-Location -Path $srcDir
-
-      $arc = $Config.GetArchitectureName()
-      Write-Host "Build $key [$arc] for $target" -ForegroundColor Green
-      Build -Config $Config
-
-      if ($lastexitcode -ne 0)
-      {
-         Set-Location -Path $Current
-         exit -1
-      }
-   }
-
-   # Copy output binary
-   foreach ($key in $BuildSourceHash.keys)
-   {
-      $srcDir = Join-Path $NcnnDotNetSourceRoot $key
-      $dll = $BuildSourceHash[$key]
-      $dstDir = Join-Path $Current $libraryDir
-
-      CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+      Set-Location -Path $Current
+      exit -1
    }
 }
 

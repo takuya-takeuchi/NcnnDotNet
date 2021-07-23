@@ -1,3 +1,35 @@
+class BuildTarget
+{
+   [string] $Platform
+   [string] $Target
+   [int]    $Architecture
+   [string] $Postfix
+   [string] $RID
+
+   BuildTarget( [string]$Platform,
+                [string]$Target,
+                [int]   $Architecture,
+                [string]$RID,
+                [string]$Postfix = ""
+              )
+   {
+      $this.Platform = $Platform
+      $this.Target = $Target
+      $this.Architecture = $Architecture
+      $this.Postfix = $Postfix
+      $this.RID = $RID
+   }
+
+   [string] $OperatingSystem
+   [string] $Distribution
+   [string] $DistributionVersion
+
+   [string] $CudaVersion
+
+   [string] $AndroidVersion
+   [string] $AndroidNativeApiLevel
+}
+
 class Config
 {
 
@@ -525,6 +557,163 @@ class Config
          }
       }
       return $this._OSXArchitectures
+   }
+
+   static [bool] Build([string]$root, [bool]$docker, [hashtable]$buildHashTable, [BuildTarget]$buildTarget)
+   {
+      $current = $PSScriptRoot
+
+      $platform              = $buildTarget.Platform
+      $target                = $buildTarget.Target
+      $architecture          = $buildTarget.Architecture
+      $postfix               = $buildTarget.Postfix
+      $rid                   = $buildTarget.RID
+      $operatingSystem       = $buildTarget.OperatingSystem
+      $distribution          = $buildTarget.Distribution
+      $distributionVersion   = $buildTarget.DistributionVersion
+      $cudaVersion           = $buildTarget.CudaVersion
+      $androidVersion        = $buildTarget.AndroidVersion
+      $androidNativeApiLevel = $buildTarget.AndroidNativeApiLevel
+
+      $option = ""
+
+      $sourceRoot = Join-Path $root src
+
+      if ($docker -eq $True)
+      {
+         $dockerDir = Join-Path $root docker
+
+         Set-Location -Path $dockerDir
+
+         $dockerFileDir = Join-Path $dockerDir build  | `
+                          Join-Path -ChildPath $distribution | `
+                          Join-Path -ChildPath $distributionVersion
+
+         if ($platform -eq "android")
+         {
+            $setting =
+            @{
+               'ANDROID_ABI' = $rid;
+               'ANDROID_NATIVE_API_LEVEL' = $androidNativeApiLevel
+            }
+            $option = [Config]::Base64Encode((ConvertTo-Json -Compress $setting))
+
+            $dockername = "ncnndotnet/build/$distribution/$distributionVersion/android/$androidVersion"
+            $imagename  = "ncnndotnet/devel/$distribution/$distributionVersion/android/$androidVersion"
+         }
+         else
+         {
+            if ($target -ne "cuda")
+            {
+               $option = ""
+
+               $dockername = "ncnndotnet/build/$distribution/$distributionVersion/$Target" + $postfix
+               $imagename  = "ncnndotnet/devel/$distribution/$distributionVersion/$Target" + $postfix
+            }
+            else
+            {
+               $option = $cudaVersion
+
+               $cudaVersion = ($cudaVersion / 10).ToString("0.0")
+               $dockername = "ncnndotnet/build/$distribution/$distributionVersion/$Target/$cudaVersion"
+               $imagename  = "ncnndotnet/devel/$distribution/$distributionVersion/$Target/$cudaVersion"
+            }
+         }
+
+         $config = [Config]::new($root, "Release", $target, $architecture, $platform, $option)
+         $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
+         $build = $config.GetBuildDirectoryName($operatingSystem)
+
+         Write-Host "Start 'docker build -t $dockername $dockerFileDir --build-arg IMAGE_NAME=""$imagename""'" -ForegroundColor Green
+         docker build --network host --force-rm=true -t $dockername $dockerFileDir --build-arg IMAGE_NAME="$imagename"
+
+         if ($lastexitcode -ne 0)
+         {
+            return $False
+         }
+
+         if ($platform -eq "desktop")
+         {
+            if ($target -eq "arm")
+            {
+               Write-Host "Start 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'" -ForegroundColor Green
+               docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            }
+         }
+
+         # Build binary
+         foreach ($key in $buildHashTable.keys)
+         {
+            Write-Host "Start 'docker run --rm -v ""$($root):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t $dockername'" -ForegroundColor Green
+            docker run --rm --network host `
+                        -v "$($root):/opt/data/NcnnDotNet" `
+                        -e "LOCAL_UID=$(id -u $env:USER)" `
+                        -e "LOCAL_GID=$(id -g $env:USER)" `
+                        -t "$dockername" $key $target $architecture $platform $option
+
+            if ($lastexitcode -ne 0)
+            {
+               return $False
+            }
+         }
+
+         # Copy output binary
+         foreach ($key in $buildHashTable.keys)
+         {
+            $srcDir = Join-Path $sourceRoot $key
+            $dll = $buildHashTable[$key]
+            $dstDir = Join-Path $current $libraryDir
+
+            CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+         }
+      }
+      else
+      {
+         if ($platform -eq "ios")
+         {
+            $option = $rid
+         }
+
+         $config = [Config]::new($root, "Release", $target, $architecture, $platform, $option)
+         $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
+         $build = $config.GetBuildDirectoryName($OperatingSystem)
+
+         foreach ($key in $buildHashTable.keys)
+         {
+            $srcDir = Join-Path $sourceRoot $key
+
+            # Move to build target directory
+            Set-Location -Path $srcDir
+
+            $arc = $config.GetArchitectureName()
+            Write-Host "Build $key [$arc] for $target" -ForegroundColor Green
+            Build -Config $config
+
+            if ($lastexitcode -ne 0)
+            {
+               return $False
+            }
+         }
+
+         # Copy output binary
+         foreach ($key in $buildHashTable.keys)
+         {
+            $srcDir = Join-Path $sourceRoot $key
+            $dll = $buildHashTable[$key]
+            $dstDir = Join-Path $current $libraryDir
+
+            if ($global:IsWindows)
+            {
+               CopyToArtifact -configuration "Release" -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+            }
+            else
+            {
+               CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+            }
+         }
+      }
+
+      return $True
    }
 
 }
@@ -2206,7 +2395,7 @@ function Build([Config]$Config)
 
    $Platform = $Config.GetPlatform()
 
-   # Post build 
+   # Post build
    switch ($Platform)
    {
       "ios"
@@ -2227,9 +2416,9 @@ function Build([Config]$Config)
             $osxArchitectures = $Config.GetOSXArchitectures()
 
             if ($osxArchitectures -eq $platform )
-            {           
+            {
                Write-Host "Invoke libtool for ${platform}" -ForegroundColor Yellow
-               
+
                switch ($platform)
                {
                   "arm64e"
@@ -2320,27 +2509,31 @@ function CopyToArtifact()
    if ($configuration)
    {
       $binary = Join-Path ${srcDir} ${build}  | `
-                Join-Path -ChildPath ${configuration} | `
-                Join-Path -ChildPath ${libraryName}
+               Join-Path -ChildPath ${configuration} | `
+               Join-Path -ChildPath ${libraryName}
    }
    else
    {
       $binary = Join-Path ${srcDir} ${build}  | `
-                Join-Path -ChildPath ${libraryName}
+               Join-Path -ChildPath ${libraryName}
    }
 
-   $output = Join-Path $dstDir runtimes | `
+   $dstDir = Join-Path $dstDir runtimes | `
              Join-Path -ChildPath ${rid} | `
              Join-Path -ChildPath native
 
-   if (!(Test-Path $output))
+   $output = Join-Path $dstDir $libraryName
+
+   if (!(Test-Path($binary)))
    {
-      Write-Host "Destination: ${output} is not found" -ForegroundColor Red
-      exit -1
+      Write-Host "${binary} does not exist" -ForegroundColor Red
    }
 
-   $output = Join-Path $output $libraryName
+   if (!(Test-Path($dstDir)))
+   {
+      Write-Host "${dstDir} does not exist" -ForegroundColor Red
+   }
 
-   Write-Host "Copy ${binary} to ${output}" -ForegroundColor Green
+   Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
    Copy-Item ${binary} ${output}
 }
