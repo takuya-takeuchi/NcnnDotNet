@@ -38,9 +38,9 @@ namespace YoloV3.Services
 
         #region IDetectService Members
 
-        public DetectResult Detect(string file)
+        public DetectResult Detect(byte[] file)
         {
-            using var m = Cv2.ImRead(file, CvLoadImage.Grayscale);
+            using var m = Cv2.ImDecode(file, CvLoadImage.Grayscale);
             if (m.IsEmpty)
                 throw new NotSupportedException("This file is not supported!!");
 

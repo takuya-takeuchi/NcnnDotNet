@@ -3,6 +3,7 @@ using Android.Content.PM;
 using Android.OS;
 using Prism;
 using Prism.Ioc;
+using YoloV3.Services;
 
 namespace YoloV3.Droid
 {
@@ -34,6 +35,7 @@ namespace YoloV3.Droid
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // Register any platform specific implementations
+            containerRegistry.RegisterSingleton<IFileAccessService, FileAccessService>();
         }
     }
 }

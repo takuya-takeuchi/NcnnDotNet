@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace NcnnDotNet.Native.Tests
 {
 
-    [TestClass]
-    public class NcnnTest
+    public sealed class Program
     {
 
         private const string VersionKey = "NCNNDOTNET_VERSION";
 
         private const string VulkanSupportKey = "NCNNDOTNET_VULKAN_SUPPORT";
 
-        [TestMethod]
+        [Fact]
         public void CheckNcnnDotNetNativeVersion()
         {
             var values = Environment.GetEnvironmentVariables();
             if (!values.Contains(VersionKey))
-                Assert.Fail($"{VersionKey} is not found.");
+                Assert.False(true, $"{VersionKey} is not found.");
 
             Console.WriteLine($"{VersionKey}: {values[VersionKey]}");
-            Assert.AreEqual(values[VersionKey], NcnnDotNet.Ncnn.GetNativeVersion());
+            Assert.Equal(values[VersionKey], NcnnDotNet.Ncnn.GetNativeVersion());
         }
 
-        [TestMethod]
+        [Fact]
         public void CheckClassification()
         {
             const string image = "goldfish.jpg";
@@ -33,7 +32,7 @@ namespace NcnnDotNet.Native.Tests
             {
                 if (m.IsEmpty)
                 {
-                    Assert.Fail($"Failed to load {image}.");
+                    Assert.False(true, $"Failed to load {image}.");
                 }
 
                 if (Ncnn.IsSupportVulkan)
@@ -44,7 +43,7 @@ namespace NcnnDotNet.Native.Tests
                 
                 if (!clsScores.Any())
                 {
-                    Assert.Fail($"Failed to classify {image}. Reason: No classification");
+                    Assert.False(true, $"Failed to classify {image}. Reason: No classification");
                 }
 
                 if (Ncnn.IsSupportVulkan)
@@ -52,21 +51,21 @@ namespace NcnnDotNet.Native.Tests
 
                 var top = PrintTop(clsScores);
                 if (top.Item1 < 0.9)
-                    Assert.Fail($"Failed to classify {image}. Reason: Low Score");
+                    Assert.False(true, $"Failed to classify {image}. Reason: Low Score");
                 if (top.Item2 != 1)
-                    Assert.Fail($"Failed to classify {image}. Reason: Wrong class");
+                    Assert.False(true, $"Failed to classify {image}. Reason: Wrong class");
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void CheckIsSupoortGui()
         {
             var values = Environment.GetEnvironmentVariables();
             if (!values.Contains(VulkanSupportKey))
-                Assert.Fail($"{VulkanSupportKey} is not found.");
+                Assert.False(true, $"{VulkanSupportKey} is not found.");
 
             Console.WriteLine($"{VulkanSupportKey}: {values[VulkanSupportKey]}");
-            Assert.AreEqual((string)values[VulkanSupportKey] != "0", NcnnDotNet.Ncnn.IsSupportVulkan);
+            Assert.Equal((string)values[VulkanSupportKey] != "0", NcnnDotNet.Ncnn.IsSupportVulkan);
         }
 
         #region Helpers

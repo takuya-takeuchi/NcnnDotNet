@@ -4,6 +4,7 @@ using Prism.Navigation;
 using SkiaSharp;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using YoloV3.Services;
 using YoloV3.Services.Interfaces;
 using YoloV3.ViewModels.Interfaces;
 
@@ -15,6 +16,8 @@ namespace YoloV3.ViewModels
 
         #region Fields
 
+        private readonly IFileAccessService _FileAccessService;
+
         private readonly IDetectService _DetectService;
 
         #endregion
@@ -22,11 +25,13 @@ namespace YoloV3.ViewModels
         #region Constructors
 
         public MainPageViewModel(INavigationService navigationService,
+                                 IFileAccessService fileAccessService,
                                  IDetectService detectService)
             : base(navigationService)
         {
             this.Title = "Yolo V3";
 
+            this._FileAccessService = fileAccessService;
             this._DetectService = detectService;
             this._FilePickCommand = new Lazy<DelegateCommand>(this.FilePickCommandFactory);
         }
@@ -41,34 +46,17 @@ namespace YoloV3.ViewModels
         {
             return new DelegateCommand(async () =>
             {
-                // var result = await FilePicker.PickAsync(new PickOptions
-                // {
-                //     PickerTitle = "Please select a image file to detect object",
-                //     FileTypes = FilePickerFileType.Images
-                // });
+                var result = await this._FileAccessService.GetFileContent();
+                if (result == null) 
+                    return;
 
-                // if (result == null) 
-                //     return;
-
-                var resourcePrefix = $"YoloV3.data.";
-                var assembly = System.Reflection.IntrospectionExtensions.GetTypeInfo(typeof(MainPageViewModel)).Assembly;
-                var path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "dog.jpg");
-                var stream = assembly.GetManifestResourceStream(resourcePrefix + "dog.jpg");
-                using (var fs = System.IO.File.Create(path))
-                {
-                    stream.Seek(0, System.IO.SeekOrigin.Begin);
-                    stream.CopyTo(fs);
-                    stream.Seek(0, System.IO.SeekOrigin.Begin);
-                }
-
-                var detectResult = this._DetectService.Detect(path);
+                var detectResult = this._DetectService.Detect(result);
                 if (detectResult == null) 
                     return;
 
-                // var stream = await result.OpenReadAsync();
                 var surface = SKSurface.Create(new SKImageInfo(detectResult.Width, detectResult.Height, SKColorType.Rgba8888));
                 using var paint = new SKPaint();
-                using var bitmap = SKBitmap.Decode(path);
+                using var bitmap = SKBitmap.Decode(result);
 
                 surface.Canvas.DrawBitmap(bitmap, 0, 0, paint);
                 paint.StrokeWidth = 3;

@@ -13,6 +13,7 @@ build:win:
     - cd nuget
     - git clean -fxd .
     - pwsh BuildWindows.ps1
+    - pwsh BuildUniversalWindowsPlatform.ps1
   tags:
     - windows
     - cuda
@@ -28,6 +29,7 @@ build:ubuntu:
   script:
     - cd nuget
     - pwsh BuildUbuntu16.ps1
+    - pwsh BuildAndroid.ps1
   tags:
     - linux
     - cuda
@@ -58,6 +60,7 @@ build:osx:
   script:
     - cd nuget
     - pwsh BuildOSX.ps1
+    - pwsh BuildIOS.ps1
   tags:
     - osx
   artifacts:

@@ -1,20 +1,37 @@
-<Project>
+<?xml version="1.0"  encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <PropertyGroup>
-    <NativeDependenciesVersion>1.0.0.0</NativeDependenciesVersion>
+    <RuntimeIdentifiers>win;linux;osx</RuntimeIdentifiers>
+    <ExtrasBuildEachRuntimeIdentifier>true</ExtrasBuildEachRuntimeIdentifier>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$(NugetPackageRoot)==''">
-    <NugetPackageRoot>
-      "$([MSBuild]::GetPathOfFileAbove($(MSBuildThisFile), $(MSBuildThisFileDirectory)..\..\))"
-    </NugetPackageRoot>
-  </PropertyGroup>
+  <ItemGroup Condition=" '$(Platform)' == 'x64' AND '$(RuntimeIdentifier)' == 'win' ">
+      <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-x64\native\NcnnDotNetNative.dll">
+          <Link>NcnnDotNetNative.dll</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+  </ItemGroup>
 
- <Target Name="EmitNugetPackageRootMessage">
-   <Message Importance="High" Text='$(NugetPackageRoot)' />
- </Target>
+  <ItemGroup Condition=" '$(Platform)' == 'x64' AND '$(RuntimeIdentifier)' == 'osx' ">
+      <Content Include="$(MSBuildThisFileDirectory)..\runtimes\osx-x64\native\libNcnnDotNetNative.dylib">
+          <Link>libNcnnDotNetNative.dylib</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(Platform)' == 'x64' AND '$(RuntimeIdentifier)' == 'linux' ">
+      <Content Include="$(MSBuildThisFileDirectory)..\runtimes\linux-x64\native\NcnnDotNetNative.so">
+          <Link>libNcnnDotNetNative.so</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+  </ItemGroup>
+  
+  <ItemGroup Condition=" '$(Platform)' == 'arm64' AND '$(RuntimeIdentifier)' == 'linux' ">
+      <Content Include="$(MSBuildThisFileDirectory)..\runtimes\linux-arm64\native\NcnnDotNetNative.so">
+          <Link>libNcnnDotNetNative.so</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+  </ItemGroup>
 
-  <ImportGroup>
-    <Import Project="$(NuGetPackageRoot)ncnnsotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets"
-            Condition="Exists('$(NuGetPackageRoot)ncnnsotnet.native\$(NativeDependenciesVersion)\build\NcnnDotNet.Native.targets')" />
-  </ImportGroup>
 </Project>

@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" 
+         xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+         IgnorableNamespaces="uap mp rescap">
   <Identity Name="31e6402e-0407-4419-a6c3-7c6d18576017" Publisher="CN=BLagunas" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="31e6402e-0407-4419-a6c3-7c6d18576017" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
@@ -15,7 +19,7 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="App1.App">
-      <uap:VisualElements DisplayName="App1" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="App1" BackgroundColor="transparent">
+      <uap:VisualElements DisplayName="YoloV3" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="YoloV3" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
@@ -23,6 +27,7 @@
     </Application>
   </Applications>
   <Capabilities>
-    <Capability Name="internetClient" />
+    <uap:Capability Name="picturesLibrary"/>
+    <rescap:Capability Name="broadFileSystemAccess" />
   </Capabilities>
 </Package>

@@ -11,7 +11,7 @@ $source = Join-Path $NcnnDotNetRoot src | `
           Join-Path -ChildPath NcnnDotNet
 dotnet restore ${source}
 # build for iOS
-dotnet build -c Release -p:CustomDefinition=LIB_STATIC ${source}
+dotnet build -c Release -p:CustomDefinition=LIB_STATIC ${source} /nowarn:CS1591
 $output = Join-Path $source bin | `
           Join-Path -ChildPath Release
 $dest = Join-Path $source bin | `
@@ -22,7 +22,7 @@ if (Test-path($dest))
 }
 Move-Item "${output}" "${dest}"
 # build for general
-dotnet build -c Release ${source}
+dotnet build -c Release ${source} /nowarn:CS1591
 
 foreach ($target in $targets)
 {

@@ -34,22 +34,22 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20210417)
+set(VERSION_DATE 20210723)
 
 # Binary is not be able to be executed in host, set 0 (success) forcibly
 set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
 
 # Only GCC requires -fPIC
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	set(CMAKE_C_FLAGS "-fPIC")
-	set(CMAKE_CXX_FLAGS "-fPIC")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 # typeinfo for DataReader_: error: undefined reference to 'typeinfo for ncnn::DataReader'
 if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
-	set(CMAKE_C_FLAGS "-fPIC")
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
     # use rtti to use dynamic_cast
-	set(CMAKE_CXX_FLAGS "-fPIC")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif()
 
 # set architecture
@@ -236,6 +236,8 @@ elseif(UNIX AND NOT APPLE)
         opencv_imgcodecs
         opencv_imgproc
         pthread
+        gcc_s
+        gcc
     )
 else()
     message(FATAL_ERROR "Failed to link library")
