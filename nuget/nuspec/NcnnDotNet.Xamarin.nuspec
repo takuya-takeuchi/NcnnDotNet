@@ -19,8 +19,6 @@
   
   <files>
     <file src="../nn128.png" target="images/" />
-    
-    <file src="../../src/NcnnDotNet/bin/Release/netstandard2.0/NcnnDotNet.dll" target="lib/netstandard2.0" />
 
     <!-- Android -->  
     <file src="build/NcnnDotNet.Android.targets" target="build/MonoAndroid/NcnnDotNet.Xamarin.targets"/>
