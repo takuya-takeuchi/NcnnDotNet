@@ -625,10 +625,11 @@ class Config
          $build = $config.GetBuildDirectoryName($operatingSystem)
 
          Write-Host "Start 'docker build -t $dockername $dockerFileDir --build-arg IMAGE_NAME=""$imagename""'" -ForegroundColor Green
-         docker build --network host --force-rm=true -t $dockername $dockerFileDir --build-arg IMAGE_NAME="$imagename"
+         docker build --network host --force-rm=true -t $dockername $dockerFileDir --build-arg IMAGE_NAME="$imagename" | Write-Host
 
          if ($lastexitcode -ne 0)
          {
+            Write-Host "Failed to docker build: $lastexitcode" -ForegroundColor Red
             return $False
          }
 
@@ -649,10 +650,11 @@ class Config
                         -v "$($root):/opt/data/NcnnDotNet" `
                         -e "LOCAL_UID=$(id -u $env:USER)" `
                         -e "LOCAL_GID=$(id -g $env:USER)" `
-                        -t "$dockername" $key $target $architecture $platform $option
+                        -t "$dockername" $key $target $architecture $platform $option | Write-Host
 
             if ($lastexitcode -ne 0)
             {
+               Write-Host "Failed to docker run: $lastexitcode" -ForegroundColor Red
                return $False
             }
          }

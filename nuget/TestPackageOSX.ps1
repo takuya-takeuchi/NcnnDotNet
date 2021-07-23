@@ -9,6 +9,13 @@ Param([Parameter(
       $Version
 )
 
+# import class and function
+$ScriptPath = $PSScriptRoot
+$NcnnDotNetRoot = Split-Path $ScriptPath -Parent
+$ScriptPath = Join-Path $NcnnDotNetRoot "nuget" | `
+              Join-Path -ChildPath "TestPackage.ps1"
+import-module $ScriptPath -function *
+
 Set-StrictMode -Version Latest
 
 $OperatingSystem="osx"
@@ -25,33 +32,7 @@ foreach($BuildTarget in $BuildTargets)
    $package = $BuildTarget.Package
    $platformTarget = $BuildTarget.PlatformTarget
    $runtimeIdentifier = $BuildTarget.RID
-   $versionStr = $Version
-
-   if ([string]::IsNullOrEmpty($Version))
-   {
-      $packages = Get-ChildItem "${Current}/*" -include *.nupkg | `
-                  Where-Object -FilterScript {$_.Name -match "${package}\.([0-9\.]+).nupkg"} | `
-                  Sort-Object -Property Name -Descending
-      foreach ($file in $packages)
-      {
-         Write-Host $file -ForegroundColor Blue
-      }
-
-      foreach ($file in $packages)
-      {
-         $file = Split-Path $file -leaf
-         $file = $file -replace "${package}\.",""
-         $file = $file -replace "\.nupkg",""
-         $versionStr = $file
-         break
-      }
-
-      if ([string]::IsNullOrEmpty($versionStr))
-      {
-         Write-Host "Version is not specified" -ForegroundColor Red
-         exit -1
-      }
-   }
+   $versionStr = Get-Version $Version $Current
    
    $command = ".\\TestPackage.ps1 -Package ${package} -Version $versionStr -PlatformTarget ${platformTarget} -RuntimeIdentifier ${runtimeIdentifier}"
    Invoke-Expression $command
