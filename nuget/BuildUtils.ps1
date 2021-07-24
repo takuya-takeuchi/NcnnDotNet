@@ -678,7 +678,7 @@ class Config
 
          $config = [Config]::new($root, "Release", $target, $architecture, $platform, $option)
          $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
-         $build = $config.GetBuildDirectoryName($OperatingSystem)
+         $build = $config.GetBuildDirectoryName($operatingSystem)
 
          foreach ($key in $buildHashTable.keys)
          {
@@ -1153,7 +1153,8 @@ class ThirdPartyBuilder
                $level = $this._Config.GetAndroidNativeAPILevel()
                $abi = $this._Config.GetAndroidABI()
 
-               Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+               Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
+            -D CMAKE_BUILD_TYPE=$Configuration `
             -D BUILD_SHARED_LIBS=OFF `
             -D BUILD_WITH_STATIC_CRT=OFF `
             -D CMAKE_INSTALL_PREFIX=`"$installDir`" `
