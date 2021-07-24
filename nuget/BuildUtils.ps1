@@ -574,6 +574,7 @@ class Config
       $cudaVersion           = $buildTarget.CudaVersion
       $androidVersion        = $buildTarget.AndroidVersion
       $androidNativeApiLevel = $buildTarget.AndroidNativeApiLevel
+      $configuration         = "Release"
 
       $option = ""
 
@@ -620,7 +621,7 @@ class Config
             }
          }
 
-         $config = [Config]::new($root, "Release", $target, $architecture, $platform, $option)
+         $config = [Config]::new($root, $configuration, $target, $architecture, $platform, $option)
          $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
          $build = $config.GetBuildDirectoryName($operatingSystem)
 
@@ -676,7 +677,7 @@ class Config
             $option = $rid
          }
 
-         $config = [Config]::new($root, "Release", $target, $architecture, $platform, $option)
+         $config = [Config]::new($root, $configuration, $target, $architecture, $platform, $option)
          $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
          $build = $config.GetBuildDirectoryName($operatingSystem)
 
