@@ -2394,7 +2394,7 @@ function Build([Config]$Config)
    }
 
    $cofiguration = $Config.GetConfigurationName()
-   Write-Host "cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
+   Write-Host "   cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
    cmake --build . --config ${cofiguration}
 
    $Platform = $Config.GetPlatform()
