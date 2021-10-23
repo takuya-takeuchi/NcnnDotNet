@@ -124,6 +124,21 @@ namespace NcnnDotNet
             return true;
         }
 
+        public bool LoadParam(DataReader dataReader)
+        {
+            if (dataReader == null) 
+                throw new ArgumentNullException(nameof(dataReader));
+
+            this.ThrowIfDisposed();
+            dataReader.ThrowIfDisposed();
+
+            var error = NativeMethods.net_Net_load_param_datareader(this.NativePtr, dataReader.NativePtr);
+            if (error != NativeMethods.ErrorType.OK)
+                return false;
+
+            return true;
+        }
+
         public bool RegisterCustomLayer(string type, DelegateHandler<LayerCreatorFunc> creator)
         {
             if (creator == null) 

@@ -1,5 +1,7 @@
 #include "datareader.h"
 
+#pragma region DataReader
+
 DataReader::DataReader(void (*constructor_function)(DataReader*),
                        void (*destructor_function)(),
                        int32_t (*scan_function)(const char*, void*),
@@ -33,3 +35,40 @@ size_t DataReader::read(void* buf, size_t size) const
     else
         return ncnn::DataReader::read(buf, size);
 }
+
+#pragma endregion DataReader
+
+#pragma region DataReaderFromMemoryWrapper
+
+DataReaderFromMemoryWrapper::DataReaderFromMemoryWrapper(const uint8_t* mem, const uint32_t length):
+    m_mem(nullptr),
+    m_reader(nullptr)
+{
+    this->m_mem = (uint8_t*)std::malloc(length);
+    std::memcpy(this->m_mem, mem, length);
+
+    const uint8_t* &ref_mem = mem;
+    this->m_reader = new ncnn::DataReaderFromMemory(ref_mem);
+}
+
+DataReaderFromMemoryWrapper::~DataReaderFromMemoryWrapper()
+{    
+    if (this->m_reader)
+    {
+        delete m_reader;
+        this->m_reader = nullptr;
+    }
+
+    if (this->m_mem)
+    {
+        free(this->m_mem);
+        this->m_mem = nullptr;
+    }
+}
+
+ncnn::DataReaderFromMemory* DataReaderFromMemoryWrapper::get() const
+{
+    return this->m_reader;
+}
+
+#pragma endregion DataReaderFromMemoryWrapper
