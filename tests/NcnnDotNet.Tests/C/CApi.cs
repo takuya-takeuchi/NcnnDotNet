@@ -134,11 +134,22 @@ namespace NcnnDotNet.Tests.C
             var option = NcnnDotNet.C.Ncnn.OptionCreate();
             Assert.NotNull(option);
 
-            NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, false);
-            Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
+            if (Ncnn.IsSupportVulkan)
+            {
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, false);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
 
-            NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, true);
-            Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option));
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, true);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option));
+            }
+            else
+            {
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, false);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
+
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, true);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
+            }
         }
 
         [Fact]

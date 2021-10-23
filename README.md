@@ -1,6 +1,6 @@
-# ![Alt text](nuget/nn48.png "NcnnDotNet") NcnnDotNet [![GitHub license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
+![NcnnDotNet](https://socialify.git.ci/takuya-takeuchi/NcnnDotNet/image?description=1&font=Raleway&language=1&logo=https%3A%2F%2Fgithub.com%2Ftakuya-takeuchi%2FNcnnDotNet%2Fraw%2Fmaster%2Fnuget%2Fnn128.png&owner=1&pattern=Circuit%20Board&theme=Light)
 
-ncnn wrapper written in C++ and C# for Windows, MacOS, Linux, iOS and Android.
+[![GitHub Stars](https://img.shields.io/github/stars/takuya-takeuchi/ncnndotnet?label=STARS&color=%23DFB317&style=for-the-badge)]() [![GitHub Forks](https://img.shields.io/github/forks/takuya-takeuchi/ncnndotnet?label=FORKS&color=%236ECA00&style=for-the-badge)]() [![GitHub Issues](https://img.shields.io/github/issues/takuya-takeuchi/ncnndotnet?label=ISSUES&color=%23007EC6&style=for-the-badge)]() [![GitHub Lisence](https://img.shields.io/github/license/takuya-takeuchi/ncnndotnet?label=LISENCE&color=%239109BD&style=for-the-badge)]()
 
 |Package|OS|x86|x64|ARM|ARM64|Nuget|
 |---|---|---|---|---|---|---|
