@@ -7,14 +7,15 @@
 
 #pragma region DataReaderFromMemory
 
-class DataReaderFromMemoryWrapper
+class DataReaderFromMemoryWrapper : public ncnn::DataReader
 {
 public:
     DataReaderFromMemoryWrapper(const uint8_t* mem, const uint32_t length);
     virtual ~DataReaderFromMemoryWrapper();
 
 public:
-    ncnn::DataReaderFromMemory* get() const;
+    virtual int scan(const char* format, void* p) const;
+    virtual size_t read(void* buf, size_t size) const;
 
 private:
     ncnn::DataReaderFromMemory* m_reader;
