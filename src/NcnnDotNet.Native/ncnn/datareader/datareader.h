@@ -22,7 +22,7 @@ private:
     uint8_t* m_mem;
 };
 
-DLLEXPORT DataReaderFromMemoryWrapper* datareader_DataReaderFromMemory_new(const uint8_t*& mem, const uint32_t length)
+DLLEXPORT DataReaderFromMemoryWrapper* datareader_DataReaderFromMemory_new(const uint8_t* mem, const uint32_t length)
 {
     return new DataReaderFromMemoryWrapper(mem, length);
 }
