@@ -29,7 +29,7 @@ foreach($BuildTarget in $BuildTargets)
    $BuildTarget.Distribution        = ${Distribution}
    $BuildTarget.DistributionVersion = ${DistributionVersion}
    
-   $ret = [Config]::Build($OpenJpegDotNetRoot, $True, $BuildSourceHash, $BuildTarget)
+   $ret = [Config]::Build($NcnnDotNetRoot, $True, $BuildSourceHash, $BuildTarget)
    if ($ret -eq $False)
    {
       Set-Location -Path $Current

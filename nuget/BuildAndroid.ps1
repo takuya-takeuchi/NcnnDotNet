@@ -37,7 +37,7 @@ foreach($BuildTarget in $BuildTargets)
    $BuildTarget.AndroidVersion        = ${AndroidVersion}
    $BuildTarget.AndroidNativeApiLevel = ${AndroidNativeApiLevel}
    
-   $ret = [Config]::Build($OpenJpegDotNetRoot, $True, $BuildSourceHash, $BuildTarget)
+   $ret = [Config]::Build($NcnnDotNetRoot, $True, $BuildSourceHash, $BuildTarget)
    if ($ret -eq $False)
    {
       Set-Location -Path $Current
