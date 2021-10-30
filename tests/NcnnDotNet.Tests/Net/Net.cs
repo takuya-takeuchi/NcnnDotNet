@@ -27,7 +27,7 @@ namespace NcnnDotNet.Tests.Net
         [Fact]
         public void LoadModelFromMemory()
         {
-            var path = Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.model");
+            var path = Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.bin");
             var memory = File.ReadAllBytes(path);
             using (var net = new NcnnDotNet.Net())
             using (var reader = new DataReaderFromMemory(memory))
