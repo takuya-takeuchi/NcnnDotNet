@@ -36,7 +36,8 @@ class Config
    $ConfigurationArray =
    @(
       "Debug",
-      "Release"
+      "Release",
+      "RelWithDebInfo"
    )
 
    $TargetArray =
@@ -418,7 +419,7 @@ class Config
          }
       }
 
-      if ($this._Configuration -eq "Debug")
+      if ($this._Configuration -eq "Debug" -or $this._Configuration -eq "RelWithDebInfo")
       {
          return "build_${osname}_${platform}_${target}_${architecture}_d"
       }
@@ -707,7 +708,8 @@ class Config
 
             if ($global:IsWindows)
             {
-               CopyToArtifact -configuration "Release" -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+               # CopyToArtifact -configuration "Release" -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+               CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
             }
             else
             {
@@ -1466,6 +1468,9 @@ class ThirdPartyBuilder
          -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
+         -D NCNN_BUILD_EXAMPLES=OFF `
+         -D NCNN_BUILD_TOOLS=OFF `
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
@@ -1479,6 +1484,9 @@ class ThirdPartyBuilder
                         -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
+                        -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
+                        -D NCNN_BUILD_EXAMPLES=OFF `
+                        -D NCNN_BUILD_TOOLS=OFF `
                         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
                         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
                         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `

@@ -12,11 +12,11 @@ popd
 mkdir bin\Debug\%APPDIR%
 del bin\Debug\%APPDIR%\%DLL%
 del bin\Debug\%APPDIR%\%PDB%
-mklink bin\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\Debug\%DLL%
-mklink bin\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\Debug\%PDB%
+mklink bin\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\%DLL%
+mklink bin\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\%PDB%
 mkdir bin\Release\%APPDIR%
 del bin\Release\%APPDIR%\%DLL%
-mklink bin\Release\%APPDIR%\%DLL% %NATIVEROOT%\Release\%DLL%
+mklink bin\Release\%APPDIR%\%DLL% %NATIVEROOT%\%DLL%
 
 del bin\Debug\%APPDIR%\VkLayer_api_dump.dll
 del bin\Debug\%APPDIR%\VkLayer_assistant_layer.dll
@@ -71,11 +71,11 @@ mklink bin\Release\%APPDIR%\VkLayer_vktrace_layer.dll "%VULKAN_SDK%\Bin\VkLayer_
 mkdir bin\%ARCH%\Debug\%APPDIR%
 del bin\%ARCH%\Debug\%APPDIR%\%DLL%
 del bin\%ARCH%\Debug\%APPDIR%\%PDB%
-mklink bin\%ARCH%\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\Debug\%DLL%
-mklink bin\%ARCH%\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\Debug\%PDB%
+mklink bin\%ARCH%\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\%DLL%
+mklink bin\%ARCH%\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\%PDB%
 mkdir bin\%ARCH%\Release\%APPDIR%
 del bin\%ARCH%\Release\%APPDIR%\%DLL%
-mklink bin\%ARCH%\Release\%APPDIR%\%DLL% %NATIVEROOT%\Release\%DLL%
+mklink bin\%ARCH%\Release\%APPDIR%\%DLL% %NATIVEROOT%\%DLL%
 
 del bin\%ARCH%\Debug\%APPDIR%\VkLayer_api_dump.dll
 del bin\%ARCH%\Debug\%APPDIR%\VkLayer_assistant_layer.dll
