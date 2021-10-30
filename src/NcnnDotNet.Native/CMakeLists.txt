@@ -318,6 +318,22 @@ set(CompilerFlags
     CMAKE_C_FLAGS_RELEASE
 )
 
+# install
+target_include_directories(${PROJ_NAME} INTERFACE
+                           $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+                           $<INSTALL_INTERFACE:include>)
+install(TARGETS ${PROJ_NAME}
+        EXPORT ${PROJ_NAME}Config
+        LIBRARY DESTINATION lib
+)
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/ncnn/
+        DESTINATION include/ncnndotnet
+)
+install(EXPORT ${PROJ_NAME}Config
+        NAMESPACE ${PROJ_NAME}::
+        DESTINATION lib/cmake/ncnndotnet
+)
+
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)

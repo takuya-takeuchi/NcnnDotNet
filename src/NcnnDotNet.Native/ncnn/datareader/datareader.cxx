@@ -1,5 +1,7 @@
 #include "datareader.h"
 
+#include <cstring>
+
 #pragma region DataReaderFromMemoryWrapper
 
 DataReaderFromMemoryWrapper::DataReaderFromMemoryWrapper(const uint8_t* mem, const uint32_t length):
