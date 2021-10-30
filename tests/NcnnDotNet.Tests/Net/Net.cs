@@ -17,21 +17,25 @@ namespace NcnnDotNet.Tests.Net
         [Fact]
         public void LoadParamFromMemory()
         {
-            var path = Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.param");
-            var memory = File.ReadAllBytes(path);
+            var param = File.ReadAllBytes(Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.param"));
             using (var net = new NcnnDotNet.Net())
-            using (var reader = new DataReaderFromMemory(memory))
-                Assert.True(net.LoadParam(reader), $"{nameof(NcnnDotNet.Net.LoadParam)} should return true");
+            using (var paramReader = new DataReaderFromMemory(param))
+                Assert.True(net.LoadParam(paramReader), $"{nameof(NcnnDotNet.Net.LoadParam)} should return true");
         }
 
         [Fact]
         public void LoadModelFromMemory()
         {
-            var path = Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.bin");
-            var memory = File.ReadAllBytes(path);
+            var param = File.ReadAllBytes(Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.param"));
+            var bin = File.ReadAllBytes(Path.Combine(TestDataDirectory, "mobilenet_ssd_voc_ncnn.bin"));
             using (var net = new NcnnDotNet.Net())
-            using (var reader = new DataReaderFromMemory(memory))
-                Assert.True(net.LoadModel(reader), $"{nameof(NcnnDotNet.Net.LoadModel)} should return true");
+            using (var paramReader = new DataReaderFromMemory(param))
+            using (var binReader = new DataReaderFromMemory(bin))
+            {
+                // You shall call Net::load_param() first, then Net::load_model().
+                Assert.True(net.LoadParam(paramReader), $"{nameof(NcnnDotNet.Net.LoadParam)} should return true");
+                Assert.True(net.LoadModel(binReader), $"{nameof(NcnnDotNet.Net.LoadModel)} should return true");
+            }
         }
 
     }
