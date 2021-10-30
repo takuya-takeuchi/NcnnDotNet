@@ -34,7 +34,8 @@ $examples =
    "SqueezeNet",
    "SqueezeNetSSD",
    "YoloV2",
-   "YoloV3"
+   "YoloV3",
+   "YoloV5"
 )
 
 # build path
