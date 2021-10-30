@@ -431,6 +431,26 @@ DLLEXPORT int32_t mat_Mat_from_pixels_resize2(const unsigned char* pixels,
     return error;
 }
 
+DLLEXPORT int32_t mat_copy_make_border(ncnn::Mat* src,
+                                       ncnn::Mat* dst,
+                                       const int32_t top,
+                                       const int32_t bottom,
+                                       const int32_t left,
+                                       const int32_t right,
+                                       const int32_t type,
+                                       const float v, 
+                                       ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::copy_make_border(s, d, top, bottom, left, right, type, v, o);
+
+    return error;
+}
+
 DLLEXPORT int32_t mat_resize_bicubic(ncnn::Mat* src,
                                      ncnn::Mat* dst,
                                      const int32_t w,
