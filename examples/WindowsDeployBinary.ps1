@@ -42,8 +42,14 @@ $ExamplesRoot = $PSScriptRoot
 $NcnnDotNetRoot = Split-Path $ExamplesRoot -Parent
 $SrcPath = Join-Path $NcnnDotNetRoot src
 $NcnnDotNetNativeRoot = Join-Path $SrcPath NcnnDotNet.Native
-$BuildDir = Join-Path $NcnnDotNetNativeRoot "build_win_desktop_${Directory}_x64"
-$NcnnDotNetNativeBuildDir = Join-Path $BuildDir $Configuration
+if ($Configuration -eq "Debug")
+{
+    $NcnnDotNetNativeBuildDir = Join-Path $NcnnDotNetNativeRoot "build_win_desktop_${Directory}_x64_d"
+}
+else
+{
+    $NcnnDotNetNativeBuildDir = Join-Path $NcnnDotNetNativeRoot "build_win_desktop_${Directory}_x64"
+}
 
 # check path
 if (!(Test-Path $NcnnDotNetNativeBuildDir))
