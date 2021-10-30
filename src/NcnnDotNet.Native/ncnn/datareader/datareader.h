@@ -20,6 +20,7 @@ public:
 private:
     ncnn::DataReaderFromMemory* m_reader;
     uint8_t* m_mem;
+    uint8_t* m_mem_ref;
 };
 
 DLLEXPORT DataReaderFromMemoryWrapper* datareader_DataReaderFromMemory_new(const uint8_t* mem, const uint32_t length)
