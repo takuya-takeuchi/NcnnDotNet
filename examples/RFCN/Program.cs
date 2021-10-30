@@ -317,7 +317,7 @@ namespace RFCN
                     // intersection over union
                     var interArea = IntersectionArea(a, b);
                     var unionArea = areas[i] + areas[picked[j]] - interArea;
-                    //             float IoU = inter_area / union_area
+                    // float IoU = inter_area / union_area
                     if (interArea / unionArea > nmsThreshold)
                         keep = 0;
                 }
