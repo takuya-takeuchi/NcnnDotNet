@@ -35,7 +35,7 @@ namespace MobileNetV2SSDLite
             {
                 if (m.IsEmpty)
                 {
-                    Console.WriteLine($"cv::imread {imagepath} failed");
+                    Console.WriteLine($"Cv2.ImRead {imagepath} failed");
                     return -1;
                 }
 

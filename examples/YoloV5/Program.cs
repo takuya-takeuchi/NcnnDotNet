@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NcnnDotNet;
 using NcnnDotNet.OpenCV;
 using Mat = NcnnDotNet.Mat;
@@ -21,9 +20,47 @@ namespace YoloV5
         private sealed class YoloV5Focus : CustomLayer
         {
 
-            protected override int OnForward(Mat bottomBlob, Mat topBlob, Option opt)
+            public YoloV5Focus()
             {
-                return base.OnForward(bottomBlob, topBlob, opt);
+                this.OneBlobOnly = true;
+            }
+
+            protected override unsafe int OnForward(Mat bottomBlob, Mat topBlob, Option opt)
+            {
+                var w = bottomBlob.W;
+                var h = bottomBlob.H;
+                var channels = bottomBlob.C;
+
+                var outW = w / 2;
+                var outH = h / 2;
+                var outC = channels * 4;
+
+                topBlob.Create(outW, outH, outC, 4u, 1, opt.BlobAllocator);
+                if (topBlob.IsEmpty)
+                    return -100;
+                
+                for (var p = 0; p < outC; p++)
+                {
+                    using var bottom = bottomBlob.Channel(p % channels);
+                    using var top = topBlob.Channel(p);
+                    var ptr = (float*)(bottom.Row((p / channels) % 2).Data + ((p / channels) / 2));
+                    var outPtr = (float*)top.Data;
+
+                    for (var i = 0; i < outH; i++)
+                    {
+                        for (var j = 0; j < outW; j++)
+                        {
+                            *outPtr = *ptr;
+
+                            outPtr += 1;
+                            ptr += 2;
+                        }
+
+                        ptr += w;
+                    }
+                }
+
+                return 0;
             }
 
         }
@@ -49,7 +86,7 @@ namespace YoloV5
             {
                 if (m.IsEmpty)
                 {
-                    Console.WriteLine($"cv::imread {imagepath} failed");
+                    Console.WriteLine($"Cv2.ImRead {imagepath} failed");
                     return -1;
                 }
 
