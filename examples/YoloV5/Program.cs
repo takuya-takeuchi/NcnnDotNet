@@ -261,7 +261,7 @@ namespace YoloV5
                 yolov5.LoadParam("yolov5s_6.0.param");
                 yolov5.LoadModel("yolov5s_6.0.bin");
 #else
-                var reg = new CustomLayerRegister("YoloV5Focus", YoloV5FocusLayerCreator);
+                using var reg = new CustomLayerRegister("YoloV5Focus", YoloV5FocusLayerCreator);
                 yolov5.RegisterCustomLayer(reg);
 
                 yolov5.LoadParam("yolov5s.param");
