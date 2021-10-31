@@ -1469,8 +1469,8 @@ class ThirdPartyBuilder
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
-         -D NCNN_BUILD_EXAMPLES=OFF `
-         -D NCNN_BUILD_TOOLS=OFF `
+         -D NCNN_BUILD_EXAMPLES=ON `
+         -D NCNN_BUILD_TOOLS=ON `
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
@@ -1485,7 +1485,7 @@ class ThirdPartyBuilder
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
                         -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
-                        -D NCNN_BUILD_EXAMPLES=OFF `
+                        -D NCNN_BUILD_EXAMPLES=ON `
                         -D NCNN_BUILD_TOOLS=OFF `
                         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
                         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `

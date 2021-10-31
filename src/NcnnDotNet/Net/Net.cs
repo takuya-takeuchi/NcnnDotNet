@@ -139,15 +139,15 @@ namespace NcnnDotNet
             return true;
         }
 
-        public bool RegisterCustomLayer(string type, DelegateHandler<LayerCreatorFunc> creator)
+        public bool RegisterCustomLayer(CustomLayerRegister register)
         {
-            if (creator == null) 
-                throw new ArgumentNullException(nameof(creator));
+            if (register == null) 
+                throw new ArgumentNullException(nameof(register));
 
             this.ThrowIfDisposed();
-
-            var str = Ncnn.Encoding.GetBytes(type);
-            var error = NativeMethods.net_Net_register_custom_layer(this.NativePtr, str, str.Length, creator.Handle);
+            
+            // layer name is not copied in ncnn so we must keep pointer
+            var error = NativeMethods.net_Net_register_custom_layer(this.NativePtr, register.Name, register.Creator, register.Destroyer, IntPtr.Zero);
             if (error != NativeMethods.ErrorType.OK)
                 throw new NcnnException("Unknown Exception");
 

@@ -19,6 +19,17 @@ namespace NcnnDotNet
                                                                    IntPtr opt);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType mat_copy_make_border(IntPtr src,
+                                                            IntPtr dst,
+                                                            int top,
+                                                            int bottom,
+                                                            int left,
+                                                            int right,
+                                                            BorderType type,
+                                                            float v, 
+                                                            IntPtr opt);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_convert_packing(IntPtr src,
                                                            IntPtr dst,
                                                            int elemPack,
