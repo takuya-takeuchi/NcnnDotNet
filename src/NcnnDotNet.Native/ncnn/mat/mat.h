@@ -189,6 +189,21 @@ DLLEXPORT int32_t mat_Mat_create2(ncnn::Mat* mat,
     return error;
 }
 
+DLLEXPORT int32_t mat_Mat_create6(ncnn::Mat* mat,
+                                  const int32_t w,
+                                  const int32_t h,
+                                  const int32_t c,
+                                  const size_t celemsize,
+                                  const int32_t elempack,
+                                  ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    mat->create(w, h, c, celemsize, elempack, allocator);
+
+    return error;
+}
+
 #pragma endregion create
 
 #pragma region create_like
