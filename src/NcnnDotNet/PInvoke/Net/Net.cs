@@ -24,7 +24,7 @@ namespace NcnnDotNet
         public static extern ErrorType net_Net_get_vulkan_device(IntPtr net, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType net_Net_register_custom_layer(IntPtr net, byte[] type, int typeLength, IntPtr creator);
+        public static extern ErrorType net_Net_register_custom_layer(IntPtr net, IntPtr type, IntPtr creator, IntPtr destroyer, IntPtr userData);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType net_Net_register_custom_layer2(IntPtr net, int index, IntPtr creator);

@@ -135,7 +135,8 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
-        internal Mat(IntPtr ptr)
+        internal Mat(IntPtr ptr, bool isEnabledDispose = true):
+            base(isEnabledDispose)
         {
             if (ptr == IntPtr.Zero)
                 throw new ArgumentException("Can not pass IntPtr.Zero", nameof(ptr));

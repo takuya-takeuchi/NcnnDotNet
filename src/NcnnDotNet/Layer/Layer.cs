@@ -112,7 +112,7 @@ namespace NcnnDotNet
             return returnValue;
         }
 
-        public int Forward(Mat bottomBlob, Mat topBlob, Option option)
+        public virtual int Forward(Mat bottomBlob, Mat topBlob, Option option)
         {
             if (bottomBlob == null)
                 throw new ArgumentNullException(nameof(bottomBlob));
@@ -166,7 +166,7 @@ namespace NcnnDotNet
             return returnValue;
         }
 
-        public int ForwardInplace(Mat mat, Option option)
+        public virtual int ForwardInplace(Mat mat, Option option)
         {
             if (mat == null)
                 throw new ArgumentNullException(nameof(mat));

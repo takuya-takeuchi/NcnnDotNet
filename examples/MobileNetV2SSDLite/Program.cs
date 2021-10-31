@@ -14,7 +14,7 @@ namespace MobileNetV2SSDLite
         {
         }
 
-        private static Noop NoopLayerCreator()
+        private static Noop NoopLayerCreator(IntPtr userData)
         {
             return new Noop();
         }
@@ -63,7 +63,8 @@ namespace MobileNetV2SSDLite
                 if (Ncnn.IsSupportVulkan)
                     mobilenetV2.Opt.UseVulkanCompute = true;
 
-                mobilenetV2.RegisterCustomLayer("Silence", new DelegateHandler<LayerCreatorFunc>(NoopLayerCreator));
+                var reg = new CustomLayerRegister("Silence", NoopLayerCreator);
+                mobilenetV2.RegisterCustomLayer(reg);
 
                 // original pretrained model from https://github.com/chuanqi305/MobileNetv2-SSDLite
                 // https://github.com/chuanqi305/MobileNetv2-SSDLite/blob/master/ssdlite/voc/deploy.prototxt

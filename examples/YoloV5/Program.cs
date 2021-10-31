@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using NcnnDotNet;
 using NcnnDotNet.OpenCV;
 using Mat = NcnnDotNet.Mat;
@@ -19,9 +20,15 @@ namespace YoloV5
 
         private sealed class YoloV5Focus : CustomLayer
         {
+
+            protected override int OnForward(Mat bottomBlob, Mat topBlob, Option opt)
+            {
+                return base.OnForward(bottomBlob, topBlob, opt);
+            }
+
         }
 
-        private static YoloV5Focus YoloV5FocusLayerCreator()
+        private static YoloV5Focus YoloV5FocusLayerCreator(IntPtr userData)
         {
             return new YoloV5Focus();
         }
@@ -246,7 +253,7 @@ namespace YoloV5
             {
                 if (Ncnn.IsSupportVulkan)
                     yolov5.Opt.UseVulkanCompute = true;
-                    // yolov5.Opt.UseBf16Storage = true;
+                // yolov5.Opt.UseBf16Storage = true;
 
                 // original pretrained model from https://github.com/ultralytics/yolov5
                 // the ncnn model https://github.com/nihui/ncnn-assets/tree/master/models
@@ -254,7 +261,8 @@ namespace YoloV5
                 yolov5.LoadParam("yolov5s_6.0.param");
                 yolov5.LoadModel("yolov5s_6.0.bin");
 #else
-                yolov5.RegisterCustomLayer("YoloV5Focus", new DelegateHandler<LayerCreatorFunc>(YoloV5FocusLayerCreator));
+                var reg = new CustomLayerRegister("YoloV5Focus", YoloV5FocusLayerCreator);
+                yolov5.RegisterCustomLayer(reg);
 
                 yolov5.LoadParam("yolov5s.param");
                 yolov5.LoadModel("yolov5s.bin");
@@ -378,7 +386,7 @@ namespace YoloV5
                 var count = picked.Count;
 
                 objects.Clear();
-                objects.Capacity = count;
+                objects.AddRange(new Object[count]);
                 for (var i = 0; i < count; i++)
                 {
                     objects[i] = proposals[picked[i]];

@@ -9,7 +9,9 @@ namespace NcnnDotNet
     {
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType layer_CustomLayer_new(out IntPtr returnValue);
+        public static extern ErrorType layer_CustomLayer_new(out IntPtr returnValue,
+                                                             IntPtr forward_function,
+                                                             IntPtr forward_inplace_function);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void layer_CustomLayer_delete(IntPtr layer);

@@ -20,6 +20,11 @@ Param
 
 # configuration
 $targetDir = "netcoreapp2.1"
+$configurations =
+@(
+   "Debug",
+   "Release"
+)
 $examples =
 @(
    "FasterRCNN",
@@ -88,13 +93,16 @@ function create-symlink($Targets, $SrcDir, $DstDir)
    }
 }
 
-foreach ($example in $examples)
+foreach ($configuration in $configurations)
 {
-   $AppDir = Join-Path $ExamplesRoot $example | `
-             Join-Path -child bin | `
-             Join-Path -child $Configuration | `
-             Join-Path -child $targetDir
-   New-Item $AppDir -Force -ItemType Directory | Out-Null
-
-   create-symlink $NcnnDotNetNativeLibraries $NcnnDotNetNativeBuildDir $AppDir
+   foreach ($example in $examples)
+   {
+      $AppDir = Join-Path $ExamplesRoot $example | `
+                Join-Path -child bin | `
+                Join-Path -child $configuration | `
+                Join-Path -child $targetDir
+      New-Item $AppDir -Force -ItemType Directory | Out-Null
+   
+      create-symlink $NcnnDotNetNativeLibraries $NcnnDotNetNativeBuildDir $AppDir
+   }
 }
