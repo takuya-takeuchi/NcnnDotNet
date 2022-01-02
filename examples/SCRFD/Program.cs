@@ -505,7 +505,7 @@ namespace SCRFD
                     Cv2.Circle(rgb, obj.Landmark[4], 2, new Scalar<double>(255, 255, 0), -1);
                 }
                 
-                var text = $"{(obj.Prob * 100):f1}";
+                var text = $"{(obj.Prob * 100):f1}%";
 
                 var baseLine = 0;
                 var labelSize = Cv2.GetTextSize(text, CvHersheyFonts.HersheySimplex, 0.5, 1, ref baseLine);
