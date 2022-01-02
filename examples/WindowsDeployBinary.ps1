@@ -19,7 +19,7 @@ Param
 )
 
 # configuration
-$targetDir = "netcoreapp2.1"
+$targetDir = "netcoreapp3.1"
 $configurations =
 @(
    "Debug",
@@ -34,6 +34,7 @@ $examples =
    "PeleeNetSSDSeg",
    "RetinaFace",
    "RFCN",
+   "SCRFD",
    "ShuffleNetV2",
    "SimplePose",
    "SqueezeNet",
