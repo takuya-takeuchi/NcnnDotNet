@@ -45,19 +45,19 @@ namespace NcnnDotNet
         public static extern void opencv_Rect_float_delete(IntPtr rect);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int opencv_Rect_float_get_x(IntPtr rect);
+        public static extern float opencv_Rect_float_get_x(IntPtr rect);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int opencv_Rect_float_get_y(IntPtr rect);
+        public static extern float opencv_Rect_float_get_y(IntPtr rect);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int opencv_Rect_float_get_width(IntPtr rect);
+        public static extern float opencv_Rect_float_get_width(IntPtr rect);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int opencv_Rect_float_get_height(IntPtr rect);
+        public static extern float opencv_Rect_float_get_height(IntPtr rect);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern int opencv_Rect_float_area(IntPtr rect);
+        public static extern float opencv_Rect_float_area(IntPtr rect);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern IntPtr opencv_Rect_float_operator_logical_and(IntPtr left, IntPtr right);
