@@ -265,12 +265,6 @@ if (NCNN_VULKAN)
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             ${Vulkan_LIBRARY}
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )   
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
