@@ -3,7 +3,7 @@
 
 #include "../../export.h"
 #include <layer.h>
-#include <layer/pooling.h>
+#include <layer/pooling1d.h>
 #include "../../shared.h"
 
 DLLEXPORT int layer_layers_Pooling1D_new(ncnn::Pooling1D** returnValue)

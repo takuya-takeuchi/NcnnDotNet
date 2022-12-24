@@ -1445,10 +1445,14 @@ class ThirdPartyBuilder
                {
                   $includeDir = Join-Path $protobufInstallDir include
 
+                  $buildExamples = "ON"
+                  $buildTools = "ON"
                   if ($Configuration -eq "Debug")
                   {
                      $libraryFile = Join-Path $protobufInstallDir lib | `
                                     Join-Path -ChildPath libprotobufd.lib
+                     $buildExamples = "OFF"
+                     $buildTools = "OFF"
                   }
                   else
                   {
@@ -1469,8 +1473,8 @@ class ThirdPartyBuilder
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
-         -D NCNN_BUILD_EXAMPLES=ON `
-         -D NCNN_BUILD_TOOLS=ON `
+         -D NCNN_BUILD_EXAMPLES=${buildExamples} `
+         -D NCNN_BUILD_TOOLS=${buildTools} `
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `

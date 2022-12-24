@@ -247,12 +247,6 @@ if (NCNN_VULKAN)
     if (MSVC OR MSYS OR MINGW)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
         list(APPEND STATIC_LIBRARIES

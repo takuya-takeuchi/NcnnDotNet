@@ -3,7 +3,7 @@
 
 #include "../../export.h"
 #include <layer.h>
-#include <layer/convolution3d.h>
+#include <layer/convolutiondepthwise3d.h>
 #include "../../shared.h"
 
 DLLEXPORT int layer_layers_ConvolutionDepthWise3D_new(ncnn::ConvolutionDepthWise3D** returnValue)
