@@ -57,7 +57,7 @@ DLLEXPORT void allocator_##__TYPENAME__##_clear(ncnn::__TYPE__* allocator)\
 MAKE_ALLOCATOR(UnlockedPoolAllocator, UnlockedPoolAllocator)
 MAKE_ALLOCATOR(PoolAllocator, PoolAllocator)
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 
 MAKE_VKALLOCATOR(VkBlobAllocator, VkBlobAllocator)
 MAKE_VKALLOCATOR(VkWeightAllocator, VkWeightAllocator)
@@ -110,7 +110,7 @@ DLLEXPORT bool allocator_Allocator_dynamic_cast(ncnn::Allocator* allocator, allo
     return false;
 }
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT bool allocator_VkAllocator_dynamic_cast(ncnn::VkAllocator* allocator, vkallocator_type* type)
 {

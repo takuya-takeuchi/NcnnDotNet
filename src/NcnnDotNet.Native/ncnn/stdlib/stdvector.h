@@ -132,7 +132,7 @@ MAKE_FUNC(double, double)
 // ModelBinFromMatArray hold reference of std::vector<ncnn::Mat> rather than std::vector<ncnn::Mat*>
 MAKE_FUNC_REFERENCE(ncnn::Mat, Mat)
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 MAKE_FUNC_REFERENCE(ncnn::VkMat, VkMat)
 #endif
 

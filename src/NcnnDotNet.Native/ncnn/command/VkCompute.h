@@ -5,7 +5,7 @@
 #include <command.h>
 #include "../shared.h"
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int32_t command_VkCompute_new(const ncnn::VulkanDevice* vkdev, ncnn::VkCompute** returnValue)
 {

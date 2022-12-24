@@ -5,7 +5,7 @@
 #include <gpu.h>
 #include "../shared.h"
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int gpu_VulkanDevice_new(const int device_index, ncnn::VulkanDevice** returnValue)
 {

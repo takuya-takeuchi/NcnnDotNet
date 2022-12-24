@@ -19,7 +19,7 @@ DLLEXPORT void net_Net_delete(ncnn::Net* net)
     if (net != nullptr) delete net;
 }
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int net_Net_set_vulkan_device(ncnn::Net* net, const int32_t device_index)
 {

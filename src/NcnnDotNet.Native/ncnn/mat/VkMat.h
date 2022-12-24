@@ -5,7 +5,7 @@
 #include <mat.h>
 #include "../shared.h"
 
-#ifdef NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int mat_VkMat_new(ncnn::VkMat** returnValue)
 {
