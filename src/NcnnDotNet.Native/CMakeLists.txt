@@ -279,12 +279,6 @@ if (NCNN_VULKAN)
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.so
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )
     endif()
 endif()
