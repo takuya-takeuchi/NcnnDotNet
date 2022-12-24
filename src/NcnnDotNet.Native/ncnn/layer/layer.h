@@ -75,7 +75,7 @@ DLLEXPORT int32_t layer_Layer_forward2(ncnn::Layer* layer,
     return error;
 }
 
-#if NCNN_VULKAN
+#ifdef NCNN_VULKAN
 
 DLLEXPORT int32_t layer_Layer_forward2_vkmat(ncnn::Layer* layer,
                                              ncnn::VkMat* bottom_blob,
@@ -128,7 +128,7 @@ DLLEXPORT void layer_Layer_set_support_packing(ncnn::Layer* layer, bool value)
     layer->support_packing = value;
 }
 
-#if NCNN_VULKAN
+#ifdef NCNN_VULKAN
 
 DLLEXPORT void layer_Layer_get_vkdev(ncnn::Layer* layer, const ncnn::VulkanDevice** returnValue)
 {

@@ -12,6 +12,10 @@ project(${PROJ_NAME} VERSION 0.0.0.20200106)
 option(NCNN_VULKAN    "vulkan compute support" OFF)
 option(NO_GUI_SUPPORT "disable gui support" OFF)
 
+if (NCNN_VULKAN)
+    add_compile_definitions(NCNN_VULKAN)
+endif()
+
 if (NO_GUI_SUPPORT)
     add_compile_definitions(NO_GUI_SUPPORT)
 endif()

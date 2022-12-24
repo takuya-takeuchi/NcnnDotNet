@@ -5,7 +5,7 @@
 #include <gpu.h>
 #include "../shared.h"
 
-#if NCNN_VULKAN
+#ifdef NCNN_VULKAN
 
 DLLEXPORT void gpu_GpuInfo_get_support_fp16_packed(ncnn::GpuInfo* info, bool* returnValue)
 {

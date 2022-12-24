@@ -220,7 +220,7 @@ DLLEXPORT int32_t mat_Mat_create_like_mat(ncnn::Mat* mat,
     return error;
 }
 
-#if NCNN_VULKAN
+#ifdef NCNN_VULKAN
 
 DLLEXPORT int32_t mat_Mat_create_like_vkmat(ncnn::Mat* mat,
                                             ncnn::VkMat* m,

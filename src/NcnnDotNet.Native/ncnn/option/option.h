@@ -159,7 +159,7 @@ DLLEXPORT void option_Option_set_workspace_allocator(ncnn::Option* option, ncnn:
     option->workspace_allocator = value;
 }
 
-#if NCNN_VULKAN
+#ifdef NCNN_VULKAN
 
 DLLEXPORT void option_Option_get_blob_vkallocator(ncnn::Option* option, ncnn::VkAllocator** returnValue)
 {
