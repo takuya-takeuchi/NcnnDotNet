@@ -7,7 +7,14 @@ RUN apt-get update && apt-get install -y \
     libx11-dev \
     libgtk2.0-dev \
     pkg-config \
-    cmake
+    wget
+
+# cmake
+ENV CMAKE_VERSION 3.21.3
+ENV ARCH linux-x86_64
+RUN wget -q https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-${ARCH}.sh && chmod +x cmake-${CMAKE_VERSION}-${ARCH}.sh
+RUN echo y | ./cmake-${CMAKE_VERSION}-${ARCH}.sh
+RUN mv cmake-${CMAKE_VERSION}-${ARCH} /opt && echo y | ln -s /opt/cmake-${CMAKE_VERSION}-${ARCH}/bin/* /usr/bin
 
 # set compiler
 ENV CMAKE_C_COMPILER=/usr/bin/gcc

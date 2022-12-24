@@ -21,7 +21,7 @@ $BuildSourceHash = [Config]::GetBinaryLibraryLinuxHash()
 $BuildTargets = @()
 $BuildTargets += [BuildTarget]::new("desktop", "cpu",    64, "$OperatingSystem-x64",   "/x64" )
 $BuildTargets += [BuildTarget]::new("desktop", "vulkan", 64, "$OperatingSystem-x64",   "/x64" )
-$BuildTargets += [BuildTarget]::new("desktop", "arm",    64, "$OperatingSystem-arm64", "/arm64" )
+# $BuildTargets += [BuildTarget]::new("desktop", "arm",    64, "$OperatingSystem-arm64", "/arm64" )
 
 foreach($BuildTarget in $BuildTargets)
 {
