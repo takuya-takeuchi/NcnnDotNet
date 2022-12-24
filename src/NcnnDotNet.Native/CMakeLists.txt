@@ -6,7 +6,7 @@ set(PROJ_NAME NcnnDotNetNative)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(${PROJ_NAME} VERSION 0.0.0.20200106)
+project(${PROJ_NAME} VERSION 0.0.0.20221224)
 
 # definitions
 option(NCNN_VULKAN    "vulkan compute support" OFF)
@@ -38,7 +38,7 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20210723)
+set(VERSION_DATE 20221224)
 
 # Binary is not be able to be executed in host, set 0 (success) forcibly
 set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
