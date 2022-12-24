@@ -4,14 +4,14 @@
 namespace NcnnDotNet.Layers
 {
 
-    public sealed class AbsVal : Layer
+    public sealed class Pooling1D : Layer
     {
 
         #region Constructors
 
-        public AbsVal()
+        public Pooling1D()
         {
-            NativeMethods.layer_layers_AbsVal_new(out var ret);
+            NativeMethods.layer_layers_Pooling1D_new(out var ret);
             this.NativePtr = ret;
         }
 
@@ -32,7 +32,7 @@ namespace NcnnDotNet.Layers
             if (this.NativePtr == IntPtr.Zero)
                 return;
 
-            NativeMethods.layer_layers_AbsVal_delete(this.NativePtr);
+            NativeMethods.layer_layers_Pooling1D_delete(this.NativePtr);
         }
 
         #endregion
