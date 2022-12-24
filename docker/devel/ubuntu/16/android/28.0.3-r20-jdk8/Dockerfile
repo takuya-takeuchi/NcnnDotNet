@@ -33,6 +33,7 @@ RUN cd /opt && mkdir -p /opt/android-sdk-linux && mkdir -p ~/.android && touch ~
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	unzip \
 	wget \
+    curl \
     apt-transport-https
 
 RUN cd /opt/android-sdk-linux \

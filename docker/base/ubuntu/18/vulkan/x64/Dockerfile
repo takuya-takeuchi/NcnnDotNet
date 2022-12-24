@@ -2,7 +2,7 @@ FROM ubuntu:18.04
 LABEL maintainer "Takuya Takeuchi <takuya.takeuchi.dev@gmail.com>"
 
 # install vulkan sdk
-RUN apt-get update && apt install -y wget apt-transport-https
+RUN apt-get update && apt install -y wget apt-transport-https curl
 
 # install vulkan sdk
 ENV VULKAN_SDK_VERSION 1.2.189.0

@@ -18,6 +18,7 @@ ENV CMAKE_CXX_COMPILER=/usr/bin/g++
 # Register Microsoft key and feed
 RUN apt-get update && apt-get install -y \
     wget \
+    curl \
     apt-transport-https
 RUN wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb && rm packages-microsoft-prod.deb
@@ -35,4 +36,4 @@ ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
 
 WORKDIR /
 # old cmake does not have FindVulkan.cmake
-RUN cp /usr/share/vulkan/${VULKAN_SDK_VERSION}/samples/cmake/FindVulkan.cmake /usr/share/cmake-3.5/Modules
+RUN cp /usr/share/vulkan/${VULKAN_SDK_VERSION}/source/Vulkan-Tools/cmake/FindVulkan.cmake /usr/share/cmake-3.5/Modules
