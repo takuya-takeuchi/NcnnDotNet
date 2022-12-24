@@ -39,9 +39,9 @@ RUN alternatives --install /usr/local/bin/cmake cmake /usr/bin/cmake3 20 \
                  --family cmake
 
 # install vulkan sdk
-ENV VULKAN_SDK_VERSION 1.2.162.0
+ENV VULKAN_SDK_VERSION 1.2.189.0
 WORKDIR /usr/share/vulkan
-RUN wget https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true -O vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
+RUN curl --output vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz https://sdk.lunarg.com/sdk/download/${VULKAN_SDK_VERSION}/linux/vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz?Human=true
 RUN tar -xf vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 RUN rm vulkansdk-linux-x86_64-${VULKAN_SDK_VERSION}.tar.gz
 ENV VULKAN_SDK /usr/share/vulkan/${VULKAN_SDK_VERSION}/x86_64
