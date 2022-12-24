@@ -1702,7 +1702,13 @@ class ThirdPartyBuilder
                                  Join-Path -Childpath libMoltenVK.a
 
                # use libc++ rather than libstdc++
-               # Add CMAKE_THREAD_LIBS_INIT="-lpthread" because CMake failed to find_package(Threads)
+               # * Add CMAKE_THREAD_LIBS_INIT="-lpthread" because CMake failed to find_package(Threads)
+               # * omp.h is missing so remove the following arguments
+               # -D OpenMP_C_FLAGS=`"-Xclang -fopenmp`" `
+               # -D OpenMP_CXX_FLAGS=`"-Xclang -fopenmp`" `
+               # -D OpenMP_C_LIB_NAMES=`"libomp`" `
+               # -D OpenMP_CXX_LIB_NAMES=`"libomp`" `
+               # -D OpenMP_libomp_LIBRARY=`"${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libomp.a`" `
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
          -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
@@ -1711,11 +1717,6 @@ class ThirdPartyBuilder
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
          -D CMAKE_TOOLCHAIN_FILE=`"${toolchain}`" `
-         -D OpenMP_C_FLAGS=`"-Xclang -fopenmp`" `
-         -D OpenMP_CXX_FLAGS=`"-Xclang -fopenmp`" `
-         -D OpenMP_C_LIB_NAMES=`"libomp`" `
-         -D OpenMP_CXX_LIB_NAMES=`"libomp`" `
-         -D OpenMP_libomp_LIBRARY=`"${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libomp.a`" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
          -D NCNN_DISABLE_RTTI:BOOL=OFF `
@@ -1735,11 +1736,11 @@ class ThirdPartyBuilder
                      -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
                      -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
                      -D CMAKE_TOOLCHAIN_FILE="${toolchain}" `
-                     -D OpenMP_C_FLAGS="-Xclang -fopenmp" `
-                     -D OpenMP_CXX_FLAGS="-Xclang -fopenmp" `
-                     -D OpenMP_C_LIB_NAMES="libomp" `
-                     -D OpenMP_CXX_LIB_NAMES="libomp" `
-                     -D OpenMP_libomp_LIBRARY="${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libomp.a" `
+                     # -D OpenMP_C_FLAGS="-Xclang -fopenmp" `
+                     # -D OpenMP_CXX_FLAGS="-Xclang -fopenmp" `
+                     # -D OpenMP_C_LIB_NAMES="libomp" `
+                     # -D OpenMP_CXX_LIB_NAMES="libomp" `
+                     # -D OpenMP_libomp_LIBRARY="${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libomp.a" `
                      -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                      -D NCNN_BUILD_BENCHMARK:BOOL=OFF `
                      -D NCNN_DISABLE_RTTI:BOOL=OFF `
