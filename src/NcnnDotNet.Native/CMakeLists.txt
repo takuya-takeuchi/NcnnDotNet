@@ -269,12 +269,6 @@ if (NCNN_VULKAN)
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
             vulkan
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
