@@ -19,8 +19,8 @@ $BuildSourceHash = [Config]::GetBinaryLibraryLinuxHash()
 # https://github.com/dotnet/coreclr/issues/9265
 # linux-x86 does not support
 $BuildTargets = @()
-# $BuildTargets += [BuildTarget]::new("desktop", "cpu",    64, "$OperatingSystem-x64",   "/x64" )
-# $BuildTargets += [BuildTarget]::new("desktop", "vulkan", 64, "$OperatingSystem-x64",   "/x64" )
+$BuildTargets += [BuildTarget]::new("desktop", "cpu",    64, "$OperatingSystem-x64",   "/x64" )
+$BuildTargets += [BuildTarget]::new("desktop", "vulkan", 64, "$OperatingSystem-x64",   "/x64" )
 $BuildTargets += [BuildTarget]::new("desktop", "arm",    64, "$OperatingSystem-arm64", "/arm64" )
 
 foreach($BuildTarget in $BuildTargets)
