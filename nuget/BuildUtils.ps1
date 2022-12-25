@@ -2335,6 +2335,11 @@ function ConfigIOS([Config]$Config)
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
       # use libc++ rather than libstdc++
+      # * Fix for PThread library not in path
+      #     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+      #     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+      #     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+      #     -D CMAKE_USE_PTHREADS_INIT=1 `
       Write-Host "   cmake -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
@@ -2345,6 +2350,10 @@ function ConfigIOS([Config]$Config)
          -D OpenCV_DIR=`"${installOpenCVDir}/share/OpenCV`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+         -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+         -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+         -D CMAKE_USE_PTHREADS_INIT=1 `
          -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
          -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
          -D NO_GUI_SUPPORT:BOOL=ON `
@@ -2360,6 +2369,10 @@ function ConfigIOS([Config]$Config)
             -D OpenCV_DIR="${installOpenCVDir}/share/OpenCV" `
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+            -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+            -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+            -D CMAKE_USE_PTHREADS_INIT=1 `
             -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
             -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
             -D NO_GUI_SUPPORT:BOOL=ON `
