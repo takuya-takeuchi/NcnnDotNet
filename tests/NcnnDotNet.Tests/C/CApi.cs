@@ -134,11 +134,22 @@ namespace NcnnDotNet.Tests.C
             var option = NcnnDotNet.C.Ncnn.OptionCreate();
             Assert.NotNull(option);
 
-            NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, false);
-            Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
+            if (Ncnn.IsSupportVulkan)
+            {
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, false);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
 
-            NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, true);
-            Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option));
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, true);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option));
+            }
+            else
+            {
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, false);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
+
+                NcnnDotNet.C.Ncnn.OptionSetUseVulkanCompute(option, true);
+                Assert.True(NcnnDotNet.C.Ncnn.OptionGetUseVulkanCompute(option) == false);
+            }
         }
 
         [Fact]
@@ -1080,7 +1091,7 @@ namespace NcnnDotNet.Tests.C
         [Fact]
         public void MatToPixelsNullAllocator()
         {
-            var targets = CreatePattern();
+            var targets = CreatePattern3();
             foreach (var t in targets)
             {
                 var mat = NcnnDotNet.C.Ncnn.MatCreate3D(t.Width, t.Height, t.Channel);
@@ -1871,6 +1882,28 @@ namespace NcnnDotNet.Tests.C
         }
 
         private static IEnumerable<PixelDataPattern> CreatePattern2()
+        {
+            return new[]
+            {
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgr },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgb },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Bgr2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 15, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 3, Stride = 30, Type = PixelType.Rgb2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Rgba },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 5,  RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 1, Stride = 10, Type = PixelType.Gray2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Rgba2Bgra },
+                new PixelDataPattern { Width = 10, Height = 10, TargetWidth = 5, TargetHeight = 5, TargetStride = 20, RoiX = 1, RoiY = 1, RoiWidth = 5, RoiHeight = 5, Channel = 4, Stride = 40, Type = PixelType.Bgra2Rgba },
+            };
+        }
+
+        private static IEnumerable<PixelDataPattern> CreatePattern3()
         {
             return new[]
             {

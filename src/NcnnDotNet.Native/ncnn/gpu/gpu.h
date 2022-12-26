@@ -5,7 +5,7 @@
 #include <gpu.h>
 #include "../shared.h"
 
-#if NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int32_t gpu_create_gpu_instance()
 {

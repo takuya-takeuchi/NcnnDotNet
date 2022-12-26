@@ -24,7 +24,7 @@ namespace NcnnDotNet
         public static extern ErrorType net_Net_get_vulkan_device(IntPtr net, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType net_Net_register_custom_layer(IntPtr net, byte[] type, int typeLength, IntPtr creator);
+        public static extern ErrorType net_Net_register_custom_layer(IntPtr net, IntPtr type, IntPtr creator, IntPtr destroyer, IntPtr userData);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType net_Net_register_custom_layer2(IntPtr net, int index, IntPtr creator);
@@ -33,7 +33,13 @@ namespace NcnnDotNet
         public static extern ErrorType net_Net_create_extractor(IntPtr net, out IntPtr returnValue);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_load_param_mem(IntPtr net, byte[] mem);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType net_Net_load_param_filepath(IntPtr net, byte[] protoPath, int protoPathLength);
+
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType net_Net_load_param_datareader(IntPtr net, IntPtr reader);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType net_Net_load_model_filepath(IntPtr net, byte[] modelPath, int modelPathLength);

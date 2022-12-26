@@ -19,7 +19,7 @@ DLLEXPORT void net_Net_delete(ncnn::Net* net)
     if (net != nullptr) delete net;
 }
 
-#if NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int net_Net_set_vulkan_device(ncnn::Net* net, const int32_t device_index)
 {
@@ -53,26 +53,24 @@ DLLEXPORT int net_Net_get_vulkan_device(ncnn::Net* net, const ncnn::VulkanDevice
 
 DLLEXPORT int net_Net_register_custom_layer(ncnn::Net* net,
                                             const char* type,
-                                            const int32_t type_len,
-                                            ncnn::layer_creator_func* creator)
+                                            ncnn::layer_creator_func creator,
+                                            ncnn::layer_destroyer_func destroyer,
+                                            void* userData)
 {
     int32_t error = ERR_OK;
 
-    std::string name(type, type_len);
-    auto& c = *creator;
-    auto ret = net->register_custom_layer(name.c_str(), c);
+    auto ret = net->register_custom_layer(type, creator, destroyer, userData);
 
     return error;
 }
 
 DLLEXPORT int net_Net_register_custom_layer2(ncnn::Net* net,
                                              const int32_t index,
-                                             ncnn::layer_creator_func* creator)
+                                             ncnn::layer_creator_func creator)
 {
     int32_t error = ERR_OK;
 
-    auto& c = *creator;
-    auto ret = net->register_custom_layer(index, c);
+    auto ret = net->register_custom_layer(index, creator);
 
     return error;
 }
@@ -89,6 +87,17 @@ DLLEXPORT int net_Net_create_extractor(ncnn::Net* net, ncnn::Extractor** returnV
 
 #pragma region load_param
 
+DLLEXPORT int net_Net_load_param_mem(ncnn::Net* net, const char* mem)
+{
+    int32_t error = ERR_OK;
+
+    const auto ret = net->load_param_mem(mem);
+    if (ret != 0)
+        return ERR_GENERAL_ERROR;
+
+    return error;
+}
+
 DLLEXPORT int net_Net_load_param_filepath(ncnn::Net* net, const char* protopath, const int32_t protopath_len)
 {
     int32_t error = ERR_OK;
@@ -100,6 +109,22 @@ DLLEXPORT int net_Net_load_param_filepath(ncnn::Net* net, const char* protopath,
 
     return error;
 }
+
+DLLEXPORT int net_Net_load_param_datareader(ncnn::Net* net, ncnn::DataReader* reader)
+{
+    int32_t error = ERR_OK;
+
+    const auto& dr = *reader;
+    const auto ret = net->load_param(dr);
+    if (ret != 0)
+        return ERR_GENERAL_ERROR;
+
+    return error;
+}
+
+#pragma endregion load_param
+
+#pragma region load_model
 
 DLLEXPORT int net_Net_load_model_filepath(ncnn::Net* net, const char* modelpath, const int32_t modelpath_len)
 {

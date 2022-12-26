@@ -19,7 +19,12 @@ Param
 )
 
 # configuration
-$targetDir = "netcoreapp2.1"
+$targetDir = "netcoreapp3.1"
+$configurations =
+@(
+   "Debug",
+   "Release"
+)
 $examples =
 @(
    "FasterRCNN",
@@ -29,12 +34,14 @@ $examples =
    "PeleeNetSSDSeg",
    "RetinaFace",
    "RFCN",
+   "SCRFD",
    "ShuffleNetV2",
    "SimplePose",
    "SqueezeNet",
    "SqueezeNetSSD",
    "YoloV2",
-   "YoloV3"
+   "YoloV3",
+   "YoloV5"
 )
 
 # build path
@@ -42,8 +49,14 @@ $ExamplesRoot = $PSScriptRoot
 $NcnnDotNetRoot = Split-Path $ExamplesRoot -Parent
 $SrcPath = Join-Path $NcnnDotNetRoot src
 $NcnnDotNetNativeRoot = Join-Path $SrcPath NcnnDotNet.Native
-$BuildDir = Join-Path $NcnnDotNetNativeRoot "build_win_desktop_${Directory}_x64"
-$NcnnDotNetNativeBuildDir = Join-Path $BuildDir $Configuration
+if ($Configuration -eq "Debug")
+{
+    $NcnnDotNetNativeBuildDir = Join-Path $NcnnDotNetNativeRoot "build_win_desktop_${Directory}_x64_d"
+}
+else
+{
+    $NcnnDotNetNativeBuildDir = Join-Path $NcnnDotNetNativeRoot "build_win_desktop_${Directory}_x64"
+}
 
 # check path
 if (!(Test-Path $NcnnDotNetNativeBuildDir))
@@ -81,13 +94,16 @@ function create-symlink($Targets, $SrcDir, $DstDir)
    }
 }
 
-foreach ($example in $examples)
+foreach ($configuration in $configurations)
 {
-   $AppDir = Join-Path $ExamplesRoot $example | `
-             Join-Path -child bin | `
-             Join-Path -child $Configuration | `
-             Join-Path -child $targetDir
-   New-Item $AppDir -Force -ItemType Directory | Out-Null
-
-   create-symlink $NcnnDotNetNativeLibraries $NcnnDotNetNativeBuildDir $AppDir
+   foreach ($example in $examples)
+   {
+      $AppDir = Join-Path $ExamplesRoot $example | `
+                Join-Path -child bin | `
+                Join-Path -child $configuration | `
+                Join-Path -child $targetDir
+      New-Item $AppDir -Force -ItemType Directory | Out-Null
+   
+      create-symlink $NcnnDotNetNativeLibraries $NcnnDotNetNativeBuildDir $AppDir
+   }
 }

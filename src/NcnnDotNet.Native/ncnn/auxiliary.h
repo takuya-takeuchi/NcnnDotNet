@@ -6,7 +6,7 @@
 
 DLLEXPORT bool is_support_vulkan()
 {
-#if NCNN_VULKAN
+#ifdef USE_VULKAN
     return true;
 #else
     return false;

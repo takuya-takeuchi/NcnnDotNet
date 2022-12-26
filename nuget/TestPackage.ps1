@@ -30,6 +30,41 @@ Param([Parameter(
 
 Set-StrictMode -Version Latest
 
+function Get-Version([string]$Version, [string]$Current)
+{
+   $versionStr = $Version
+   
+   if ([string]::IsNullOrEmpty($Version))
+   {
+      $packages = Get-ChildItem "${Current}/*" -include *.nupkg | `
+                  Where-Object -FilterScript {$_.Name -match "${package}\.([0-9\.]+).nupkg"} | `
+                  Sort-Object -Property Name -Descending
+      foreach ($file in $packages)
+      {
+         Write-Host $file -ForegroundColor Blue
+      }
+
+      foreach ($file in $packages)
+      {
+         $file = Split-Path $file -leaf
+         $file = $file -replace "${package}\.",""
+         $file = $file -replace "\.nupkg",""
+         $versionStr = $file
+         break
+      }
+
+      if ([string]::IsNullOrEmpty($versionStr))
+      {
+         Write-Host "Version is not specified" -ForegroundColor Red
+         exit -1
+      }
+
+      return $versionStr
+   }
+
+   return $Version
+}
+
 function Clear-PackakgeCache([string]$Package, [string]$Version)
 {
    # Linux is executed on container
@@ -48,7 +83,10 @@ function Clear-PackakgeCache([string]$Package, [string]$Version)
          Remove-Item -Path "${pathPackage}" -Recurse -Force
       }
 
-      New-Item "${path}" -ItemType Directory > $null
+      if (!(Test-Path "${path}"))
+      {
+         New-Item "${path}" -ItemType Directory > $null
+      }
    }
 }
 
@@ -135,8 +173,8 @@ function RunTest($BuildTargets)
          }
       }
 
-      Write-Host "${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --runtime ${RuntimeIdentifier} --logger trx" -Foreground Yellow
-      & ${dotnetPath} test -c Release -r "$TestDir" -s $runsetting --runtime ${RuntimeIdentifier} --logger trx
+      Write-Host "${dotnetPath} test -c Release -s $runsetting --runtime ${RuntimeIdentifier} --logger trx" -Foreground Yellow
+      & ${dotnetPath} test -c Release -s $runsetting --runtime ${RuntimeIdentifier} --logger trx
       if ($lastexitcode -eq 0) {
          Write-Host "Test Successful" -ForegroundColor Green
       } else {

@@ -135,7 +135,8 @@ namespace NcnnDotNet
             this.NativePtr = net;
         }
 
-        internal Mat(IntPtr ptr)
+        internal Mat(IntPtr ptr, bool isEnabledDispose = true):
+            base(isEnabledDispose)
         {
             if (ptr == IntPtr.Zero)
                 throw new ArgumentException("Can not pass IntPtr.Zero", nameof(ptr));
@@ -282,6 +283,7 @@ namespace NcnnDotNet
         {
             this.ThrowIfDisposed();
 
+            // mat_Mat_channel return new::Mat so it should be disposed
             var ret = NativeMethods.mat_Mat_channel(this.NativePtr, c);
             return new Mat(ret);
         }
@@ -310,6 +312,14 @@ namespace NcnnDotNet
             allocator?.ThrowIfDisposed();
 
             var ret = NativeMethods.mat_Mat_create2(this.NativePtr, w, h, elemSize, allocator?.NativePtr ?? IntPtr.Zero);
+        }
+
+        public void Create(int w, int h, int c, ulong elemSize, int elempack, Allocator allocator = null)
+        {
+            this.ThrowIfDisposed();
+            allocator?.ThrowIfDisposed();
+
+            var ret = NativeMethods.mat_Mat_create6(this.NativePtr, w, h, c, elemSize, elempack, allocator?.NativePtr ?? IntPtr.Zero);
         }
 
         #endregion
@@ -574,6 +584,8 @@ namespace NcnnDotNet
                     }
                 }
             }
+
+            public IntPtr Data => this._Ptr;
 
             #endregion
 

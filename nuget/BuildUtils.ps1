@@ -1,10 +1,43 @@
+class BuildTarget
+{
+   [string] $Platform
+   [string] $Target
+   [int]    $Architecture
+   [string] $Postfix
+   [string] $RID
+
+   BuildTarget( [string]$Platform,
+                [string]$Target,
+                [int]   $Architecture,
+                [string]$RID,
+                [string]$Postfix = ""
+              )
+   {
+      $this.Platform = $Platform
+      $this.Target = $Target
+      $this.Architecture = $Architecture
+      $this.Postfix = $Postfix
+      $this.RID = $RID
+   }
+
+   [string] $OperatingSystem
+   [string] $Distribution
+   [string] $DistributionVersion
+
+   [string] $CudaVersion
+
+   [string] $AndroidVersion
+   [string] $AndroidNativeApiLevel
+}
+
 class Config
 {
 
    $ConfigurationArray =
    @(
       "Debug",
-      "Release"
+      "Release",
+      "RelWithDebInfo"
    )
 
    $TargetArray =
@@ -386,7 +419,7 @@ class Config
          }
       }
 
-      if ($this._Configuration -eq "Debug")
+      if ($this._Configuration -eq "Debug" -or $this._Configuration -eq "RelWithDebInfo")
       {
          return "build_${osname}_${platform}_${target}_${architecture}_d"
       }
@@ -525,6 +558,167 @@ class Config
          }
       }
       return $this._OSXArchitectures
+   }
+
+   static [bool] Build([string]$root, [bool]$docker, [hashtable]$buildHashTable, [BuildTarget]$buildTarget)
+   {
+      $current = $PSScriptRoot
+
+      $platform              = $buildTarget.Platform
+      $target                = $buildTarget.Target
+      $architecture          = $buildTarget.Architecture
+      $postfix               = $buildTarget.Postfix
+      $rid                   = $buildTarget.RID
+      $operatingSystem       = $buildTarget.OperatingSystem
+      $distribution          = $buildTarget.Distribution
+      $distributionVersion   = $buildTarget.DistributionVersion
+      $cudaVersion           = $buildTarget.CudaVersion
+      $androidVersion        = $buildTarget.AndroidVersion
+      $androidNativeApiLevel = $buildTarget.AndroidNativeApiLevel
+      $configuration         = "Release"
+
+      $option = ""
+
+      $sourceRoot = Join-Path $root src
+
+      if ($docker -eq $True)
+      {
+         $dockerDir = Join-Path $root docker
+
+         Set-Location -Path $dockerDir
+
+         $dockerFileDir = Join-Path $dockerDir build  | `
+                          Join-Path -ChildPath $distribution | `
+                          Join-Path -ChildPath $distributionVersion
+
+         if ($platform -eq "android")
+         {
+            $setting =
+            @{
+               'ANDROID_ABI' = $rid;
+               'ANDROID_NATIVE_API_LEVEL' = $androidNativeApiLevel
+            }
+            $option = [Config]::Base64Encode((ConvertTo-Json -Compress $setting))
+
+            $dockername = "ncnndotnet/build/$distribution/$distributionVersion/android/$androidVersion"
+            $imagename  = "ncnndotnet/devel/$distribution/$distributionVersion/android/$androidVersion"
+         }
+         else
+         {
+            if ($target -ne "cuda")
+            {
+               $option = ""
+
+               $dockername = "ncnndotnet/build/$distribution/$distributionVersion/$Target" + $postfix
+               $imagename  = "ncnndotnet/devel/$distribution/$distributionVersion/$Target" + $postfix
+            }
+            else
+            {
+               $option = $cudaVersion
+
+               $cudaVersion = ($cudaVersion / 10).ToString("0.0")
+               $dockername = "ncnndotnet/build/$distribution/$distributionVersion/$Target/$cudaVersion"
+               $imagename  = "ncnndotnet/devel/$distribution/$distributionVersion/$Target/$cudaVersion"
+            }
+         }
+
+         $config = [Config]::new($root, $configuration, $target, $architecture, $platform, $option)
+         $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
+         $build = $config.GetBuildDirectoryName($operatingSystem)
+
+         Write-Host "Start 'docker build -t $dockername $dockerFileDir --build-arg IMAGE_NAME=""$imagename""'" -ForegroundColor Green
+         docker build --network host --force-rm=true -t $dockername $dockerFileDir --build-arg IMAGE_NAME="$imagename" | Write-Host
+
+         if ($lastexitcode -ne 0)
+         {
+            Write-Host "Failed to docker build: $lastexitcode" -ForegroundColor Red
+            return $False
+         }
+
+         if ($platform -eq "desktop")
+         {
+            if ($target -eq "arm")
+            {
+               Write-Host "Start 'docker run --rm --privileged multiarch/qemu-user-static --reset -p yes'" -ForegroundColor Green
+               docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            }
+         }
+
+         # Build binary
+         foreach ($key in $buildHashTable.keys)
+         {
+            Write-Host "Start 'docker run --rm -v ""$($root):/opt/data/NcnnDotNet"" -e LOCAL_UID=$(id -u $env:USER) -e LOCAL_GID=$(id -g $env:USER) -t $dockername'" -ForegroundColor Green
+            docker run --rm --network host `
+                        -v "$($root):/opt/data/NcnnDotNet" `
+                        -e "LOCAL_UID=$(id -u $env:USER)" `
+                        -e "LOCAL_GID=$(id -g $env:USER)" `
+                        -t "$dockername" $key $target $architecture $platform $option | Write-Host
+
+            if ($lastexitcode -ne 0)
+            {
+               Write-Host "Failed to docker run: $lastexitcode" -ForegroundColor Red
+               return $False
+            }
+         }
+
+         # Copy output binary
+         foreach ($key in $buildHashTable.keys)
+         {
+            $srcDir = Join-Path $sourceRoot $key
+            $dll = $buildHashTable[$key]
+            $dstDir = Join-Path $current $libraryDir
+
+            CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+         }
+      }
+      else
+      {
+         if ($platform -eq "ios")
+         {
+            $option = $rid
+         }
+
+         $config = [Config]::new($root, $configuration, $target, $architecture, $platform, $option)
+         $libraryDir = Join-Path "artifacts" $config.GetArtifactDirectoryName()
+         $build = $config.GetBuildDirectoryName($operatingSystem)
+
+         foreach ($key in $buildHashTable.keys)
+         {
+            $srcDir = Join-Path $sourceRoot $key
+
+            # Move to build target directory
+            Set-Location -Path $srcDir
+
+            $arc = $config.GetArchitectureName()
+            Write-Host "Build $key [$arc] for $target" -ForegroundColor Green
+            Build -Config $config
+
+            if ($lastexitcode -ne 0)
+            {
+               return $False
+            }
+         }
+
+         # Copy output binary
+         foreach ($key in $buildHashTable.keys)
+         {
+            $srcDir = Join-Path $sourceRoot $key
+            $dll = $buildHashTable[$key]
+            $dstDir = Join-Path $current $libraryDir
+
+            if ($global:IsWindows)
+            {
+               # CopyToArtifact -configuration "Release" -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+               CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+            }
+            else
+            {
+               CopyToArtifact -srcDir $srcDir -build $build -libraryName $dll -dstDir $dstDir -rid $rid
+            }
+         }
+      }
+
+      return $True
    }
 
 }
@@ -962,7 +1156,8 @@ class ThirdPartyBuilder
                $level = $this._Config.GetAndroidNativeAPILevel()
                $abi = $this._Config.GetAndroidABI()
 
-               Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
+               Write-Host "   cmake -D CMAKE_TOOLCHAIN_FILE=${env:ANDROID_NDK}/build/cmake/android.toolchain.cmake `
+            -D CMAKE_BUILD_TYPE=$Configuration `
             -D BUILD_SHARED_LIBS=OFF `
             -D BUILD_WITH_STATIC_CRT=OFF `
             -D CMAKE_INSTALL_PREFIX=`"$installDir`" `
@@ -1250,10 +1445,14 @@ class ThirdPartyBuilder
                {
                   $includeDir = Join-Path $protobufInstallDir include
 
+                  $buildExamples = "ON"
+                  $buildTools = "ON"
                   if ($Configuration -eq "Debug")
                   {
                      $libraryFile = Join-Path $protobufInstallDir lib | `
                                     Join-Path -ChildPath libprotobufd.lib
+                     $buildExamples = "OFF"
+                     $buildTools = "OFF"
                   }
                   else
                   {
@@ -1273,6 +1472,9 @@ class ThirdPartyBuilder
          -D Protobuf_PROTOC_EXECUTABLE=`"${exeDir}`" `
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
+         -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
+         -D NCNN_BUILD_EXAMPLES=${buildExamples} `
+         -D NCNN_BUILD_TOOLS=${buildTools} `
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
@@ -1286,6 +1488,9 @@ class ThirdPartyBuilder
                         -D Protobuf_PROTOC_EXECUTABLE="${exeDir}" `
                         -D NCNN_VULKAN:BOOL=$vulkanOnOff `
                         -D NCNN_OPENCV:BOOL=OFF `
+                        -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
+                        -D NCNN_BUILD_EXAMPLES=ON `
+                        -D NCNN_BUILD_TOOLS=OFF `
                         -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
                         -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
                         -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
@@ -1497,6 +1702,17 @@ class ThirdPartyBuilder
                                  Join-Path -Childpath libMoltenVK.a
 
                # use libc++ rather than libstdc++
+               # * Fix for PThread library not in path
+               #     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+               #     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+               #     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+               #     -D CMAKE_USE_PTHREADS_INIT=1 `
+               # * omp.h is missing so remove the following arguments
+               #     -D OpenMP_C_FLAGS=`"-Xclang -fopenmp`" `
+               #     -D OpenMP_CXX_FLAGS=`"-Xclang -fopenmp`" `
+               #     -D OpenMP_C_LIB_NAMES=`"libomp`" `
+               #     -D OpenMP_CXX_LIB_NAMES=`"libomp`" `
+               #     -D OpenMP_libomp_LIBRARY=`"${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libomp.a`" `
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
          -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
@@ -1513,6 +1729,10 @@ class ThirdPartyBuilder
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
+         -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+         -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+         -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+         -D CMAKE_USE_PTHREADS_INIT=1 `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1531,6 +1751,10 @@ class ThirdPartyBuilder
                      -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
                      -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
                      -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
+                     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+                     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+                     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+                     -D CMAKE_USE_PTHREADS_INIT=1 `
                      -D OpenCV_DIR="${installOpenCVDir}" `
                      $ncnnDir
 
@@ -2111,6 +2335,11 @@ function ConfigIOS([Config]$Config)
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
       # use libc++ rather than libstdc++
+      # * Fix for PThread library not in path
+      #     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+      #     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+      #     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+      #     -D CMAKE_USE_PTHREADS_INIT=1 `
       Write-Host "   cmake -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
@@ -2121,6 +2350,10 @@ function ConfigIOS([Config]$Config)
          -D OpenCV_DIR=`"${installOpenCVDir}/share/OpenCV`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+         -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+         -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+         -D CMAKE_USE_PTHREADS_INIT=1 `
          -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
          -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
          -D NO_GUI_SUPPORT:BOOL=ON `
@@ -2136,6 +2369,10 @@ function ConfigIOS([Config]$Config)
             -D OpenCV_DIR="${installOpenCVDir}/share/OpenCV" `
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+            -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+            -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+            -D CMAKE_USE_PTHREADS_INIT=1 `
             -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
             -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
             -D NO_GUI_SUPPORT:BOOL=ON `
@@ -2201,12 +2438,12 @@ function Build([Config]$Config)
    }
 
    $cofiguration = $Config.GetConfigurationName()
-   Write-Host "cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
+   Write-Host "   cmake --build . --config ${cofiguration}" -ForegroundColor Yellow
    cmake --build . --config ${cofiguration}
 
    $Platform = $Config.GetPlatform()
 
-   # Post build 
+   # Post build
    switch ($Platform)
    {
       "ios"
@@ -2227,9 +2464,9 @@ function Build([Config]$Config)
             $osxArchitectures = $Config.GetOSXArchitectures()
 
             if ($osxArchitectures -eq $platform )
-            {           
+            {
                Write-Host "Invoke libtool for ${platform}" -ForegroundColor Yellow
-               
+
                switch ($platform)
                {
                   "arm64e"
@@ -2320,27 +2557,31 @@ function CopyToArtifact()
    if ($configuration)
    {
       $binary = Join-Path ${srcDir} ${build}  | `
-                Join-Path -ChildPath ${configuration} | `
-                Join-Path -ChildPath ${libraryName}
+               Join-Path -ChildPath ${configuration} | `
+               Join-Path -ChildPath ${libraryName}
    }
    else
    {
       $binary = Join-Path ${srcDir} ${build}  | `
-                Join-Path -ChildPath ${libraryName}
+               Join-Path -ChildPath ${libraryName}
    }
 
-   $output = Join-Path $dstDir runtimes | `
+   $dstDir = Join-Path $dstDir runtimes | `
              Join-Path -ChildPath ${rid} | `
              Join-Path -ChildPath native
 
-   if (!(Test-Path $output))
+   $output = Join-Path $dstDir $libraryName
+
+   if (!(Test-Path($binary)))
    {
-      Write-Host "Destination: ${output} is not found" -ForegroundColor Red
-      exit -1
+      Write-Host "${binary} does not exist" -ForegroundColor Red
    }
 
-   $output = Join-Path $output $libraryName
+   if (!(Test-Path($dstDir)))
+   {
+      Write-Host "${dstDir} does not exist" -ForegroundColor Red
+   }
 
-   Write-Host "Copy ${binary} to ${output}" -ForegroundColor Green
+   Write-Host "Copy ${libraryName} to ${output}" -ForegroundColor Green
    Copy-Item ${binary} ${output}
 }

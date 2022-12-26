@@ -12,17 +12,17 @@ popd
 mkdir bin\Debug\%APPDIR%
 del bin\Debug\%APPDIR%\%DLL%
 del bin\Debug\%APPDIR%\%PDB%
-mklink bin\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\Debug\%DLL%
-mklink bin\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\Debug\%PDB%
+mklink bin\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\%DLL%
+mklink bin\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\%PDB%
 mkdir bin\Release\%APPDIR%
 del bin\Release\%APPDIR%\%DLL%
-mklink bin\Release\%APPDIR%\%DLL% %NATIVEROOT%\Release\%DLL%
+mklink bin\Release\%APPDIR%\%DLL% %NATIVEROOT%\%DLL%
 
 mkdir bin\%ARCH%\Debug\%APPDIR%
 del bin\%ARCH%\Debug\%APPDIR%\%DLL%
 del bin\%ARCH%\Debug\%APPDIR%\%PDB%
-mklink bin\%ARCH%\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\Debug\%DLL%
-mklink bin\%ARCH%\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\Debug\%PDB%
+mklink bin\%ARCH%\Debug\%APPDIR%\%DLL% %NATIVEROOT%_d\%DLL%
+mklink bin\%ARCH%\Debug\%APPDIR%\%PDB% %NATIVEROOT%_d\%PDB%
 mkdir bin\%ARCH%\Release\%APPDIR%
 del bin\%ARCH%\Release\%APPDIR%\%DLL%
-mklink bin\%ARCH%\Release\%APPDIR%\%DLL% %NATIVEROOT%\Release\%DLL%
+mklink bin\%ARCH%\Release\%APPDIR%\%DLL% %NATIVEROOT%\%DLL%

@@ -189,6 +189,21 @@ DLLEXPORT int32_t mat_Mat_create2(ncnn::Mat* mat,
     return error;
 }
 
+DLLEXPORT int32_t mat_Mat_create6(ncnn::Mat* mat,
+                                  const int32_t w,
+                                  const int32_t h,
+                                  const int32_t c,
+                                  const size_t celemsize,
+                                  const int32_t elempack,
+                                  ncnn::Allocator* allocator)
+{
+    int32_t error = ERR_OK;
+
+    mat->create(w, h, c, celemsize, elempack, allocator);
+
+    return error;
+}
+
 #pragma endregion create
 
 #pragma region create_like
@@ -205,7 +220,7 @@ DLLEXPORT int32_t mat_Mat_create_like_mat(ncnn::Mat* mat,
     return error;
 }
 
-#if NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int32_t mat_Mat_create_like_vkmat(ncnn::Mat* mat,
                                             ncnn::VkMat* m,
@@ -427,6 +442,26 @@ DLLEXPORT int32_t mat_Mat_from_pixels_resize2(const unsigned char* pixels,
                                                     allocator);
 
     *returnValue = new ncnn::Mat(ret);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_copy_make_border(ncnn::Mat* src,
+                                       ncnn::Mat* dst,
+                                       const int32_t top,
+                                       const int32_t bottom,
+                                       const int32_t left,
+                                       const int32_t right,
+                                       const int32_t type,
+                                       const float v, 
+                                       ncnn::Option* opt)
+{
+    int32_t error = ERR_OK;
+
+    const auto& s = *src;
+    auto& d = *dst;
+    const auto& o = *opt;
+    ncnn::copy_make_border(s, d, top, bottom, left, right, type, v, o);
 
     return error;
 }

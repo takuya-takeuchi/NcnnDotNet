@@ -50,6 +50,32 @@ namespace NcnnDotNet
             }
         }
 
+        public static void CopyMakeBorder(Mat src, Mat dst, int top, int bottom, int left, int right, BorderType type, float v, Option option = null)
+        {
+            var inputOption = option != null;
+            var opt = inputOption ? option : new Option();
+
+            try
+            {
+                var error = NativeMethods.mat_copy_make_border(src.NativePtr,
+                                                               dst.NativePtr,
+                                                               top,
+                                                               bottom,
+                                                               left,
+                                                               right,
+                                                               type,
+                                                               v,
+                                                               opt.NativePtr);
+                if (error != NativeMethods.ErrorType.OK)
+                    throw new NcnnException("Unknown Exception");
+            }
+            finally
+            {
+                if (!inputOption)
+                    opt?.Dispose();
+            }
+        }
+
         public static void ConvertPacking(Mat src, Mat dst, int elemPack, Option option = null)
         {
             var inputOption = option != null;
