@@ -4,7 +4,7 @@
 
 |Package|OS|x86|x64|ARM|ARM64|Nuget|
 |---|---|---|---|---|---|---|
-|NcnnDotNet (CPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
+|NcnnDotNet (CPU)|Windows|✓|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 ||Linux|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 ||OSX|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.svg)](https://www.nuget.org/packages/NcnnDotNet)|
 |NcnnDotNet (GPU)|Windows|-|✓|-|-|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.GPU.svg)](https://www.nuget.org/packages/NcnnDotNet.GPU)|

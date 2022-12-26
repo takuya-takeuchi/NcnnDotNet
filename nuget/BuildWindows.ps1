@@ -26,6 +26,7 @@ if ($VulkanSDKDir -And !(Test-Path $VulkanSDKDir))
 }
 
 $BuildTargets = @()
+$BuildTargets += [BuildTarget]::new("desktop", "cpu",    32, "$OperatingSystem-x86", "" )
 $BuildTargets += [BuildTarget]::new("desktop", "cpu",    64, "$OperatingSystem-x64", "" )
 $BuildTargets += [BuildTarget]::new("desktop", "vulkan", 64, "$OperatingSystem-x64", "" )
 

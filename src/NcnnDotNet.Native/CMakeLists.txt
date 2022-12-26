@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.12.1)
 cmake_policy(SET CMP0053 NEW)
 cmake_policy(SET CMP0054 NEW)
 
@@ -6,11 +6,15 @@ set(PROJ_NAME NcnnDotNetNative)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(${PROJ_NAME} VERSION 0.0.0.20200106)
+project(${PROJ_NAME} VERSION 0.0.0.20221224)
 
 # definitions
 option(NCNN_VULKAN    "vulkan compute support" OFF)
 option(NO_GUI_SUPPORT "disable gui support" OFF)
+
+if (NCNN_VULKAN)
+    add_compile_definitions(USE_VULKAN)
+endif()
 
 if (NO_GUI_SUPPORT)
     add_compile_definitions(NO_GUI_SUPPORT)
@@ -34,7 +38,7 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20210723)
+set(VERSION_DATE 20221224)
 
 # Binary is not be able to be executed in host, set 0 (success) forcibly
 set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
@@ -247,12 +251,6 @@ if (NCNN_VULKAN)
     if (MSVC OR MSYS OR MINGW)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/Lib/vulkan-1.lib
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS")
         list(APPEND STATIC_LIBRARIES
@@ -267,32 +265,14 @@ if (NCNN_VULKAN)
     elseif(APPLE)
         list(APPEND STATIC_LIBRARIES
             ${Vulkan_LIBRARY}
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )   
     elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Android")
         list(APPEND STATIC_LIBRARIES
             vulkan
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )
     elseif(UNIX AND NOT APPLE)
         list(APPEND STATIC_LIBRARIES
             $ENV{VULKAN_SDK}/lib/libvulkan.so
-            glslang
-            GenericCodeGen
-            MachineIndependent
-            OGLCompiler
-            OSDependent
-            SPIRV
         )
     endif()
 endif()

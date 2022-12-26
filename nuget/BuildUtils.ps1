@@ -1445,10 +1445,14 @@ class ThirdPartyBuilder
                {
                   $includeDir = Join-Path $protobufInstallDir include
 
+                  $buildExamples = "ON"
+                  $buildTools = "ON"
                   if ($Configuration -eq "Debug")
                   {
                      $libraryFile = Join-Path $protobufInstallDir lib | `
                                     Join-Path -ChildPath libprotobufd.lib
+                     $buildExamples = "OFF"
+                     $buildTools = "OFF"
                   }
                   else
                   {
@@ -1469,8 +1473,8 @@ class ThirdPartyBuilder
          -D NCNN_VULKAN:BOOL=$vulkanOnOff `
          -D NCNN_OPENCV:BOOL=OFF `
          -D NCNN_BUILD_WITH_STATIC_CRT=OFF `
-         -D NCNN_BUILD_EXAMPLES=ON `
-         -D NCNN_BUILD_TOOLS=ON `
+         -D NCNN_BUILD_EXAMPLES=${buildExamples} `
+         -D NCNN_BUILD_TOOLS=${buildTools} `
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
@@ -1698,6 +1702,17 @@ class ThirdPartyBuilder
                                  Join-Path -Childpath libMoltenVK.a
 
                # use libc++ rather than libstdc++
+               # * Fix for PThread library not in path
+               #     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+               #     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+               #     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+               #     -D CMAKE_USE_PTHREADS_INIT=1 `
+               # * omp.h is missing so remove the following arguments
+               #     -D OpenMP_C_FLAGS=`"-Xclang -fopenmp`" `
+               #     -D OpenMP_CXX_FLAGS=`"-Xclang -fopenmp`" `
+               #     -D OpenMP_C_LIB_NAMES=`"libomp`" `
+               #     -D OpenMP_CXX_LIB_NAMES=`"libomp`" `
+               #     -D OpenMP_libomp_LIBRARY=`"${developerDir}/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib/libomp.a`" `
                Write-Host "   cmake -D CMAKE_BUILD_TYPE=$Configuration `
          -D CMAKE_CXX_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
          -D CMAKE_EXE_LINKER_FLAGS=`"-std=c++11 -stdlib=libc++ -static`" `
@@ -1714,6 +1729,10 @@ class ThirdPartyBuilder
          -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
          -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
          -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
+         -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+         -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+         -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+         -D CMAKE_USE_PTHREADS_INIT=1 `
          -D OpenCV_DIR=`"${installOpenCVDir}`" `
          $ncnnDir" -ForegroundColor Yellow
                cmake -D CMAKE_BUILD_TYPE=$Configuration `
@@ -1732,6 +1751,10 @@ class ThirdPartyBuilder
                      -D WITH_LAYER_argmax:BOOL=${WITH_LAYER_argmax} `
                      -D WITH_LAYER_spp:BOOL=${WITH_LAYER_spp} `
                      -D WITH_LAYER_tile:BOOL=${WITH_LAYER_tile} `
+                     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+                     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+                     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+                     -D CMAKE_USE_PTHREADS_INIT=1 `
                      -D OpenCV_DIR="${installOpenCVDir}" `
                      $ncnnDir
 
@@ -2312,6 +2335,11 @@ function ConfigIOS([Config]$Config)
       $env:ncnn_DIR = "${installNcnnDir}/lib/cmake/ncnn"
 
       # use libc++ rather than libstdc++
+      # * Fix for PThread library not in path
+      #     -D CMAKE_THREAD_LIBS_INIT="-lpthread" `
+      #     -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+      #     -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+      #     -D CMAKE_USE_PTHREADS_INIT=1 `
       Write-Host "   cmake -D CMAKE_SYSTEM_NAME=iOS `
          -D CMAKE_OSX_ARCHITECTURES=${osxArchitectures} `
          -D CMAKE_OSX_SYSROOT=${OSX_SYSROOT} `
@@ -2322,6 +2350,10 @@ function ConfigIOS([Config]$Config)
          -D OpenCV_DIR=`"${installOpenCVDir}/share/OpenCV`" `
          -D ncnn_DIR=`"${installNcnnDir}/lib/cmake/ncnn`" `
          -D ncnn_SRC_DIR=`"${ncnnDir}`" `
+         -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+         -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+         -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+         -D CMAKE_USE_PTHREADS_INIT=1 `
          -D Vulkan_INCLUDE_DIR=`"${env:VULKAN_SDK}/MoltenVK/include`" `
          -D Vulkan_LIBRARY=`"${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a`" `
          -D NO_GUI_SUPPORT:BOOL=ON `
@@ -2337,6 +2369,10 @@ function ConfigIOS([Config]$Config)
             -D OpenCV_DIR="${installOpenCVDir}/share/OpenCV" `
             -D ncnn_DIR="${installNcnnDir}/lib/cmake/ncnn" `
             -D ncnn_SRC_DIR="${ncnnDir}" `
+            -D CMAKE_THREAD_LIBS_INIT=`"-lpthread`" `
+            -D CMAKE_HAVE_THREADS_LIBRARY=1 `
+            -D CMAKE_USE_WIN32_THREADS_INIT=0 `
+            -D CMAKE_USE_PTHREADS_INIT=1 `
             -D Vulkan_INCLUDE_DIR="${env:VULKAN_SDK}/MoltenVK/include" `
             -D Vulkan_LIBRARY="${env:VULKAN_SDK}/MoltenVK/MoltenVK.xcframework/${targetPlatform}/libMoltenVK.a" `
             -D NO_GUI_SUPPORT:BOOL=ON `

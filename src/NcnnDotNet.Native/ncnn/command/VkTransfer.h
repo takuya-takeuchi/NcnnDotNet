@@ -5,7 +5,7 @@
 #include <command.h>
 #include "../shared.h"
 
-#if NCNN_VULKAN
+#ifdef USE_VULKAN
 
 DLLEXPORT int32_t command_VkTransfer_new(const ncnn::VulkanDevice* vkdev, ncnn::VkTransfer** returnValue)
 {
