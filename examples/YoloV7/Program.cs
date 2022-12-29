@@ -5,7 +5,7 @@ using NcnnDotNet;
 using NcnnDotNet.OpenCV;
 using Mat = NcnnDotNet.Mat;
 
-namespace YoloV5
+namespace YoloV7
 {
 
     internal class Program
@@ -13,67 +13,9 @@ namespace YoloV5
 
         #region Fields
 
-#if YOLOV5_V60 || YOLOV5_V62
-        private const int MaxStride = 64;
-#else
         private const int MaxStride = 32;
-#endif
 
         #endregion
-
-        private sealed class YoloV5Focus : CustomLayer
-        {
-
-            public YoloV5Focus()
-            {
-                this.OneBlobOnly = true;
-            }
-
-            protected override unsafe int OnForward(Mat bottomBlob, Mat topBlob, Option opt)
-            {
-                var w = bottomBlob.W;
-                var h = bottomBlob.H;
-                var channels = bottomBlob.C;
-
-                var outW = w / 2;
-                var outH = h / 2;
-                var outC = channels * 4;
-
-                topBlob.Create(outW, outH, outC, 4u, 1, opt.BlobAllocator);
-                if (topBlob.IsEmpty)
-                    return -100;
-
-                // ToDo: parallel
-                for (var p = 0; p < outC; p++)
-                {
-                    using var bottom = bottomBlob.Channel(p % channels);
-                    using var top = topBlob.Channel(p);
-                    var ptr = (float*)(bottom.Row((p / channels) % 2).Data) + ((p / channels) / 2);
-                    var outPtr = (float*)top.Data;
-
-                    for (var i = 0; i < outH; i++)
-                    {
-                        for (var j = 0; j < outW; j++)
-                        {
-                            *outPtr = *ptr;
-
-                            outPtr += 1;
-                            ptr += 2;
-                        }
-
-                        ptr += w;
-                    }
-                }
-
-                return 0;
-            }
-
-        }
-
-        private static YoloV5Focus YoloV5FocusLayerCreator(IntPtr userData)
-        {
-            return new YoloV5Focus();
-        }
 
         #region Methods
 
@@ -81,7 +23,7 @@ namespace YoloV5
         {
             if (args.Length != 1)
             {
-                Console.WriteLine($"Usage: {nameof(YoloV5)} [imagepath]");
+                Console.WriteLine($"Usage: {nameof(YoloV7)} [imagepath]");
                 return -1;
             }
 
@@ -99,7 +41,7 @@ namespace YoloV5
                 //    Ncnn.CreateGpuInstance();
 
                 var objects = new List<Object>();
-                DetectYoloV5(m, objects);
+                DetectYoloV7(m, objects);
 
                 //if (Ncnn.IsSupportVulkan)
                 //    Ncnn.DestroyGpuInstance();
@@ -247,11 +189,6 @@ namespace YoloV5
                             var confidence = boxConfidence * Sigmoid(classScore);
                             if (confidence >= probThreshold)
                             {
-                                // yolov5/models/yolo.py Detect forward
-                                // y = x[i].Sigmoid()
-                                // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
-                                // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
-
                                 var dx = Sigmoid(featPtr[0]);
                                 var dy = Sigmoid(featPtr[1]);
                                 var dw = Sigmoid(featPtr[2]);
@@ -289,29 +226,18 @@ namespace YoloV5
             }
         }
 
-        private static void DetectYoloV5(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
+        private static void DetectYoloV7(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
         {
-            using (var yolov5 = new Net())
+            using (var yolov7 = new Net())
             {
                 if (Ncnn.IsSupportVulkan)
-                    yolov5.Opt.UseVulkanCompute = true;
-                // yolov5.Opt.UseBf16Storage = true;
+                    yolov7.Opt.UseVulkanCompute = true;
+                // yolov7.Opt.UseBf16Storage = true;
 
-                // original pretrained model from https://github.com/ultralytics/yolov5
+                // original pretrained model from https://github.com/WongKinYiu/yolov7
                 // the ncnn model https://github.com/nihui/ncnn-assets/tree/master/models
-#if YOLOV5_V62
-                yolov5.LoadParam("yolov5s_6.2.param");
-                yolov5.LoadModel("yolov5s_6.2.bin");
-#elif YOLOV5_V60
-                yolov5.LoadParam("yolov5s_6.0.param");
-                yolov5.LoadModel("yolov5s_6.0.bin");
-#else
-                using var reg = new CustomLayerRegister("YoloV5Focus", YoloV5FocusLayerCreator);
-                yolov5.RegisterCustomLayer(reg);
-
-                yolov5.LoadParam("yolov5s.param");
-                yolov5.LoadModel("yolov5s.bin");
-#endif
+                yolov7.LoadParam("yolov7-tiny.param");
+                yolov7.LoadModel("yolov7-tiny.bin");
 
                 const int targetSize = 640;
                 const float probThreshold = 0.25f;
@@ -338,9 +264,7 @@ namespace YoloV5
                 }
                 
                 using var @in = Mat.FromPixelsResize(bgr.Data, PixelType.Bgr2Rgb, imgW, imgH, w, h);
-
-                // pad to targetSize rectangle
-                // yolov5/utils/datasets.py letterbox
+                
                 var wPad = (w + MaxStride - 1) / MaxStride * MaxStride - w;
                 var hPad = (h + MaxStride - 1) / MaxStride * MaxStride - h;
                 using var inPad = new Mat();
@@ -349,13 +273,11 @@ namespace YoloV5
                 var normVals = new[] { 1 / 255.0f, 1 / 255.0f, 1 / 255.0f };
                 inPad.SubstractMeanNormalize(null, normVals);
 
-                using var ex = yolov5.CreateExtractor();
+                using var ex = yolov7.CreateExtractor();
 
                 ex.Input("images", inPad);
 
                 var proposals = new List<Object>();
-
-                // anchor setting from yolov5/models/yolov5s.yaml
 
                 // stride 8
                 {
@@ -363,12 +285,12 @@ namespace YoloV5
                     ex.Extract("output", @out);
 
                     using var anchors = new Mat(6);
-                    anchors[0] = 10.0f;
-                    anchors[1] = 13.0f;
-                    anchors[2] = 16.0f;
-                    anchors[3] = 30.0f;
-                    anchors[4] = 33.0f;
-                    anchors[5] = 23.0f;
+                    anchors[0] = 12.0f;
+                    anchors[1] = 16.0f;
+                    anchors[2] = 19.0f;
+                    anchors[3] = 36.0f;
+                    anchors[4] = 40.0f;
+                    anchors[5] = 28.0f;
                     
                     var objects8 = new List<Object>();
                     GenerateProposals(anchors, 8, inPad, @out, probThreshold, objects8);
@@ -379,22 +301,16 @@ namespace YoloV5
                 // stride 16
                 {
                     using var @out = new Mat();
-#if YOLOV5_V62
-                    ex.Extract("353", @out);
-#elif YOLOV5_V60
-                    ex.Extract("376", @out);
-#else
-                    ex.Extract("781", @out);
-#endif
+                    ex.Extract("288", @out);
 
                     using var anchors = new Mat(6);
-                    anchors[0] = 30.0f;
-                    anchors[1] = 61.0f;
-                    anchors[2] = 62.0f;
-                    anchors[3] = 45.0f;
-                    anchors[4] = 59.0f;
-                    anchors[5] = 119.0f;
-                    
+                    anchors[0] = 36.0f;
+                    anchors[1] = 75.0f;
+                    anchors[2] = 76.0f;
+                    anchors[3] = 55.0f;
+                    anchors[4] = 72.0f;
+                    anchors[5] = 146.0f;
+
                     var objects16 = new List<Object>();
                     GenerateProposals(anchors, 16, inPad, @out, probThreshold, objects16);
                     
@@ -404,20 +320,15 @@ namespace YoloV5
                 // stride 32
                 {
                     using var @out = new Mat();
-#if YOLOV5_V62
-                    ex.Extract("367", @out);
-#elif YOLOV5_V60
-                    ex.Extract("401", @out);
-#else
-                    ex.Extract("801", @out);
-#endif
+                    ex.Extract("302", @out);
+
                     using var anchors = new Mat(6);
-                    anchors[0] = 116.0f;
-                    anchors[1] = 90.0f;
-                    anchors[2] = 156.0f;
-                    anchors[3] = 198.0f;
-                    anchors[4] = 373.0f;
-                    anchors[5] = 326.0f;
+                    anchors[0] = 142.0f;
+                    anchors[1] = 110.0f;
+                    anchors[2] = 192.0f;
+                    anchors[3] = 243.0f;
+                    anchors[4] = 459.0f;
+                    anchors[5] = 401.0f;
 
                     var objects32 = new List<Object>();
                     GenerateProposals(anchors, 32, inPad, @out, probThreshold, objects32);
@@ -547,14 +458,42 @@ namespace YoloV5
                 "toothbrush"
             };
 
+            var colors = new []
+            {
+                new Scalar<double>(54, 67, 244),
+                new Scalar<double>(99, 30, 233),
+                new Scalar<double>(176, 39, 156),
+                new Scalar<double>(183, 58, 103),
+                new Scalar<double>(181, 81, 63),
+                new Scalar<double>(243, 150, 33),
+                new Scalar<double>(244, 169, 3),
+                new Scalar<double>(212, 188, 0),
+                new Scalar<double>(136, 150, 0),
+                new Scalar<double>(80, 175, 76),
+                new Scalar<double>(74, 195, 139),
+                new Scalar<double>(57, 220, 205),
+                new Scalar<double>(59, 235, 255),
+                new Scalar<double>(7, 193, 255),
+                new Scalar<double>(0, 152, 255),
+                new Scalar<double>(34, 87, 255),
+                new Scalar<double>(72, 85, 121),
+                new Scalar<double>(158, 158, 158),
+                new Scalar<double>(139, 125, 96)
+            };
+
+            var colorIndex = 0;
+
             using var image = bgr.Clone();
             for (var i = 0; i < objects.Count; i++)
             {
                 var obj = objects[i];
 
+                var color = colors[colorIndex % 19];
+                colorIndex++;
+
                 Console.WriteLine($"{obj.Label} = {obj.Prob:f5} at {obj.Rect.X:f2} {obj.Rect.Y:f2} {obj.Rect.Width:f2} {obj.Rect.Height:f2}");
 
-                Cv2.Rectangle(image, obj.Rect, new Scalar<double>(255, 0, 0));
+                Cv2.Rectangle(image, obj.Rect, color, 2);
 
                 var text = $"{classNames[obj.Label]} {(obj.Prob * 100):f1}";
 
@@ -570,10 +509,10 @@ namespace YoloV5
 
                 Cv2.Rectangle(image, new Rect<int>(new Point<int>(x, y),
                                                    new Size<int>(labelSize.Width, labelSize.Height + baseLine)),
-                              new Scalar<double>(255, 255, 255), -1);
+                              color, -1);
                 
                 Cv2.PutText(image, text, new Point<int>(x, y + labelSize.Height),
-                            CvHersheyFonts.HersheySimplex, 0.5, new Scalar<double>(0, 0, 0));
+                            CvHersheyFonts.HersheySimplex, 0.5, new Scalar<double>(255, 255, 255));
             }
 
             Cv2.ImShow("image", image);

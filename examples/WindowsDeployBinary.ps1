@@ -42,6 +42,7 @@ $examples =
    "YoloV2",
    "YoloV3",
    "YoloV5",
+   "YoloV7",
    "YoloX"
 )
 
