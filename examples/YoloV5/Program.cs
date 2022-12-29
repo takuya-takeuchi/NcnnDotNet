@@ -70,7 +70,7 @@ namespace YoloV5
             return new YoloV5Focus();
         }
 
-#region Methods
+        #region Methods
 
         private static int Main(string[] args)
         {
@@ -105,7 +105,7 @@ namespace YoloV5
             return 0;
         }
 
-#region Helpers
+        #region Helpers
         
         private static float IntersectionArea(Object a, Object b)
         {
@@ -575,9 +575,9 @@ namespace YoloV5
             Cv2.WaitKey(0);
         }
 
-#endregion
+        #endregion
 
-#endregion
+        #endregion
 
     }
 
