@@ -5,17 +5,11 @@ using NcnnDotNet;
 using NcnnDotNet.OpenCV;
 using Mat = NcnnDotNet.Mat;
 
-namespace YoloV5
+namespace YoloX
 {
 
     internal class Program
     {
-
-#if YOLOV5_V60 || YOLOV5_V62
-        private const int MaxStride = 64;
-#else
-        private const int MaxStride = 32;
-#endif
 
         private sealed class YoloV5Focus : CustomLayer
         {
@@ -77,7 +71,7 @@ namespace YoloV5
         {
             if (args.Length != 1)
             {
-                Console.WriteLine($"Usage: {nameof(YoloV5)} [imagepath]");
+                Console.WriteLine($"Usage: {nameof(YoloX)} [imagepath]");
                 return -1;
             }
 
@@ -95,7 +89,7 @@ namespace YoloV5
                 //    Ncnn.CreateGpuInstance();
 
                 var objects = new List<Object>();
-                DetectYoloV5(m, objects);
+                DetectYoloX(m, objects);
 
                 //if (Ncnn.IsSupportVulkan)
                 //    Ncnn.DestroyGpuInstance();
@@ -185,129 +179,104 @@ namespace YoloV5
                     picked.Add(i);
             }
         }
-
-        private static float Sigmoid(float x)
+        
+        private static void GenerateGridsAndStride(int targetW, int targetH, IList<int> strides, IList<GridAndStride> gridAndStrides)
         {
-            return (float)(1.0f / (1.0f + Math.Exp(-x)));
-        }
-
-        private static void GenerateProposals(Mat anchors, int stride, Mat inPad, Mat featBlob, float probThreshold, IList<Object> objects)
-        {
-            var numGrid = featBlob.H;
-
-            int numGridX;
-            int numGridY;
-            if (inPad.W > inPad.H)
+            var count = strides.Count;
+            for (var i = 0; i < count; i++)
             {
-                numGridX = inPad.W / stride;
-                numGridY = numGrid / numGridX;
-            }
-            else
-            {
-                numGridY = inPad.H / stride;
-                numGridX = numGrid / numGridY;
-            }
-
-            var numClass = featBlob.W - 5;
-
-            var numAnchors = anchors.W / 2;
-
-            for (var q = 0; q < numAnchors; q++)
-            {
-                var anchorW = anchors[q * 2];
-                var anchorH = anchors[q * 2 + 1];
-
-                using var feat = featBlob.Channel(q);
-
-                for (var i = 0; i < numGridY; i++)
+                var stride = strides[i];
+                var numGridW = targetW / stride;
+                var numGridH = targetH / stride;
+                for (var g1 = 0; g1 < numGridH; g1++)
                 {
-                    for (var j = 0; j < numGridX; j++)
+                    for (var g0 = 0; g0 < numGridW; g0++)
                     {
-                        var featPtr = feat.Row(i * numGridX + j);
-                        var boxConfidence = Sigmoid(featPtr[4]);
-                        if (boxConfidence >= probThreshold)
+                        var gs = new GridAndStride
                         {
-                            // find class index with max class score
-                            var classIndex = 0;
-                            var classScore = -float.MaxValue;
-                            for (var k = 0; k < numClass; k++)
-                            {
-                                var score = featPtr[5 + k];
-                                if (score > classScore)
-                                {
-                                    classIndex = k;
-                                    classScore = score;
-                                }
-                            }
-
-                            var confidence = boxConfidence * Sigmoid(classScore);
-                            if (confidence >= probThreshold)
-                            {
-                                // yolov5/models/yolo.py Detect forward
-                                // y = x[i].Sigmoid()
-                                // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
-                                // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
-
-                                var dx = Sigmoid(featPtr[0]);
-                                var dy = Sigmoid(featPtr[1]);
-                                var dw = Sigmoid(featPtr[2]);
-                                var dh = Sigmoid(featPtr[3]);
-
-                                var pbCx = (dx * 2.0f - 0.5f + j) * stride;
-                                var pbCy = (dy * 2.0f - 0.5f + i) * stride;
-
-                                var pbW = (float)Math.Pow(dw * 2.0f, 2) * anchorW;
-                                var pbH = (float)Math.Pow(dh * 2.0f, 2) * anchorH;
-
-                                var x0 = pbCx - pbW * 0.5f;
-                                var y0 = pbCy - pbH * 0.5f;
-                                var x1 = pbCx + pbW * 0.5f;
-                                var y1 = pbCy + pbH * 0.5f;
-
-                                var obj = new Object
-                                {
-                                    Rect =
-                                {
-                                    X = x0,
-                                    Y = y0,
-                                    Width = x1 - x0,
-                                    Height = y1 - y0
-                                },
-                                    Label = classIndex,
-                                    Prob = confidence
-                                };
-
-                                objects.Add(obj);
-                            }
-                        }
+                            Grid0 = g0,
+                            Grid1 = g1,
+                            Stride = stride
+                        };
+                        gridAndStrides.Add(gs);
                     }
                 }
             }
         }
 
-        private static void DetectYoloV5(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
+        private static unsafe void GenerateYoloXProposals(IList<GridAndStride> gridStrides, Mat featBlob, float probThreshold, IList<Object> objects)
         {
-            using (var yolov5 = new Net())
+            var numGrid = featBlob.H;
+            var numClass = featBlob.W - 5;
+            var numAnchors = gridStrides.Count;
+            
+            using var tmp = featBlob.Channel(0);
+            var featPtr = (float*)tmp.Data;
+            for (var anchorIdx = 0; anchorIdx < numAnchors; anchorIdx++)
+            {
+                var grid0 = gridStrides[anchorIdx].Grid0;
+                var grid1 = gridStrides[anchorIdx].Grid1;
+                var stride = gridStrides[anchorIdx].Stride;
+
+                // yolox/models/yolo_head.py decode logic
+                //  outputs[..., :2] = (outputs[..., :2] + grids) * strides
+                //  outputs[..., 2:4] = torch.exp(outputs[..., 2:4]) * strides
+                var xCenter = (featPtr[0] + grid0) * stride;
+                var yCenter = (featPtr[1] + grid1) * stride;
+                var w = (float)Math.Exp(featPtr[2]) * stride;
+                var h = (float)Math.Exp(featPtr[3]) * stride;
+                var x0 = xCenter - w * 0.5f;
+                var y0 = yCenter - h * 0.5f;
+
+                var boxObjectness = featPtr[4];
+                for (var classIdx = 0; classIdx < numClass; classIdx++)
+                {
+                    var boxClsScore = featPtr[5 + classIdx];
+                    var boxProb = boxObjectness * boxClsScore;
+                    if (boxProb > probThreshold)
+                    {
+                        var obj = new Object
+                        {
+                            Rect =
+                            {
+                                X = x0,
+                                Y = y0,
+                                Width = w,
+                                Height = h
+                            },
+                            Label = classIdx,
+                            Prob = boxProb
+                        };
+
+                        objects.Add(obj);
+                    }
+
+                }
+
+                featPtr += featBlob.W;
+            }
+        }
+
+        private static void DetectYoloX(NcnnDotNet.OpenCV.Mat bgr, List<Object> objects)
+        {
+            using (var yolox = new Net())
             {
                 if (Ncnn.IsSupportVulkan)
-                    yolov5.Opt.UseVulkanCompute = true;
+                    yolox.Opt.UseVulkanCompute = true;
                 // yolov5.Opt.UseBf16Storage = true;
 
-                // original pretrained model from https://github.com/ultralytics/yolov5
-                // the ncnn model https://github.com/nihui/ncnn-assets/tree/master/models
-#if YOLOV5_V62
-                yolov5.LoadParam("yolov5s_6.2.param");
-                yolov5.LoadModel("yolov5s_6.2.bin");
-#elif YOLOV5_V60
-                yolov5.LoadParam("yolov5s_6.0.param");
-                yolov5.LoadModel("yolov5s_6.0.bin");
-#else
+                // Focus in yolov5
                 using var reg = new CustomLayerRegister("YoloV5Focus", YoloV5FocusLayerCreator);
-                yolov5.RegisterCustomLayer(reg);
+                yolox.RegisterCustomLayer(reg);
 
-                yolov5.LoadParam("yolov5s.param");
-                yolov5.LoadModel("yolov5s.bin");
-#endif
+                // original pretrained model from https://github.com/Megvii-BaseDetection/YOLOX
+                // ncnn model param: https://github.com/Megvii-BaseDetection/YOLOX/releases/download/0.1.1rc0/yolox_s_ncnn.tar.gz
+                // NOTE that newest version YOLOX remove normalization of model (minus mean and then div by std),
+                // which might cause your model outputs becoming a total mess, plz check carefully.
+                if (!yolox.LoadParam("yolox.param"))
+                    Environment.Exit(-1);
+                if (!yolox.LoadModel("yolox.bin"))
+                    Environment.Exit(-1);
 
                 const int targetSize = 640;
                 const float probThreshold = 0.25f;
@@ -315,8 +284,7 @@ namespace YoloV5
 
                 var imgW = bgr.Cols;
                 var imgH = bgr.Rows;
-
-                // letterbox pad to multiple of MaxStride
+                
                 var w = imgW;
                 var h = imgH;
                 float scale;
@@ -333,92 +301,31 @@ namespace YoloV5
                     w = (int)(w * scale);
                 }
                 
-                using var @in = Mat.FromPixelsResize(bgr.Data, PixelType.Bgr2Rgb, imgW, imgH, w, h);
+                using var @in = Mat.FromPixelsResize(bgr.Data, PixelType.Bgr, imgW, imgH, w, h);
 
                 // pad to targetSize rectangle
-                // yolov5/utils/datasets.py letterbox
-                var wPad = (w + MaxStride - 1) / MaxStride * MaxStride - w;
-                var hPad = (h + MaxStride - 1) / MaxStride * MaxStride - h;
-                using var inPad = new Mat();
-                Ncnn.CopyMakeBorder(@in, inPad, hPad / 2, hPad - hPad / 2, wPad / 2, wPad - wPad / 2, BorderType.Constant, 114.0f);
+                var wPad = (w + 31) / 32 * 32 - w;
+                var hPad = (h + 31) / 32 * 32 - h;
                 
-                var normVals = new[] { 1 / 255.0f, 1 / 255.0f, 1 / 255.0f };
-                inPad.SubstractMeanNormalize(null, normVals);
+                using var inPad = new Mat();
+                // different from yolov5, yolox only pad on bottom and right side,
+                // which means users don't need to extra padding info to decode boxes coordinate.
+                Ncnn.CopyMakeBorder(@in, inPad, 0, hPad, 0, wPad, BorderType.Constant, 114.0f);
 
-                using var ex = yolov5.CreateExtractor();
+                using var ex = yolox.CreateExtractor();
 
                 ex.Input("images", inPad);
 
                 var proposals = new List<Object>();
-
-                // anchor setting from yolov5/models/yolov5s.yaml
-
-                // stride 8
+                
                 {
                     using var @out = new Mat();
                     ex.Extract("output", @out);
 
-                    using var anchors = new Mat(6);
-                    anchors[0] = 10.0f;
-                    anchors[1] = 13.0f;
-                    anchors[2] = 16.0f;
-                    anchors[3] = 30.0f;
-                    anchors[4] = 33.0f;
-                    anchors[5] = 23.0f;
-                    
-                    var objects8 = new List<Object>();
-                    GenerateProposals(anchors, 8, inPad, @out, probThreshold, objects8);
-                    
-                    proposals.AddRange(objects8);
-                }
-
-                // stride 16
-                {
-                    using var @out = new Mat();
-#if YOLOV5_V62
-                    ex.Extract("353", @out);
-#elif YOLOV5_V60
-                    ex.Extract("376", @out);
-#else
-                    ex.Extract("781", @out);
-#endif
-
-                    using var anchors = new Mat(6);
-                    anchors[0] = 30.0f;
-                    anchors[1] = 61.0f;
-                    anchors[2] = 62.0f;
-                    anchors[3] = 45.0f;
-                    anchors[4] = 59.0f;
-                    anchors[5] = 119.0f;
-                    
-                    var objects16 = new List<Object>();
-                    GenerateProposals(anchors, 16, inPad, @out, probThreshold, objects16);
-                    
-                    proposals.AddRange(objects16);
-                }
-
-                // stride 32
-                {
-                    using var @out = new Mat();
-#if YOLOV5_V62
-                    ex.Extract("367", @out);
-#elif YOLOV5_V60
-                    ex.Extract("401", @out);
-#else
-                    ex.Extract("801", @out);
-#endif
-                    using var anchors = new Mat(6);
-                    anchors[0] = 116.0f;
-                    anchors[1] = 90.0f;
-                    anchors[2] = 156.0f;
-                    anchors[3] = 198.0f;
-                    anchors[4] = 373.0f;
-                    anchors[5] = 326.0f;
-
-                    var objects32 = new List<Object>();
-                    GenerateProposals(anchors, 32, inPad, @out, probThreshold, objects32);
-
-                    proposals.AddRange(objects32);
+                    var strideArray = new []{ 8, 16, 32 }; // might have stride=64 in YOLOX
+                    var gridStrides = new List<GridAndStride>();
+                    GenerateGridsAndStride(inPad.W, inPad.H, strideArray, gridStrides);
+                    GenerateYoloXProposals(gridStrides, @out, probThreshold, proposals);
                 }
 
                 // sort all proposals by score from highest to lowest
@@ -437,10 +344,10 @@ namespace YoloV5
                     objects[i] = proposals[picked[i]];
 
                     // adjust offset to original unpadded
-                    var x0 = (objects[i].Rect.X - (wPad / 2)) / scale;
-                    var y0 = (objects[i].Rect.Y - (hPad / 2)) / scale;
-                    var x1 = (objects[i].Rect.X + objects[i].Rect.Width - (wPad / 2)) / scale;
-                    var y1 = (objects[i].Rect.Y + objects[i].Rect.Height - (hPad / 2)) / scale;
+                    var x0 = (objects[i].Rect.X) / scale;
+                    var y0 = (objects[i].Rect.Y) / scale;
+                    var x1 = (objects[i].Rect.X + objects[i].Rect.Width) / scale;
+                    var y1 = (objects[i].Rect.Y + objects[i].Rect.Height) / scale;
 
                     // clip
                     x0 = Math.Max(Math.Min(x0, imgW - 1), 0.0f);

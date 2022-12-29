@@ -19,7 +19,7 @@ Param
 )
 
 # configuration
-$targetDir = "netcoreapp3.1"
+$targetDir = "netcoreapp2.1"
 $configurations =
 @(
    "Debug",
@@ -41,7 +41,8 @@ $examples =
    "SqueezeNetSSD",
    "YoloV2",
    "YoloV3",
-   "YoloV5"
+   "YoloV5",
+   "YoloX"
 )
 
 # build path
