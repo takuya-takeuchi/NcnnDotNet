@@ -11,7 +11,7 @@ namespace YoloV5
     internal class Program
     {
 
-#if YOLOV5_V60
+#if YOLOV5_V60 || YOLOV5_V62
         private const int MaxStride = 64;
 #else
         private const int MaxStride = 32;
@@ -43,7 +43,7 @@ namespace YoloV5
                 {
                     using var bottom = bottomBlob.Channel(p % channels);
                     using var top = topBlob.Channel(p);
-                    var ptr = (float*)(bottom.Row((p / channels) % 2).Data + ((p / channels) / 2));
+                    var ptr = (float*)(bottom.Row((p / channels) % 2).Data) + ((p / channels) / 2);
                     var outPtr = (float*)top.Data;
 
                     for (var i = 0; i < outH; i++)
@@ -70,7 +70,7 @@ namespace YoloV5
             return new YoloV5Focus();
         }
 
-        #region Methods
+#region Methods
 
         private static int Main(string[] args)
         {
@@ -90,14 +90,14 @@ namespace YoloV5
                     return -1;
                 }
 
-                if (Ncnn.IsSupportVulkan)
-                    Ncnn.CreateGpuInstance();
+                //if (Ncnn.IsSupportVulkan)
+                //    Ncnn.CreateGpuInstance();
 
                 var objects = new List<Object>();
                 DetectYoloV5(m, objects);
 
-                if (Ncnn.IsSupportVulkan)
-                    Ncnn.DestroyGpuInstance();
+                //if (Ncnn.IsSupportVulkan)
+                //    Ncnn.DestroyGpuInstance();
 
                 DrawObjects(m, objects);
             }
@@ -105,7 +105,7 @@ namespace YoloV5
             return 0;
         }
 
-        #region Helpers
+#region Helpers
         
         private static float IntersectionArea(Object a, Object b)
         {
@@ -223,61 +223,61 @@ namespace YoloV5
                     for (var j = 0; j < numGridX; j++)
                     {
                         var featPtr = feat.Row(i * numGridX + j);
-
-                        // find class index with max class score
-                        var classIndex = 0;
-                        var classScore = - float.MaxValue;
-                        for (var k = 0; k < numClass; k++)
+                        var boxConfidence = Sigmoid(featPtr[4]);
+                        if (boxConfidence >= probThreshold)
                         {
-                            var score = featPtr[5 + k];
-                            if (score > classScore)
+                            // find class index with max class score
+                            var classIndex = 0;
+                            var classScore = -float.MaxValue;
+                            for (var k = 0; k < numClass; k++)
                             {
-                                classIndex = k;
-                                classScore = score;
+                                var score = featPtr[5 + k];
+                                if (score > classScore)
+                                {
+                                    classIndex = k;
+                                    classScore = score;
+                                }
                             }
-                        }
 
-                        var box_score = featPtr[4];
-
-                        var confidence = Sigmoid(box_score) * Sigmoid(classScore);
-
-                        if (confidence >= probThreshold)
-                        {
-                            // yolov5/models/yolo.py Detect forward
-                            // y = x[i].Sigmoid()
-                            // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
-                            // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
-
-                            var dx = Sigmoid(featPtr[0]);
-                            var dy = Sigmoid(featPtr[1]);
-                            var dw = Sigmoid(featPtr[2]);
-                            var dh = Sigmoid(featPtr[3]);
-
-                            var pbCx = (dx * 2.0f - 0.5f + j) * stride;
-                            var pbCy = (dy * 2.0f - 0.5f + i) * stride;
-
-                            var pbW = (float)Math.Pow(dw * 2.0f, 2) * anchorW;
-                            var pbH = (float)Math.Pow(dh * 2.0f, 2) * anchorH;
-
-                            var x0 = pbCx - pbW * 0.5f;
-                            var y0 = pbCy - pbH * 0.5f;
-                            var x1 = pbCx + pbW * 0.5f;
-                            var y1 = pbCy + pbH * 0.5f;
-
-                            var obj = new Object
+                            var confidence = boxConfidence * Sigmoid(classScore);
+                            if (confidence >= probThreshold)
                             {
-                                Rect =
+                                // yolov5/models/yolo.py Detect forward
+                                // y = x[i].Sigmoid()
+                                // y[..., 0:2] = (y[..., 0:2] * 2. - 0.5 + self.grid[i].to(x[i].device)) * self.stride[i]  # xy
+                                // y[..., 2:4] = (y[..., 2:4] * 2) ** 2 * self.anchor_grid[i]  # wh
+
+                                var dx = Sigmoid(featPtr[0]);
+                                var dy = Sigmoid(featPtr[1]);
+                                var dw = Sigmoid(featPtr[2]);
+                                var dh = Sigmoid(featPtr[3]);
+
+                                var pbCx = (dx * 2.0f - 0.5f + j) * stride;
+                                var pbCy = (dy * 2.0f - 0.5f + i) * stride;
+
+                                var pbW = (float)Math.Pow(dw * 2.0f, 2) * anchorW;
+                                var pbH = (float)Math.Pow(dh * 2.0f, 2) * anchorH;
+
+                                var x0 = pbCx - pbW * 0.5f;
+                                var y0 = pbCy - pbH * 0.5f;
+                                var x1 = pbCx + pbW * 0.5f;
+                                var y1 = pbCy + pbH * 0.5f;
+
+                                var obj = new Object
+                                {
+                                    Rect =
                                 {
                                     X = x0,
                                     Y = y0,
                                     Width = x1 - x0,
                                     Height = y1 - y0
                                 },
-                                Label = classIndex,
-                                Prob = confidence
-                            };
+                                    Label = classIndex,
+                                    Prob = confidence
+                                };
 
-                            objects.Add(obj);
+                                objects.Add(obj);
+                            }
                         }
                     }
                 }
@@ -294,7 +294,10 @@ namespace YoloV5
 
                 // original pretrained model from https://github.com/ultralytics/yolov5
                 // the ncnn model https://github.com/nihui/ncnn-assets/tree/master/models
-#if YOLOV5_V60
+#if YOLOV5_V62
+                yolov5.LoadParam("yolov5s_6.2.param");
+                yolov5.LoadModel("yolov5s_6.2.bin");
+#elif YOLOV5_V60
                 yolov5.LoadParam("yolov5s_6.0.param");
                 yolov5.LoadModel("yolov5s_6.0.bin");
 #else
@@ -371,7 +374,9 @@ namespace YoloV5
                 // stride 16
                 {
                     using var @out = new Mat();
-#if YOLOV5_V60
+#if YOLOV5_V62
+                    ex.Extract("353", @out);
+#elif YOLOV5_V60
                     ex.Extract("376", @out);
 #else
                     ex.Extract("781", @out);
@@ -394,7 +399,9 @@ namespace YoloV5
                 // stride 32
                 {
                     using var @out = new Mat();
-#if YOLOV5_V60
+#if YOLOV5_V62
+                    ex.Extract("367", @out);
+#elif YOLOV5_V60
                     ex.Extract("401", @out);
 #else
                     ex.Extract("801", @out);
@@ -568,9 +575,9 @@ namespace YoloV5
             Cv2.WaitKey(0);
         }
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
     }
 
