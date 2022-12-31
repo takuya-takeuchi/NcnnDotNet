@@ -446,6 +446,56 @@ DLLEXPORT int32_t mat_Mat_from_pixels_resize2(const unsigned char* pixels,
     return error;
 }
 
+DLLEXPORT voiod mat_Mat_to_pixels(ncnn::Mat* mat,
+                                    unsigned char* pixels,
+                                    const int32_t type)
+{
+    int32_t error = ERR_OK;
+
+    mat->to_pixels(pixels, type);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_to_pixels(ncnn::Mat* mat,
+                                    unsigned char* pixels,
+                                    const int32_t type,
+                                    const int32_t stride)
+{
+    int32_t error = ERR_OK;
+
+    mat->to_pixels(pixels, type, stride);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_to_pixels_resize(ncnn::Mat* mat,
+                                           unsigned char* pixels,
+                                           const int32_t type,
+                                           const int32_t target_width,
+                                           const int32_t target_height)
+{
+    int32_t error = ERR_OK;
+
+    mat->to_pixels(pixels, type, target_width, target_height);
+
+    return error;
+}
+
+DLLEXPORT int32_t mat_Mat_to_pixels_resize(ncnn::Mat* mat,
+                                           unsigned char* pixels,
+                                           const int32_t type,
+                                           const int32_t target_width,
+                                           const int32_t target_height,
+                                           const int32_t target_stride)
+{
+    int32_t error = ERR_OK;
+
+    mat->to_pixels(pixels, type, target_width, target_height, target_stride);
+
+    return error;
+}
+
 DLLEXPORT int32_t mat_copy_make_border(ncnn::Mat* src,
                                        ncnn::Mat* dst,
                                        const int32_t top,
