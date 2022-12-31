@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoloX", "examples\YoloX\Yol
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "YoloV7", "examples\YoloV7\YoloV7.csproj", "{F2B5374A-B4C8-40AC-B1D4-42C9BDC23B84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NcnnDotNet.Extensions.Drawing", "src\NcnnDotNet.Extensions.Drawing\NcnnDotNet.Extensions.Drawing.csproj", "{E2E458FD-FC02-46CD-A5FF-48E96D31701D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -173,6 +175,10 @@ Global
 		{F2B5374A-B4C8-40AC-B1D4-42C9BDC23B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2B5374A-B4C8-40AC-B1D4-42C9BDC23B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2B5374A-B4C8-40AC-B1D4-42C9BDC23B84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2E458FD-FC02-46CD-A5FF-48E96D31701D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2E458FD-FC02-46CD-A5FF-48E96D31701D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2E458FD-FC02-46CD-A5FF-48E96D31701D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2E458FD-FC02-46CD-A5FF-48E96D31701D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,6 +210,7 @@ Global
 		{6180B1EC-0A2F-428B-8F0B-F0E115312DA2} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{FE80D21C-6F31-45C3-9F8D-5AF536010D86} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
 		{F2B5374A-B4C8-40AC-B1D4-42C9BDC23B84} = {65E02C5F-4C5C-4444-AC3C-63CBBE76C4B5}
+		{E2E458FD-FC02-46CD-A5FF-48E96D31701D} = {8E8E8DD9-0547-4E5E-AC68-F84FACE8C492}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C7789377-10BC-434A-87CC-8001AE7F93C6}
