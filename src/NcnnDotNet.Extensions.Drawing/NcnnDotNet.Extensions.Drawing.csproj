@@ -1,27 +1,61 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Authors>Takuya Takeuchi</Authors>
-    <Description>NcnnDotNet extension for System.Drawing</Description>
+    <Description>NcnnDotNet Extension package for System.Drawing</Description>
     <Company />
     <Copyright>© Takuya Takeuchi 2023</Copyright>
-    <Configurations>Debug;Release;</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <Version>2023.01.01.0</Version>
     <RepositoryUrl>https://github.com/takuya-takeuchi/NcnnDotNet</RepositoryUrl>
-    <PackageTags>ncnn .net neural-network deep-learning</PackageTags>
-    <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
+    <PackageTags>ncnn .net neural-network</PackageTags>
+    <PackageLicenseUrl></PackageLicenseUrl>
+  
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RootNamespace>NcnnDotNet</RootNamespace>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <ProjectReference Include="..\NcnnDotNet\NcnnDotNet.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DefineConstants>$(DefineConstants);TRACE;DEBUG</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <Optimize>true</Optimize>
+    <DocumentationFile>docs\NcnnDotNet.Extensions.Drawing.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461'">
+    <DefineConstants>$(DefineConstants);DOTNET_FRAMEWORK;</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(TargetFramework.Contains('netstandard')) Or $(TargetFramework.Contains('netcoreapp')) ">
+    <DefineConstants>$(DefineConstants);DOTNETCORE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup Condition="!$(TargetFramework.Contains('netstandard')) And !$(TargetFramework.Contains('netcoreapp')) ">
+    <Reference Include="System" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(TargetFramework.Contains('netstandard')) Or $(TargetFramework.Contains('netcoreapp')) ">
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.7.0</Version>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NcnnDotNet\NcnnDotNet.csproj" />
+    <None Include="..\..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
