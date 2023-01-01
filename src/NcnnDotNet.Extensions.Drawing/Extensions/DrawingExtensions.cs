@@ -5,8 +5,25 @@ using System.Drawing.Imaging;
 namespace NcnnDotNet.Extensions
 {
 
-    public static class Drawing
+    public static class DrawingExtensions
     {
+
+        #region Fields
+
+        private static readonly Color[] Palette;
+
+        #endregion
+
+        #region Constructors
+
+        static DrawingExtensions()
+        {
+            Palette = new Color[256];
+            for (var i = 0; i < 256; i++)
+                Palette[i] = Color.FromArgb(i, i, i);
+        }
+
+        #endregion
 
         #region Methods
 
@@ -190,11 +207,13 @@ namespace NcnnDotNet.Extensions
         {
             BitmapData bitmapData = null;
 
+            var format = dst.PixelFormat;
+
             try
             {
                 var width = dst.Width;
                 var height = dst.Height;
-                bitmapData = dst.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, dst.PixelFormat);
+                bitmapData = dst.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.WriteOnly, format);
 
                 var srcStride = width * srcChannel;
                 var dstStride = bitmapData.Stride;
@@ -301,6 +320,14 @@ namespace NcnnDotNet.Extensions
             {
                 if (bitmapData != null)
                     dst.UnlockBits(bitmapData);
+
+                if (format == PixelFormat.Format8bppIndexed)
+                {
+                    var pal = dst.Palette;
+                    for (var i = 0; i < 256; i++)
+                        pal.Entries[i] = Palette[i];
+                    dst.Palette = pal;
+                }
             }
 
             return dst;
