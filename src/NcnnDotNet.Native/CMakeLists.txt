@@ -38,7 +38,7 @@ message("-------------------------------------------------------")
 set(VERSION_MAJOR 0)
 set(VERSION_MINOR 0)
 set(VERSION_PATCH 0)
-set(VERSION_DATE 20221224)
+set(VERSION_DATE 20230101)
 
 # Binary is not be able to be executed in host, set 0 (success) forcibly
 set(THREADS_PTHREAD_ARG "0" CACHE STRING "Forcibly set by CMakeLists.txt." FORCE)
