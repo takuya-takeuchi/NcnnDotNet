@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NcnnDotNet.Extensions.Drawing</id>
-    <version>0.0.0.20221224</version>
+    <version>0.0.0.20230101</version>
     <title>NcnnDotNet.Extensions.Drawing</title>
     <authors>Takuya Takeuchi</authors>
     <owners>Takuya Takeuchi</owners>
@@ -18,11 +18,11 @@
 
     <dependencies>
       <group targetFramework="net461">
-        <dependency id="NcnnDotNet" version="0.0.0.20221224" />
+        <dependency id="NcnnDotNet" version="0.0.0.20230101" />
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="System.Drawing.Common" version="4.7.0" />
-        <dependency id="NcnnDotNet" version="0.0.0.20221224" />
+        <dependency id="NcnnDotNet" version="0.0.0.20230101" />
       </group>
     </dependencies>
     <frameworkAssemblies>
