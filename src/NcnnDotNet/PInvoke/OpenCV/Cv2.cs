@@ -30,6 +30,13 @@ namespace NcnnDotNet
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern void opencv_imshow(byte[] winName, int winNameLength, IntPtr mat);
 
+        [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
+        public static extern ErrorType opencv_merge(IntPtr[] channels,
+                                                    int channelsLength,
+                                                    int width,
+                                                    int height,
+                                                    IntPtr mat);
+
         #region circle
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]

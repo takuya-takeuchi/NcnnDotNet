@@ -500,6 +500,52 @@ namespace NcnnDotNet
 
         #endregion
 
+        #region FromPixels
+
+        public void ToPixels(IntPtr pixels, PixelType type)
+        {
+            this.ThrowIfDisposed();
+
+            NativeMethods.mat_Mat_to_pixels(this.NativePtr,
+                                            pixels,
+                                            (int)type);
+        }
+
+        public void ToPixels(IntPtr pixels, PixelType type, int stride)
+        {
+            this.ThrowIfDisposed();
+
+            NativeMethods.mat_Mat_to_pixels2(this.NativePtr,
+                                             pixels,
+                                             (int)type,
+                                             stride);
+        }
+
+        public void ToPixelsResize(IntPtr pixels, PixelType type, int targetWidth, int targetHeight)
+        {
+            this.ThrowIfDisposed();
+
+            NativeMethods.mat_Mat_to_pixels_resize(this.NativePtr,
+                                                   pixels,
+                                                   (int)type,
+                                                   targetWidth,
+                                                   targetHeight);
+        }
+
+        public void ToPixelsResize(IntPtr pixels, PixelType type, int targetWidth, int targetHeight, int targetStride)
+        {
+            this.ThrowIfDisposed();
+
+            NativeMethods.mat_Mat_to_pixels_resize2(this.NativePtr,
+                                                    pixels,
+                                                    (int)type,
+                                                    targetWidth,
+                                                    targetHeight,
+                                                    targetStride);
+        }
+
+        #endregion
+
         public MemoryBuffer Row(int y)
         {
             this.ThrowIfDisposed();
