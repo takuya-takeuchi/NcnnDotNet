@@ -5,9 +5,15 @@ namespace NcnnDotNet.OpenCV
     public enum CvLoadImage
     {
 
-        Grayscale = 1,
+        Unchanged = -1,
 
-        Color = 3,
+        Grayscale = 0,
+
+        Color     = 1,
+
+        AnyDepth  = 2,
+
+        AnyColor  = 4
 
     }
 
