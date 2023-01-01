@@ -11,7 +11,8 @@ Param([Parameter(
 
 $PublishTargets = ( "NcnnDotNet",
                     "NcnnDotNet.GPU",
-                    "NcnnDotNet.Xamarin"
+                    "NcnnDotNet.Xamarin",
+                    "NcnnDotNet.Extensions.Drawing"
                   )
 
 $Token = $env:NcnnDotNetNugetToken

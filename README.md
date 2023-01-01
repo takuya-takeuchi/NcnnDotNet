@@ -14,6 +14,10 @@
 ||Android|✓|✓|✓|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 ||iOS|-|✓|-|✓|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Xamarin.svg)](https://www.nuget.org/packages/NcnnDotNet.Xamarin)|
 
+|Package|Description|Nuget|
+|---|---|---|
+|NcnnDotNet.Extensions.Drawing|GDI+ Extensions|[![NuGet version](https://img.shields.io/nuget/v/NcnnDotNet.Extensions.Drawing.svg)](https://www.nuget.org/packages/NcnnDotNet.Extensions.Drawing)|
+
 ## Demo
 
 #### YoloV3 on Xamarin.Android, iOS and UWP
