@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace NcnnDotNet.Tests
+namespace NcnnDotNet.Extensions.Drawing.Tests
 {
 
     public abstract class TestBase
@@ -26,15 +26,6 @@ namespace NcnnDotNet.Tests
             var path = Path.Combine(OutputDirectory, Path.Combine(function));
             Directory.CreateDirectory(path);
             return path;
-        }
-
-        #endregion
-
-        #region Methods
-        
-        protected FileInfo GetDataFile(string filename)
-        {
-            return new FileInfo(Path.Combine(TestDataDirectory, filename));
         }
 
         #endregion

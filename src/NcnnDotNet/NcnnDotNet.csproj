@@ -5,9 +5,9 @@
     <Authors>Takuya Takeuchi</Authors>
     <Description>.NET wrapper for ncnn written in C#</Description>
     <Company />
-    <Copyright>© Takuya Takeuchi 2019-2021</Copyright>
+    <Copyright>© Takuya Takeuchi 2019-2023</Copyright>
     <Configurations>Debug;Release;Debug_Static;Release_Static</Configurations>
-    <Version>2022.12.24.0</Version>
+    <Version>2023.01.01.0</Version>
     <RepositoryUrl>https://github.com/takuya-takeuchi/NcnnDotNet</RepositoryUrl>
     <PackageTags>ncnn .net neural-network deep-learning</PackageTags>
     <PackageLicenseUrl>https://opensource.org/licenses/MIT</PackageLicenseUrl>
