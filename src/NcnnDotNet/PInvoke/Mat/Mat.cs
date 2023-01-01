@@ -209,10 +209,10 @@ namespace NcnnDotNet
                                                          int type);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType mat_Mat_to_pixels(IntPtr mat,
-                                                         IntPtr pixels,
-                                                         int type,
-                                                         int stride);
+        public static extern ErrorType mat_Mat_to_pixels2(IntPtr mat,
+                                                          IntPtr pixels,
+                                                          int type,
+                                                          int stride);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
         public static extern ErrorType mat_Mat_to_pixels_resize(IntPtr mat,
@@ -222,12 +222,12 @@ namespace NcnnDotNet
                                                                 int target_height);
 
         [DllImport(NativeLibrary, CallingConvention = CallingConvention)]
-        public static extern ErrorType mat_Mat_to_pixels_resize(IntPtr mat,
-                                                                IntPtr pixels,
-                                                                int type,
-                                                                int target_width,
-                                                                int target_height,
-                                                                int target_stride);
+        public static extern ErrorType mat_Mat_to_pixels_resize2(IntPtr mat,
+                                                                 IntPtr pixels,
+                                                                 int type,
+                                                                 int target_width,
+                                                                 int target_height,
+                                                                 int target_stride);
 
     }
 
