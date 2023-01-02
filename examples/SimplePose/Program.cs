@@ -22,7 +22,7 @@ namespace SimplePose
 
             var imagepath = args[0];
 
-            using (var m = Cv2.ImRead(imagepath, CvLoadImage.Grayscale))
+            using (var m = Cv2.ImRead(imagepath, CvLoadImage.AnyColor))
             {
                 if (m.IsEmpty)
                 {

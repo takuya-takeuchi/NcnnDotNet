@@ -44,7 +44,7 @@ namespace SCRFD
                 return -1;
             }
 
-            using (var m = Cv2.ImRead(imagePath, CvLoadImage.Color))
+            using (var m = Cv2.ImRead(imagePath, CvLoadImage.AnyColor))
             {
                 if (m.IsEmpty)
                 {
